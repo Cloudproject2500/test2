@@ -1,0 +1,251 @@
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F9FAFB;
+  --accent-blue: #3b82f6;
+  --accent-blue-hover: #2563EB;
+  --text-primary: #37352F;
+  --text-secondary: #787774;
+  --border-color: #E9E9E7;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --soft-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --success: #0F7B6C;
+  --warning: #DFAB01;
+  --error: #EB5757;
+  --font-main: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+/* Notion-style Blocks */
+.workspace-block {
+  background: var(--bg-primary);
+  border-radius: 4px;
+  padding: 8px;
+  transition: background 0.2s ease;
+  cursor: pointer;
+}
+
+.workspace-block:hover {
+  background: var(--bg-secondary);
+}
+
+.premium-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: var(--soft-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.premium-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Sidebar Refined */
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-color);
+  padding: 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-section-title {
+  padding: 0 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 1.5rem 0 0.5rem 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.1s ease;
+}
+
+.nav-item:hover {
+  background: rgba(55, 53, 47, 0.08);
+}
+
+.nav-item.active {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent-blue);
+  font-weight: 600;
+}
+
+.nav-icon {
+  margin-right: 0.75rem;
+  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+}
+
+/* Main Layout */
+.main-wrapper {
+  flex: 1;
+  min-height: 100vh;
+  padding: 4rem 6rem;
+  overflow-y: auto;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+}
+
+.nav-item-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.nav-item-container:hover {
+  background-color: var(--hover-bg);
+}
+
+.nav-item-container:hover .delete-item-btn {
+  display: flex;
+}
+
+.delete-item-btn {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 4px;
+  color: var(--text-secondary);
+  position: absolute;
+  right: 8px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.delete-item-btn:hover {
+  background-color: #FEE2E2;
+  color: var(--error);
+}
+
+.add-page-btn {
+  margin-top: 4px;
+  font-size: 12px;
+  padding: 8px;
+}
+
+.add-page-btn:hover {
+  background-color: var(--hover-bg);
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-blue {
+  background: #E7F3F8;
+  color: #0B6E99;
+}
+
+.badge-green {
+  background: #EDF3EC;
+  color: #448361;
+}
+
+.badge-orange {
+  background: #FAEBDD;
+  color: #D9730D;
+}
+
+.badge-purple {
+  background: #F5E0E9;
+  color: #AD1A72;
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--accent-blue);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--accent-blue-hover);
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-gradient {
+  color: var(--text-primary);
+}

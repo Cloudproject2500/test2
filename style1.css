@@ -1,0 +1,913 @@
+:root {
+    --primary-blue: #3b82f6;
+    --logo-blue: #4096ff;
+    --text-black: #000000;
+    --text-white: #ffffff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    color: var(--text-black);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem;
+    background-color: transparent;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 2000;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo-icon {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 8px;
+    /* Optional: keep if the logo needs it, or remove */
+}
+
+.logo-text {
+    font-weight: 700;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    position: relative;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-black);
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.btn-black {
+    background-color: black;
+    color: white;
+    padding: 0.6rem 1.5rem;
+    border-radius: 9999px;
+    /* Pill shape */
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: opacity 0.2s;
+}
+
+.btn-blue {
+    background-color: #3b82f6;
+    color: #ffffff;
+    padding: 0.6rem 1.5rem;
+    border-radius: 9999px;
+    border: none;
+    /* Remove default outline */
+    /* Pill shape */
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: opacity 0.2s;
+}
+
+.btn-black:hover {
+    opacity: 0.8;
+}
+
+/* Hero Section */
+.hero {
+    flex: 1;
+    background: white;
+    /* Changed to white */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /* Left align */
+    justify-content: center;
+    padding-top: 10rem;
+    padding-bottom: 12rem;
+    /* Increased from 8rem to extend bottom */
+    padding-left: 5%;
+    /* Side padding */
+    padding-right: 5%;
+    text-align: left;
+    /* Text left */
+    color: black;
+    /* Text black */
+}
+
+.hero-content {
+    max-width: 600px;
+    /* Constrain width for left column */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.hero-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 60px;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-shadow: none;
+    color: black;
+    text-align: left;
+}
+
+.hero-description {
+    font-size: 1.25rem;
+    color: black;
+    text-align: left;
+    margin-bottom: 2rem;
+    max-width: 600px;
+}
+
+.hero-subtitle {
+    font-family: 'Outfit', sans-serif;
+    font-size: 4rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 4rem;
+    opacity: 0.95;
+    font-style: italic;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Align items to the left (flex-start) or center? User said "left side of the words" */
+    gap: 0.5rem;
+}
+
+.hero-keyword {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    /* Cursor pointer removed for automation */
+}
+
+.hero-keyword::before {
+    content: '';
+    width: 40px;
+    height: 40px;
+    background-color: white;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    /* added border for visibility when empty */
+    /* Remove default checked bg */
+    background-image: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+}
+
+.hero-keyword.checked::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: 70%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-color: #3b82f6;
+    /* Optional: change border color when checked */
+}
+
+.btn-white {
+    background-color: white;
+    color: black;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 12px;
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s;
+}
+
+.btn-white:hover {
+    transform: scale(1.05);
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+    }
+
+    .hero-title,
+    .hero-subtitle {
+        font-size: 2.5rem;
+    }
+}
+
+/* ---------------------------------------- 1st page in landing page */
+
+.content-spacer {
+    height: 100vh;
+    background-color: #f8f9fa;
+    /* Added styles for text alignment */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.content-spacer h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 55px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    /* Remove default top margin */
+    text-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
+}
+
+.content-spacer p {
+    font-size: 1.25rem;
+    color: #4b5563;
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+/* ----------------------------------------*/
+
+/* ---------------------------------------- 2nd page in landing page */
+.content-spacer1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    text-align: center;
+    background-color: #ffffff;
+    height: 120vh;
+}
+
+.bottom-section .content-spacer {
+    height: 80vh;
+    padding-top: 5rem;
+    justify-content: flex-start;
+}
+
+/* ---------------------------------------- 3rd page in landing page */
+.content-spacer3 {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* From bottom-section override */
+    align-items: center;
+    padding: 2rem;
+    padding-top: 5rem;
+    /* From bottom-section override */
+    text-align: center;
+    background-color: #f8f9fa;
+    /* Assuming same bg as spacer 1 or default? Use default gray/white */
+    height: 80vh;
+    /* From bottom-section override */
+}
+
+.content-spacer3 h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 59px;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
+}
+
+.content-spacer3 p {
+    font-size: 1.25rem;
+    color: #4b5563;
+    max-width: 600px;
+    line-height: 1.6;
+}
+
+/* ---------------------------------------- */
+
+.content-spacer1 h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 55px;
+    margin-top: 100px;
+    text-align: center;
+    text-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.content-spacer1 p {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
+    text-align: center;
+    text-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------------------------------------- */
+
+.below .content-spacer {
+    height: 120vh;
+}
+
+/* --- Feature Demo Animation --- */
+.demo-container {
+    margin-top: 3rem;
+    width: 100%;
+    max-width: 800px;
+    /* Increased from 600px */
+    height: 500px;
+    /* Increased from 350px */
+    position: relative;
+    /* ensure cursor can be absolute relative to this or window */
+}
+
+.demo-window {
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Outfit', sans-serif;
+    text-align: left;
+    /* reset text alignment */
+}
+
+.demo-sidebar {
+    width: 140px;
+    background: #f1f5f9;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border-right: 1px solid #e2e8f0;
+}
+
+.sb-logo {
+    font-weight: 800;
+    color: #3b82f6;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    padding-left: 0.5rem;
+}
+
+.sb-item {
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+    cursor: default;
+    transition: background 0.2s, color 0.2s;
+}
+
+.demo-main {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.dm-header {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #1e293b;
+}
+
+.dm-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    opacity: 0;
+    /* Hidden initially, shown via animation */
+}
+
+.work-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    opacity: 0;
+    /* Hidden initially, shown via animation */
+}
+
+.dm-item {
+    padding: 0.75rem 1rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    color: #334155;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.dm-item::before {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid #cbd5e1;
+    border-radius: 4px;
+    margin-right: 0.75rem;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+/* Checked state helper (controlled by animation) */
+.dm-item.checked::before {
+    background: #3b82f6;
+    border-color: #3b82f6;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    background-size: 80%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.dm-item.checked {
+    text-decoration: line-through;
+    color: #94a3b8;
+}
+
+/* Cursor Element */
+.demo-cursor {
+    position: absolute;
+    top: 110%;
+    /* Start off-screen */
+    left: 110%;
+    pointer-events: none;
+    z-index: 10;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    animation: cursor-dual-loop 12s infinite ease-in-out;
+}
+
+.dm-lists-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.dm-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    transition: opacity 0.3s;
+}
+
+/* 
+    Animation Timeline (Total 12s):
+    Scaled down from 20s relative timings.
+*/
+
+@keyframes cursor-dual-loop {
+    0% {
+        top: 350px;
+        left: 400px;
+        transform: scale(1);
+        opacity: 0;
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    /* --- PERSONAL SECTION --- */
+    /* Checks p-task-1 (x=200, y=110) */
+    10% {
+        top: 110px;
+        left: 200px;
+        transform: scale(1);
+    }
+
+    12% {
+        top: 110px;
+        left: 200px;
+        transform: scale(0.9);
+    }
+
+    14% {
+        top: 110px;
+        left: 200px;
+        transform: scale(1);
+    }
+
+    /* Checks p-task-2 (x=200, y=160) */
+    18% {
+        top: 160px;
+        left: 200px;
+        transform: scale(1);
+    }
+
+    20% {
+        top: 160px;
+        left: 200px;
+        transform: scale(0.9);
+    }
+
+    22% {
+        top: 160px;
+        left: 200px;
+        transform: scale(1);
+    }
+
+    /* --- SWITCH TO WORK TAB --- */
+    /* Work Tab is roughly at (70, 75) */
+    35% {
+        top: 85px;
+        left: 50px;
+        transform: scale(1);
+    }
+
+    37% {
+        top: 85px;
+        left: 50px;
+        transform: scale(0.9);
+    }
+
+    39% {
+        top: 85px;
+        left: 50px;
+        transform: scale(1);
+    }
+
+    /* --- WORK SECTION --- */
+    /* Checks w-task-1 (x=200, y=110) */
+    45% {
+        top: 110px;
+        left: 200px;
+        transform: scale(1);
+    }
+
+    47% {
+        top: 110px;
+        left: 200px;
+        transform: scale(0.9);
+    }
+
+    49% {
+        top: 110px;
+        left: 200px;
+        transform: scale(1);
+    }
+
+    /* Checks w-task-2 (x=200, y=160) */
+    55% {
+        top: 160px;
+        left: 200px;
+        transform: scale(1);
+    }
+
+    57% {
+        top: 160px;
+        left: 200px;
+        transform: scale(0.9);
+    }
+
+    59% {
+        top: 160px;
+        left: 200px;
+        transform: scale(1);
+    }
+
+    /* Exit */
+    65% {
+        top: 250px;
+        left: 500px;
+        opacity: 1;
+    }
+
+
+    100% {
+        top: 250px;
+        left: 500px;
+        opacity: 0;
+    }
+}
+
+/* Sidebar Active States */
+#sb-personal {
+    animation: sb-personal-active 12s infinite;
+}
+
+#sb-work {
+    animation: sb-work-active 12s infinite;
+}
+
+@keyframes sb-personal-active {
+
+    0%,
+    36.9% {
+        background: #3b82f6;
+        color: white;
+    }
+
+    /* Initially active */
+    37%,
+    100% {
+        background: transparent;
+        color: #64748b;
+    }
+}
+
+@keyframes sb-work-active {
+
+    0%,
+    36.9% {
+        background: transparent;
+        color: #64748b;
+    }
+
+    37%,
+    90% {
+        background: #3b82f6;
+        color: white;
+    }
+
+    100% {
+        background: transparent;
+        color: #64748b;
+    }
+}
+
+/* List Visibility Toggles */
+#list-personal {
+    animation: list-personal-viz 12s infinite;
+}
+
+#list-work {
+    animation: list-work-viz 12s infinite;
+}
+
+@keyframes list-personal-viz {
+
+    0%,
+    36.9% {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    37%,
+    100% {
+        opacity: 0;
+        transform: translateY(-5px);
+        pointer-events: none;
+    }
+}
+
+@keyframes list-work-viz {
+
+    0%,
+    36.9% {
+        opacity: 0;
+        transform: translateY(10px);
+        pointer-events: none;
+    }
+
+    37%,
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-5px);
+        pointer-events: none;
+    }
+}
+
+/* --- Task Check States (PERSONAL) --- */
+#p-task-1 {
+    animation: p-strike-1 12s infinite;
+}
+
+#p-task-2 {
+    animation: p-strike-2 12s infinite;
+}
+
+@keyframes p-strike-1 {
+
+    0%,
+    12% {
+        text-decoration: none;
+        color: #334155;
+    }
+
+    12.1%,
+    100% {
+        text-decoration: line-through;
+        color: #94a3b8;
+    }
+}
+
+@keyframes p-strike-2 {
+
+    0%,
+    20% {
+        text-decoration: none;
+        color: #334155;
+    }
+
+    20.1%,
+    100% {
+        text-decoration: line-through;
+        color: #94a3b8;
+    }
+}
+
+/* Pseudo-elements for Checkboxes (Personal) */
+#p-task-1::before {
+    animation: p-check-1 12s infinite;
+}
+
+#p-task-2::before {
+    animation: p-check-2 12s infinite;
+}
+
+@keyframes p-check-1 {
+
+    0%,
+    12% {
+        background-color: transparent;
+        border-color: #cbd5e1;
+        background-image: none;
+    }
+
+    12.1%,
+    100% {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+
+@keyframes p-check-2 {
+
+    0%,
+    20% {
+        background-color: transparent;
+        border-color: #cbd5e1;
+        background-image: none;
+    }
+
+    20.1%,
+    100% {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+
+/* --- Task Check States (WORK) --- */
+#w-task-1 {
+    animation: w-strike-1 12s infinite;
+}
+
+#w-task-2 {
+    animation: w-strike-2 12s infinite;
+}
+
+@keyframes w-strike-1 {
+
+    0%,
+    47% {
+        text-decoration: none;
+        color: #334155;
+    }
+
+    47.1%,
+    100% {
+        text-decoration: line-through;
+        color: #94a3b8;
+    }
+}
+
+@keyframes w-strike-2 {
+
+    0%,
+    57% {
+        text-decoration: none;
+        color: #334155;
+    }
+
+    57.1%,
+    100% {
+        text-decoration: line-through;
+        color: #94a3b8;
+    }
+}
+
+/* Pseudo-elements for Checkboxes (Work) */
+#w-task-1::before {
+    animation: w-check-1 12s infinite;
+}
+
+#w-task-2::before {
+    animation: w-check-2 12s infinite;
+}
+
+@keyframes w-check-1 {
+
+    0%,
+    47% {
+        background-color: transparent;
+        border-color: #cbd5e1;
+        background-image: none;
+    }
+
+    47.1%,
+    100% {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+
+@keyframes w-check-2 {
+
+    0%,
+    57% {
+        background-color: transparent;
+        border-color: #cbd5e1;
+        background-image: none;
+    }
+
+    57.1%,
+    100% {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+        background-size: 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+}
+
+.sync-image {
+    max-width: 1000px;
+    height: auto;
+    display: block;
+    margin-top: -3rem;
+    margin-left: auto;
+    margin-right: auto;
+    /* Move up to close gap */
+    border-radius: 12px;
+
+}
+
+.sync-logo-container {
+    margin-top: 2rem;
+    /* Drag down a bit */
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.sync-icon-anim {
+    width: 100px;
+    height: 100px;
+    animation: spin-slow 8s linear infinite;
+}
+
+@keyframes spin-slow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}

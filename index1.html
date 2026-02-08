@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskMate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style1.css">
+    <script src="app.js" defer></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <img src="logo1.png" alt="TaskMate Logo" class="logo-icon">
+            <span class="logo-text">TaskMate</span>
+        </div>
+        <nav class="nav">
+            <a href="#" class="nav-link">About Us</a>
+            <a href="#" class="btn-black">Try Demo</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                One platform for
+                <br>every "You"
+            </h1>
+            <p class="hero-description">Organize your personal, work, schedule,
+                <br>and more in one platform.
+            </p>
+            <div class="hero-cta">
+                <button class="btn-blue">Download Now</button>
+            </div>
+        </div>
+    </main>
+
+    <section class="below">
+        <!-- added content inside the white space -->
+        <div class="content-spacer">
+            <h2>Seamlessly Manage Work & Life</h2>
+            <p>Switch effortlessly between professional projects and personal goals. Keep everything in one place,
+                without the clutter.</p>
+
+            <div class="demo-container">
+                <div class="demo-window">
+                    <div class="demo-sidebar">
+                        <div class="sb-logo">TaskMate</div>
+                        <div class="sb-item" id="sb-work">Work</div>
+                        <div class="sb-item" id="sb-personal">Personal</div>
+                        <div class="sb-item" id="sb-others">My Soccer team</div>
+                        <div class="sb-item">Settings</div>
+                    </div>
+                    <div class="demo-main">
+                        <div class="dm-header">Tasks</div>
+                        <div class="dm-lists-container">
+                            <!-- Work List (Default Hidden) -->
+                            <div class="dm-list" id="list-work">
+                                <div class="dm-item" id="w-task-1">Finish Q3 Report</div>
+                                <div class="dm-item" id="w-task-2">Email Design Team</div>
+                                <div class="dm-item" id="w-task-3">Update JIRA</div>
+                            </div>
+                            <!-- Personal List -->
+                            <div class="dm-list" id="list-personal">
+                                <div class="dm-item" id="p-task-1">Buy groceries</div>
+                                <div class="dm-item" id="p-task-2">Chest & tricep day</div>
+                                <div class="dm-item" id="p-task-3">Vacuum my room</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- The fake cursor -->
+                    <div class="demo-cursor">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M5.65376 12.3673H5.46026L5.31717 12.4976L0.500002 16.8829L0.500002 1.19138L11.7841 12.3673H5.65376Z"
+                                fill="black" stroke="white" stroke-width="1" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="devices-section">
+        <div class="content-spacer1">
+            <h2>Categorize & Manage Your Schedule
+            </h2>
+            <p>Switch to any devices and pick up right where you left off.</p>
+            <!-- Sync Logo SVG -->
+            <div class="sync-logo-container">
+                <svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                    class="sync-icon-anim">
+                    <path d="M23 4V10H17" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M1 20V14H7" stroke="#3b82f6" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path
+                        d="M3.51 9C4.01717 7.56678 4.87913 6.2854 6.0325 5.25C8.01931 3.47352 10.6385 2.65129 13.2575 2.97725C15.8765 3.30321 18.2711 4.75005 19.89 6.99L23 10"
+                        stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path
+                        d="M1 14L4.11 17.01C5.72888 19.2499 8.12351 20.6968 10.7425 21.0227C13.3615 21.3487 15.9807 20.5265 17.9675 18.75C19.1209 17.7146 19.9828 16.4332 20.49 15"
+                        stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <img src="sync5.png" alt="Sync across devices" class="sync-image">
+        </div>
+    </section>
+
+    <section class="bottom-section">
+        <div class="content-spacer3">
+            <h2>Never miss your deadlines.
+                <br>Never forget your reminders.
+            </h2>
+            <p>Taskmate's AI assistant will remind you of your deadlines and reminders, incase you have forgotten them
+            </p>
+        </div>
+    </section>
+</body>
+
+</html>
