@@ -74,9 +74,9 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                 */}
                 <header style={{ marginBottom: '3rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                        <span>🏠</span> / Dashboard
+                        <span>Dashboard</span>
                     </div>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Welcome back, TaskMate (v2.0)</h2>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Welcome back, user (v2.0)</h2>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem' }}>
                         Manage your lifestyle and academic ecosystem in one place.
                     </p>
