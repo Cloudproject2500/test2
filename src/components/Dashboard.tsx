@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { SmartScheduler } from '../services/smartScheduler';
-import { CanvasParser } from '../services/canvasParser';
 import type { ScheduledTask, CanvasTask, LifePage, PersonalTodo } from '../types';
 import { db } from '../services/firebase';
-import { collection, query, where, onSnapshot, addDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot } from 'firebase/firestore';
 
 interface DashboardProps {
     roomId: string;
@@ -13,10 +12,9 @@ interface DashboardProps {
     onJoinRoom: (roomId: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos, onViewChange, onJoinRoom }) => {
+const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos, onViewChange }) => {
     const [tasks, setTasks] = useState<ScheduledTask[]>([]);
     const [loading, setLoading] = useState(false);
-    const [isSyncing, setIsSyncing] = useState(false);
 
     useEffect(() => {
         if (!roomId) {
@@ -44,37 +42,6 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
         return () => unsubscribe();
     }, [roomId]);
 
-    const handleSyncCanvas = async () => {
-        if (isSyncing) return;
-
-        let targetRoom = roomId;
-        if (!targetRoom) {
-            targetRoom = 'DemoRoom_2026';
-            onJoinRoom(targetRoom);
-            // Give a tiny bit of time for state to propagate if needed, 
-            // though Firestore listener will handle the data once added.
-        }
-
-        setIsSyncing(true);
-        try {
-            // Simulate API latency
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            const demoTasks = CanvasParser.getSimulationTasks(targetRoom);
-
-            // Add each task to Firestore
-            const promises = demoTasks.map(task =>
-                addDoc(collection(db, "tasks"), task)
-            );
-
-            await Promise.all(promises);
-            console.log("Canvas demo tasks synced successfully.");
-        } catch (e) {
-            console.error("Error syncing Canvas tasks: ", e);
-        } finally {
-            setIsSyncing(false);
-        }
-    };
 
     const getCourseBadgeClass = (courseName: string) => {
         if (courseName.includes('CS') || courseName.includes('IS')) return 'badge badge-blue';
@@ -116,14 +83,6 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                     <section className="premium-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                             <h3 style={{ fontSize: '1.125rem', fontWeight: '600' }}>📚 Shared Deadlines</h3>
-                            <button
-                                onClick={handleSyncCanvas}
-                                className="btn-primary"
-                                style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', position: 'relative' }}
-                                disabled={isSyncing}
-                            >
-                                {isSyncing ? '⌛ Scanning Canvas...' : roomId ? '🔄 Sync Canvas' : '🚀 Start Demo Sync'}
-                            </button>
                         </div>
 
                         {!roomId ? (
