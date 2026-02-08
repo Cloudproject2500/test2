@@ -76,7 +76,7 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1rem' }}>
                         <span>Dashboard</span>
                     </div>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Welcome back, user (v2.0)</h2>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Welcome back, user</h2>
                     <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem' }}>
                         Manage your lifestyle and academic ecosystem in one place.
                     </p>
@@ -90,7 +90,7 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                     */}
                     <section className="premium-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1.125rem', fontWeight: '600' }}>📚 Shared Deadlines (UPDATED)</h3>
+                            <h3 style={{ fontSize: '1.125rem', fontWeight: '600' }}>Shared Deadlines (UPDATED)</h3>
                         </div>
 
                         {!roomId ? (
