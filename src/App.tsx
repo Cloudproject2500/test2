@@ -60,18 +60,7 @@ function App() {
     saveTodos(updated);
   };
 
-  const handleApplyTemplate = (pageId: string, tasks: { text: string, icon: string, goal?: number }[]) => {
-    const newTasks: PersonalTodo[] = tasks.map(t => ({
-      id: Math.random().toString(36).substr(2, 9),
-      pageId,
-      text: t.text,
-      icon: t.icon,
-      completed: false,
-      progress: t.goal ? 0 : undefined,
-      goal: t.goal
-    }));
-    saveTodos([...personalTodos, ...newTasks]);
-  };
+
 
   const handleAddLifePage = (name: string) => {
     const newPage: LifePage = {
@@ -125,7 +114,7 @@ function App() {
               onToggleTodo={handleToggleTodo}
               onUpdateProgress={handleUpdateTodoProgress}
               onDeleteTodo={handleDeleteTodo}
-              onApplyTemplate={handleApplyTemplate}
+
             />
           );
         }

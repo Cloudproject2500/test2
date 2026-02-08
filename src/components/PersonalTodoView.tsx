@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { LifePage, PersonalTodo, CategoryTemplate } from '../types';
+import type { LifePage, PersonalTodo } from '../types';
 
 interface PersonalTodoViewProps {
     page: LifePage;
@@ -8,40 +8,10 @@ interface PersonalTodoViewProps {
     onToggleTodo: (id: string) => void;
     onUpdateProgress: (id: string, progress: number) => void;
     onDeleteTodo: (id: string) => void;
-    onApplyTemplate: (pageId: string, tasks: { text: string, icon: string, goal?: number }[]) => void;
+
 }
 
-const TEMPLATES: CategoryTemplate[] = [
-    {
-        id: 'fitness-workout',
-        name: 'Full Body Workout',
-        category: 'fitness',
-        tasks: [
-            { text: 'Squats (3x12)', icon: '🏋️' },
-            { text: 'Push-ups (3x15)', icon: '💪' },
-            { text: 'Water intake (L)', icon: '💧', goal: 2 },
-            { text: 'Protein intake (g)', icon: '🥩', goal: 120 }
-        ]
-    },
-    {
-        id: 'hobbies-reading',
-        name: 'Reading Challenge',
-        category: 'hobbies',
-        tasks: [
-            { text: 'Current Book Progress', icon: '📖', goal: 300 }
-        ]
-    },
-    {
-        id: 'lifestyle-routine',
-        name: 'Daily Routine',
-        category: 'lifestyle',
-        tasks: [
-            { text: 'Morning Meditation', icon: '🧘' },
-            { text: 'Journaling', icon: '✍️' },
-            { text: 'Plan tomorrow', icon: '📅' }
-        ]
-    }
-];
+
 
 const PersonalTodoView: React.FC<PersonalTodoViewProps> = ({
     page,
@@ -50,10 +20,9 @@ const PersonalTodoView: React.FC<PersonalTodoViewProps> = ({
     onToggleTodo,
     onUpdateProgress,
     onDeleteTodo,
-    onApplyTemplate
+
 }) => {
     const [newTaskText, setNewTaskText] = useState('');
-    const [showTemplates, setShowTemplates] = useState(false);
 
     const handleAddTask = (e: React.FormEvent) => {
         e.preventDefault();
@@ -70,7 +39,7 @@ const PersonalTodoView: React.FC<PersonalTodoViewProps> = ({
         return Math.min(100, (todo.progress || 0) / todo.goal * 100);
     };
 
-    const categoryTemplates = TEMPLATES.filter(t => t.category === page.id || (page.type === 'custom' && t.category === 'lifestyle'));
+
 
     return (
         <main className="main-wrapper">
@@ -82,55 +51,10 @@ const PersonalTodoView: React.FC<PersonalTodoViewProps> = ({
                         </div>
                         <h2 style={{ fontSize: '2.5rem', fontWeight: 800 }}>{page.name}</h2>
                     </div>
-                    {categoryTemplates.length > 0 && (
-                        <button
-                            onClick={() => setShowTemplates(!showTemplates)}
-                            style={{
-                                padding: '8px 16px',
-                                borderRadius: '8px',
-                                border: `1px solid ${brandBlue}`,
-                                color: brandBlue,
-                                background: 'white',
-                                fontWeight: 600,
-                                cursor: 'pointer'
-                            }}
-                        >
-                            {showTemplates ? 'Close Templates' : 'Use Template'}
-                        </button>
-                    )}
+
                 </header>
 
-                {showTemplates && (
-                    <div className="premium-card" style={{ marginBottom: '2rem', background: '#f0f7ff', border: `1px dashed ${brandBlue}` }}>
-                        <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem', color: brandBlue }}>Category Templates</h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
-                            {categoryTemplates.map(template => (
-                                <div
-                                    key={template.id}
-                                    onClick={() => {
-                                        onApplyTemplate(page.id, template.tasks);
-                                        setShowTemplates(false);
-                                    }}
-                                    style={{
-                                        padding: '1rem',
-                                        borderRadius: '8px',
-                                        background: 'white',
-                                        border: '1px solid var(--border-color)',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s'
-                                    }}
-                                    onMouseEnter={e => e.currentTarget.style.borderColor = brandBlue}
-                                    onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border-color)'}
-                                >
-                                    <h4 style={{ margin: 0, fontSize: '0.875rem', fontWeight: 600 }}>{template.name}</h4>
-                                    <p style={{ margin: '4px 0 0 0', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                                        {template.tasks.length} tasks
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+
 
                 <div className="premium-card" style={{ padding: '0', overflow: 'hidden' }}>
                     <form onSubmit={handleAddTask} style={{ display: 'flex', borderBottom: '1px solid var(--border-color)' }}>
@@ -163,7 +87,7 @@ const PersonalTodoView: React.FC<PersonalTodoViewProps> = ({
                         {todos.length === 0 ? (
                             <div style={{ padding: '3rem', textAlign: 'center', color: 'var(--text-secondary)' }}>
                                 <p style={{ margin: 0 }}>No tasks here yet.</p>
-                                <p style={{ marginTop: '0.5rem', fontSize: '0.875rem' }}>Select a template or add a task manually.</p>
+                                <p style={{ marginTop: '0.5rem', fontSize: '0.875rem' }}>Add a task manually.</p>
                             </div>
                         ) : (
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>

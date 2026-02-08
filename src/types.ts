@@ -63,11 +63,6 @@ export interface PersonalTodo {
     color?: string;
 }
 
-export interface CategoryTemplate {
-    id: string;
-    name: string;
-    category: string;
-    tasks: { text: string; icon: string; goal?: number }[];
-}
+
 
 
