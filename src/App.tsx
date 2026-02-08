@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Dashboard from './components/Dashboard';
+import Dashboard from './components/TaskDashboard';
 import SimulationDashboard from './components/SimulationDashboard';
 import Sidebar from './components/Sidebar';
 import Inbox from './components/Inbox';

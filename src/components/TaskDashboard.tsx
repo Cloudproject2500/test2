@@ -12,7 +12,7 @@ interface DashboardProps {
     onJoinRoom: (roomId: string) => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos, onViewChange }) => {
+const TaskDashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos, onViewChange }) => {
     const [tasks, setTasks] = useState<ScheduledTask[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -198,4 +198,4 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
     );
 };
 
-export default Dashboard;
+export default TaskDashboard;
