@@ -68,6 +68,10 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
     return (
         <main className="main-wrapper">
             <div className="container">
+                {/* 
+                  HEADER SECTION:
+                  Contains navigation breadcrumbs, welcome message, and subtitle.
+                */}
                 <header style={{ marginBottom: '3rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1rem' }}>
                         <span>🏠</span> / Dashboard
@@ -79,7 +83,11 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                 </header>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
-                    {/* Core Block: Academic Deadlines */}
+                    {/* 
+                      SECTION 1: ACADEMIC DEADLINES
+                      Displays the list of shared academic tasks/deadlines.
+                      Fetches data from Firestore based on the current roomId.
+                    */}
                     <section className="premium-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                             <h3 style={{ fontSize: '1.125rem', fontWeight: '600' }}>📚 Shared Deadlines</h3>
@@ -112,7 +120,11 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                         )}
                     </section>
 
-                    {/* Dynamic Life Progress Summaries */}
+                    {/* 
+                      SECTION 2: DYNAMIC LIFE PROGRESS SUMMARIES
+                      Iterates through 'lifePages' (Lifestyle, Fitness, Hobbies) and shows a progress bar
+                      based on completed todos in that category.
+                    */}
                     {lifePages.map(page => {
                         const progress = getPageProgress(page.id);
                         return (
@@ -156,7 +168,11 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                         );
                     })}
 
-                    {/* Static Analytics Block (Unified Balance) */}
+                    {/* 
+                      SECTION 3: LIFE BALANCE ANALYTICS
+                      A static visual representation of the work-life balance ratio.
+                      Currently hardcoded to 65% Academic and 35% Lifestyle.
+                    */}
                     <section className="premium-card">
                         <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1.5rem' }}>📊 Life Balance</h3>
                         <div style={{ height: '8px', background: '#eee', borderRadius: '4px', overflow: 'hidden', display: 'flex' }}>
@@ -170,6 +186,10 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                     </section>
                 </div>
 
+                {/* 
+                  FOOTER SECTION:
+                  Copyright and version information.
+                */}
                 <footer style={{ marginTop: '4rem', paddingBottom: '2rem', opacity: 0.6, fontSize: '0.8125rem' }}>
                     <p>© 2026 TaskMate OS Architect. Management Platform v1.9.0</p>
                 </footer>
