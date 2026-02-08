@@ -1,43 +1,38 @@
-import React, { useState, useEffect } from 'react';
-import { SmartScheduler } from '../services/smartScheduler';
-import type { ScheduledTask, CanvasTask } from '../types';
-import { db } from '../services/firebase';
-import { collection, query, where, onSnapshot } from 'firebase/firestore';
+import React, { useState } from 'react';
 
-interface DeadlinesViewProps {
-    roomId: string;
-}
+import type { ScheduledTask } from '../types';
 
-const DeadlinesView: React.FC<DeadlinesViewProps> = ({ roomId }) => {
-    const [tasks, setTasks] = useState<ScheduledTask[]>([]);
-    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (!roomId) {
-            setTasks([]);
-            return;
+
+
+const DeadlinesView: React.FC = () => {
+    const [tasks] = useState<ScheduledTask[]>([
+        {
+            id: '1',
+            courseName: 'CS 101',
+            title: 'Algorithm Analysis',
+            dueDate: new Date(Date.now() + 86400000 * 2).toISOString(),
+            type: 'assignment',
+            status: 'pending',
+            syncedAt: new Date().toISOString(),
+            priority: 1,
+            remainingTime: '2 days',
+            urgency: 'Critical'
+        },
+        {
+            id: '2',
+            courseName: 'MATH 202',
+            title: 'Linear Algebra Quiz',
+            dueDate: new Date(Date.now() + 86400000 * 5).toISOString(),
+            type: 'quiz',
+            status: 'pending',
+            syncedAt: new Date().toISOString(),
+            priority: 2,
+            remainingTime: '5 days',
+            urgency: 'Upcoming'
         }
+    ]);
 
-        setLoading(true);
-        const q = query(collection(db, "tasks"), where("roomId", "==", roomId));
-
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const fetchedTasks: CanvasTask[] = [];
-            querySnapshot.forEach((doc) => {
-                fetchedTasks.push({ id: doc.id, ...doc.data() } as CanvasTask);
-            });
-
-            // SmartScheduler already sorts by priority (diffMs)
-            const scheduled = SmartScheduler.calculatePriority(fetchedTasks);
-            setTasks(scheduled);
-            setLoading(false);
-        }, (error) => {
-            console.error("Firestore error:", error);
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
-    }, [roomId]);
 
     const getRiskColor = (urgency: string) => {
         switch (urgency) {
@@ -72,15 +67,7 @@ const DeadlinesView: React.FC<DeadlinesViewProps> = ({ roomId }) => {
                     </p>
                 </header>
 
-                {!roomId ? (
-                    <div className="premium-card flex-center" style={{ height: '300px', flexDirection: 'column' }}>
-                        <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>Join a room to see shared deadlines.</p>
-                    </div>
-                ) : loading ? (
-                    <div className="flex-center" style={{ height: '300px' }}>
-                        <p style={{ color: 'var(--accent-blue)', fontSize: '1.125rem', fontWeight: 600 }}>Analyzing priorities...</p>
-                    </div>
-                ) : tasks.length === 0 ? (
+                {tasks.length === 0 ? (
                     <div className="premium-card flex-center" style={{ height: '300px' }}>
                         <p style={{ color: 'var(--text-secondary)', fontSize: '1rem' }}>No active deadlines found.</p>
                     </div>
@@ -134,6 +121,7 @@ const DeadlinesView: React.FC<DeadlinesViewProps> = ({ roomId }) => {
                         ))}
                     </div>
                 )}
+
             </div>
         </main>
     );

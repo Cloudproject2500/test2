@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import type { LifePage } from '../types';
 
 interface SidebarProps {
-    roomId: string;
-    onLeaveRoom: () => void;
-    onJoinRoom: (roomId: string) => void;
+
     currentView: string;
     onViewChange: (view: string) => void;
     lifePages: LifePage[];
@@ -13,26 +11,18 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
-    roomId,
-    onLeaveRoom,
-    onJoinRoom,
+
     currentView,
     onViewChange,
     lifePages,
     onAddLifePage,
     onDeleteLifePage
 }) => {
-    const [inputRoomId, setInputRoomId] = useState('');
+
     const [isAddingPage, setIsAddingPage] = useState(false);
     const [newPageName, setNewPageName] = useState('');
 
-    const handleJoin = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (inputRoomId.trim()) {
-            onJoinRoom(inputRoomId.trim());
-            setInputRoomId('');
-        }
-    };
+
 
     const handleAddPage = (e: React.FormEvent) => {
         e.preventDefault();
@@ -161,33 +151,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
             </div>
 
-            {/* Collaboration Section */}
-            <div className="sidebar-section" style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)' }}>
-                {roomId ? (
-                    <div className="workspace-block" style={{ padding: '8px' }}>
-                        <p style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Shared Room</p>
-                        <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent-blue)' }}>{roomId}</p>
-                        <button
-                            onClick={onLeaveRoom}
-                            style={{ background: 'none', border: 'none', color: 'var(--error)', fontSize: '11px', padding: 0, cursor: 'pointer', marginTop: '4px' }}
-                        >
-                            Leave
-                        </button>
-                    </div>
-                ) : (
-                    <form onSubmit={handleJoin} style={{ padding: '0 8px' }}>
-                        <input
-                            type="text"
-                            placeholder="Join Room..."
-                            className="workspace-block"
-                            style={{ width: '100%', border: '1px solid var(--border-color)', outline: 'none', fontSize: '12px', marginBottom: '8px' }}
-                            value={inputRoomId}
-                            onChange={(e) => setInputRoomId(e.target.value)}
-                        />
-                        <button type="submit" className="btn-primary" style={{ width: '100%', padding: '4px', fontSize: '11px' }}>Join</button>
-                    </form>
-                )}
-            </div>
+
         </aside>
     );
 };

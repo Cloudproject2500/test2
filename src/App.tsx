@@ -10,7 +10,7 @@ import PersonalTodoView from './components/PersonalTodoView';
 import type { LifePage, PersonalTodo } from './types';
 
 function App() {
-  const [roomId, setRoomId] = useState<string>(localStorage.getItem('taskmate_room_id') || '');
+
   const [currentView, setCurrentView] = useState('dashboard');
 
   const initialLifePages: LifePage[] = [
@@ -81,15 +81,7 @@ function App() {
     if (currentView === id) setCurrentView('dashboard');
   };
 
-  const handleJoinRoom = (id: string) => {
-    setRoomId(id);
-    localStorage.setItem('taskmate_room_id', id);
-  };
 
-  const handleLeaveRoom = () => {
-    setRoomId('');
-    localStorage.removeItem('taskmate_room_id');
-  };
 
   const renderView = () => {
     switch (currentView) {
@@ -100,7 +92,7 @@ function App() {
       case 'courses':
         return <CoursesView />;
       case 'deadlines':
-        return <DeadlinesView roomId={roomId} />;
+        return <DeadlinesView />;
       case 'simulation': // New Simulation View
         return <SimulationDashboard />;
       default:
@@ -119,11 +111,11 @@ function App() {
           );
         }
         return <Dashboard
-          roomId={roomId}
+
           lifePages={lifePages}
           personalTodos={personalTodos}
           onViewChange={setCurrentView}
-          onJoinRoom={handleJoinRoom}
+
         />;
     }
   };
@@ -131,9 +123,7 @@ function App() {
   return (
     <div className="App" style={{ display: 'flex' }}>
       <Sidebar
-        roomId={roomId}
-        onJoinRoom={handleJoinRoom}
-        onLeaveRoom={handleLeaveRoom}
+
         currentView={currentView}
         onViewChange={setCurrentView}
         lifePages={lifePages}

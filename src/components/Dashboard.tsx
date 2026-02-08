@@ -2,11 +2,9 @@ import React from 'react';
 import type { LifePage, PersonalTodo } from '../types';
 
 interface DashboardProps {
-    roomId: string;
     lifePages: LifePage[];
     personalTodos: PersonalTodo[];
     onViewChange: (view: string) => void;
-    onJoinRoom: (roomId: string) => void;
 }
 
 const Dashboard: React.FC<DashboardProps> = ({ lifePages, personalTodos, onViewChange }) => {
