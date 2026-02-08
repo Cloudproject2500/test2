@@ -91,7 +91,7 @@ const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos,
                             </div>
                         ) : loading ? (
                             <div className="flex-center" style={{ height: '150px' }}>
-                                <p style={{ color: 'var(--accent-blue)', fontSize: '0.875rem' }}>Syncing...</p>
+                                <p style={{ color: 'var(--accent-blue)', fontSize: '0.875rem' }}>loading...</p>
                             </div>
                         ) : tasks.length === 0 ? (
                             <div className="flex-center" style={{ height: '150px' }}>
