@@ -12,7 +12,7 @@ interface DashboardProps {
     onJoinRoom: (roomId: string) => void;
 }
 
-const TaskDashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos, onViewChange }) => {
+const Dashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTodos, onViewChange }) => {
     const [tasks, setTasks] = useState<ScheduledTask[]>([]);
     const [loading, setLoading] = useState(false);
 
@@ -90,7 +90,7 @@ const TaskDashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTo
                     */}
                     <section className="premium-card">
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ fontSize: '1.125rem', fontWeight: '600' }}>📚 Shared Deadlines</h3>
+                            <h3 style={{ fontSize: '1.125rem', fontWeight: '600' }}>📚 Shared Deadlines (UPDATED)</h3>
                         </div>
 
                         {!roomId ? (
@@ -198,4 +198,4 @@ const TaskDashboard: React.FC<DashboardProps> = ({ roomId, lifePages, personalTo
     );
 };
 
-export default TaskDashboard;
+export default Dashboard;
