@@ -64,9 +64,7 @@ const CoursesView: React.FC = () => {
                 <div style={{ marginBottom: '20px', position: 'relative' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                         <h2 style={{ margin: 0, fontSize: '24px', fontWeight: 800 }}>Course Directory</h2>
-                        <button className="btn-primary" style={{ padding: '8px 16px', borderRadius: '8px', fontSize: '13px' }}>
-                            Sync with Canvas
-                        </button>
+
                     </div>
 
                     <input
