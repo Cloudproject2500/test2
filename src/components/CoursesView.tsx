@@ -2,15 +2,13 @@ import React, { useState, useMemo } from 'react';
 import { coursesData, CATEGORIES } from '../data/coursesData';
 import type { Course } from '../types';
 import CourseCard from './CourseCard';
-import Timetable from './Timetable';
+
 
 const CoursesView: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const [startTimeFilter, setStartTimeFilter] = useState(8); // 8 AM
     const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
-    const [plannedCourses, setPlannedCourses] = useState<Course[]>([]);
-    const [conflictMessage, setConflictMessage] = useState<string | null>(null);
 
     const toggleCategory = (category: string) => {
         setExpandedCategories(prev => ({
@@ -25,43 +23,6 @@ const CoursesView: React.FC = () => {
         );
     };
 
-    const handleAddToTimetable = (course: Course) => {
-        // Conflict Detection
-        const hasConflict = plannedCourses.some(pc => {
-            const daysOverlap = pc.days.some(d => course.days.includes(d));
-            if (!daysOverlap) return false;
-
-            const startA = parseInt(pc.startTime.replace(':', ''));
-            const endA = parseInt(pc.endTime.replace(':', ''));
-            const startB = parseInt(course.startTime.replace(':', ''));
-            const endB = parseInt(course.endTime.replace(':', ''));
-
-            return (startA < endB && startB < endA);
-        });
-
-        if (hasConflict) {
-            const conflictCourse = plannedCourses.find(pc => {
-                const daysOverlap = pc.days.some(d => course.days.includes(d));
-                const startA = parseInt(pc.startTime.replace(':', ''));
-                const endA = parseInt(pc.endTime.replace(':', ''));
-                const startB = parseInt(course.startTime.replace(':', ''));
-                const endB = parseInt(course.endTime.replace(':', ''));
-                return daysOverlap && (startA < endB && startB < endA);
-            });
-
-            setConflictMessage(`Time Conflict Detected with ${conflictCourse?.code}.`);
-            setTimeout(() => setConflictMessage(null), 3000);
-            return;
-        }
-
-        if (plannedCourses.some(pc => pc.id === course.id)) return;
-
-        setPlannedCourses([...plannedCourses, course]);
-    };
-
-    const handleRemoveCourse = (courseId: string) => {
-        setPlannedCourses(plannedCourses.filter(c => c.id !== courseId));
-    };
 
     const filteredCourses = useMemo(() => {
         return coursesData.filter(course => {
@@ -187,7 +148,6 @@ const CoursesView: React.FC = () => {
                                             <CourseCard
                                                 key={course.id}
                                                 course={course}
-                                                onAddToTimetable={handleAddToTimetable}
                                             />
                                         ))
                                     ) : (
@@ -202,28 +162,6 @@ const CoursesView: React.FC = () => {
                 </div>
             </div>
 
-            {/* Right Column: Timetable */}
-            <div style={{ width: '45%', display: 'flex', flexDirection: 'column' }}>
-                {conflictMessage && (
-                    <div style={{
-                        backgroundColor: '#FEF2F2',
-                        color: '#B91C1C',
-                        padding: '12px',
-                        borderRadius: '8px',
-                        marginBottom: '16px',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        border: '1px solid #FCA5A5',
-                        textAlign: 'center'
-                    }}>
-                        ⚠️ {conflictMessage}
-                    </div>
-                )}
-                <Timetable
-                    plannedCourses={plannedCourses}
-                    onRemoveCourse={handleRemoveCourse}
-                />
-            </div>
         </div>
     );
 };

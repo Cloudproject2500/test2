@@ -3,10 +3,10 @@ import type { Course } from '../types';
 
 interface CourseCardProps {
     course: Course;
-    onAddToTimetable: (course: Course) => void;
+
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course, onAddToTimetable }) => {
+const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const getAttributeBadge = (attr: string) => {
@@ -58,36 +58,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course, onAddToTimetable }) => 
                         {course.instructor} • {course.days.join(', ')} {course.startTime} - {course.endTime}
                     </p>
                 </div>
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onAddToTimetable(course);
-                    }}
-                    style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        border: '1px solid var(--accent-blue)',
-                        backgroundColor: 'transparent',
-                        color: 'var(--accent-blue)',
-                        cursor: 'pointer',
-                        fontSize: '18px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'all 0.2s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'var(--accent-blue)';
-                        e.currentTarget.style.color = 'white';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color = 'var(--accent-blue)';
-                    }}
-                >
-                    +
-                </button>
+
             </div>
 
             {isExpanded && (
