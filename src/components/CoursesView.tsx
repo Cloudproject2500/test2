@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { coursesData, CATEGORIES } from '../data/coursesData';
-import type { Course } from '../types';
+import { coursesData } from '../data/coursesData';
+
 import CourseCard from './CourseCard';
 
 
@@ -8,14 +8,7 @@ const CoursesView: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedDays, setSelectedDays] = useState<string[]>([]);
     const [startTimeFilter, setStartTimeFilter] = useState(8); // 8 AM
-    const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
-    const toggleCategory = (category: string) => {
-        setExpandedCategories(prev => ({
-            ...prev,
-            [category]: !prev[category]
-        }));
-    };
 
     const toggleDay = (day: string) => {
         setSelectedDays(prev =>
@@ -34,21 +27,7 @@ const CoursesView: React.FC = () => {
         });
     }, [searchQuery, selectedDays, startTimeFilter]);
 
-    // Group by category based on prefix mapping
-    const groupedCourses = useMemo(() => {
-        const groups: Record<string, Course[]> = {};
-        Object.keys(CATEGORIES).forEach(cat => groups[cat] = []);
 
-        filteredCourses.forEach(course => {
-            for (const [category, prefixes] of Object.entries(CATEGORIES)) {
-                if (prefixes.includes(course.prefix)) {
-                    groups[category].push(course);
-                    break;
-                }
-            }
-        });
-        return groups;
-    }, [filteredCourses]);
 
     return (
         <div className="courses-view" style={{
@@ -120,48 +99,25 @@ const CoursesView: React.FC = () => {
                 </div>
 
                 <div style={{ flex: 1, overflowY: 'auto', paddingRight: '8px' }}>
-                    {Object.entries(groupedCourses).map(([category, courses]) => (
-                        <div key={category} style={{ marginBottom: '16px' }}>
-                            <div
-                                onClick={() => toggleCategory(category)}
-                                style={{
-                                    backgroundColor: '#F3F4F6',
-                                    padding: '12px 16px',
-                                    borderRadius: '8px',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    marginBottom: '8px'
-                                }}
-                            >
-                                <span style={{ fontWeight: 700, fontSize: '14px', color: '#374151' }}>{category} ({courses.length})</span>
-                                <span>{expandedCategories[category] ? '−' : '+'}</span>
-                            </div>
-
-                            {expandedCategories[category] && (
-                                <div style={{
-                                    padding: '0 4px',
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                                    gap: '16px'
-                                }}>
-                                    {courses.length > 0 ? (
-                                        courses.map(course => (
-                                            <CourseCard
-                                                key={course.id}
-                                                course={course}
-                                            />
-                                        ))
-                                    ) : (
-                                        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '13px', padding: '12px' }}>
-                                            No courses match filters in this category.
-                                        </p>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                    <div style={{
+                        padding: '0 4px',
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                        gap: '16px'
+                    }}>
+                        {filteredCourses.length > 0 ? (
+                            filteredCourses.map(course => (
+                                <CourseCard
+                                    key={course.id}
+                                    course={course}
+                                />
+                            ))
+                        ) : (
+                            <p style={{ textAlign: 'center', color: 'var(--text-secondary)', fontSize: '13px', padding: '12px', gridColumn: '1 / -1' }}>
+                                No courses match your filters.
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
 
