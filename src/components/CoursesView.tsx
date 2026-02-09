@@ -142,7 +142,12 @@ const CoursesView: React.FC = () => {
                             </div>
 
                             {expandedCategories[category] && (
-                                <div style={{ padding: '0 4px' }}>
+                                <div style={{
+                                    padding: '0 4px',
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                                    gap: '16px'
+                                }}>
                                     {courses.length > 0 ? (
                                         courses.map(course => (
                                             <CourseCard
