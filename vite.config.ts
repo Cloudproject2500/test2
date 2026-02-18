@@ -10,6 +10,9 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         demo: resolve(__dirname, 'demo/index.html'),
+        login: resolve(__dirname, 'login/index.html'),
+        signup: resolve(__dirname, 'signup/index.html'),
+        callback: resolve(__dirname, 'auth/callback/index.html'),
       },
     },
   },

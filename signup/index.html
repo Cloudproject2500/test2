@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - TaskMate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Outfit:wght@100..900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/mini-logo.svg" />
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="logo-container">
+            <a href="/" style="text-decoration: none; display: flex; align-items: center; gap: 0.75rem;">
+                <img src="/logo1.png" alt="TaskMate Logo" class="logo-icon">
+                <span class="logo-text">TaskMate</span>
+            </a>
+        </div>
+        <nav class="nav">
+            <a href="/" class="nav-link-back">Back to Home</a>
+        </nav>
+    </header>
+
+    <main class="signup-container">
+        <div class="signup-card">
+            <h1 class="signup-title">Create an account</h1>
+            <p class="signup-subtitle">Join Taskmate today!</p>
+
+            <div class="social-buttons">
+                <button id="btn-google" class="btn-social btn-google">
+                    <img src="/googlelogo.png" alt="Google" class="social-icon">
+                    Continue with Google
+                </button>
+            </div>
+
+            <div class="divider">
+                <span>Or continue with email</span>
+            </div>
+
+            <form class="signup-form">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Create a password" required
+                        pattern="(?=.*[!@#$%^&*]).{8,}"
+                        title="Must contain at least one special character and be at least 8 characters long">
+                    <p class="input-hint">Must contain at least one special character (!@#$%^&*)</p>
+                </div>
+                <button type="submit" class="btn-primary">Create account</button>
+            </form>
+
+            <div class="signup-footer">
+                Already have an account? <a href="/login/" class="link-blue">Log in</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        &copy; 2026 TaskMate. All rights reserved.
+    </footer>
+
+    <script type="module">
+        import { supabase } from '../src/lib/supabase.js'
+
+        const handleGoogleSignIn = async () => {
+            const { error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${window.location.origin}/auth/callback/`,
+                    queryParams: {
+                        access_type: 'offline',
+                        prompt: 'consent',
+                    },
+                }
+            })
+            if (error) {
+                console.error('Error signing in:', error.message);
+                alert('Error signing in: ' + error.message);
+            }
+        }
+
+        const handleEmailSignUp = async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Basic validation
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            const { data, error } = await supabase.auth.signUp({
+                email: email,
+                password: password,
+                options: {
+                    emailRedirectTo: `${window.location.origin}/auth/callback/`
+                }
+            });
+
+            if (error) {
+                console.error('Signup error:', error.message);
+                alert('Error signing up: ' + error.message);
+            } else {
+                console.log('Signup successful:', data);
+                if (data.user && data.user.identities && data.user.identities.length === 0) {
+                    alert('This email is already registered. Please log in instead.');
+                } else {
+                    alert('Signup successful! Please checking your email for the confirmation link.');
+                }
+            }
+        }
+
+        const googleBtn = document.getElementById('btn-google');
+        if (googleBtn) {
+            googleBtn.addEventListener('click', handleGoogleSignIn);
+        }
+
+        const signupForm = document.querySelector('.signup-form');
+        if (signupForm) {
+            signupForm.addEventListener('submit', handleEmailSignUp);
+        }
+    </script>
+</body>
+
+</html>

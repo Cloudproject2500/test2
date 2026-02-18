@@ -1,4 +1,4 @@
 // Animation removed as per user request
 document.addEventListener('DOMContentLoaded', () => {
-    // No active scripts currently
+    // Modal logic removed (login page is now separate)
 });
