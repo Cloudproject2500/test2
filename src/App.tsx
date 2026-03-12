@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from './lib/supabase';
 import Dashboard from './components/Dashboard';
+import TutorialOverlay from './components/TutorialOverlay';
 import SimulationDashboard from './components/SimulationDashboard';
 import Sidebar from './components/Sidebar';
 import Inbox from './components/Inbox';
@@ -12,6 +14,32 @@ import type { LifePage, PersonalTodo } from './types';
 function App() {
 
   const [currentView, setCurrentView] = useState('dashboard');
+  const [showTutorial, setShowTutorial] = useState(false);
+
+  useEffect(() => {
+    const checkTutorial = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('has_seen_tutorial')
+          .eq('user_id', user.id)
+          .single();
+        if (profile && profile.has_seen_tutorial === false) {
+          setShowTutorial(true);
+        }
+      }
+    };
+    checkTutorial();
+  }, []);
+
+  const handleCloseTutorial = async () => {
+    setShowTutorial(false);
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      await supabase.from('profiles').update({ has_seen_tutorial: true }).eq('user_id', user.id);
+    }
+  };
 
   const initialLifePages: LifePage[] = [
     { id: 'lifestyle', name: 'Lifestyle', icon: '☘️', type: 'default' },
@@ -130,6 +158,7 @@ function App() {
         onAddLifePage={handleAddLifePage}
         onDeleteLifePage={handleDeleteLifePage}
       />
+      {showTutorial && <TutorialOverlay onClose={handleCloseTutorial} />}
       {renderView()}
     </div>
   );

@@ -45,6 +45,10 @@
 
             <form class="signup-form">
                 <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" id="firstName" placeholder="Enter your first name" required>
+                </div>
+                <div class="form-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" placeholder="Enter your email" required>
                 </div>
@@ -91,32 +95,60 @@
         const handleEmailSignUp = async (e) => {
             e.preventDefault();
 
+            const firstName = document.getElementById('firstName').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const submitBtn = document.querySelector('.signup-form .btn-primary');
 
             // Basic validation
-            if (!email || !password) {
+            if (!firstName || !email || !password) {
                 alert('Please fill in all fields');
                 return;
             }
 
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: password,
-                options: {
-                    emailRedirectTo: `${window.location.origin}/auth/callback/`
-                }
-            });
+            // Start loading state
+            if (submitBtn) {
+                submitBtn.classList.add('loading');
+                submitBtn.disabled = true;
+            }
 
-            if (error) {
-                console.error('Signup error:', error.message);
-                alert('Error signing up: ' + error.message);
-            } else {
-                console.log('Signup successful:', data);
-                if (data.user && data.user.identities && data.user.identities.length === 0) {
-                    alert('This email is already registered. Please log in instead.');
+            try {
+                console.log('Sending signup request to Supabase...');
+                const { data, error } = await supabase.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            first_name: firstName,
+                        },
+                        emailRedirectTo: `${window.location.origin}/auth/callback/`
+                    }
+                });
+
+                if (error) {
+                    console.error('Signup explicitly failed:', error.message);
+                    alert('Error signing up: ' + error.message);
                 } else {
-                    alert('Signup successful! Please checking your email for the confirmation link.');
+                    console.log('Signup 200 OK! Data returned:', data);
+
+                    if (data.session) {
+                        console.log('Instant session detected! Routing directly to welcome page...');
+                        window.location.href = '/welcome/index.html';
+                    } else if (data.user && data.user.identities && data.user.identities.length === 0) {
+                        console.log('User already registered hit!');
+                        alert('This email is already registered. Please log in instead.');
+                    } else {
+                        console.log('No session returned. Showing check email alert.');
+                        alert('Signup successful! Please check your email for the confirmation link.');
+                    }
+                }
+            } catch (err) {
+                console.error("FATAL JAVASCRIPT EXCEPTION RUNNING SIGNUP:", err);
+            } finally {
+                // Remove loading state when completely done
+                if (submitBtn) {
+                    submitBtn.classList.remove('loading');
+                    submitBtn.disabled = false;
                 }
             }
         }
@@ -130,6 +162,27 @@
         if (signupForm) {
             signupForm.addEventListener('submit', handleEmailSignUp);
         }
+
+        // Listen for auth state changes so the original tab instantly redirects
+        // when the user clicks the confirmation link in their email!
+        supabase.auth.onAuthStateChange(async (event, session) => {
+            console.log("Auth State Changed detected:", event);
+            if (event === 'SIGNED_IN' && session) {
+                console.log("SIGNED_IN event fired. Checking profile once...");
+
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('user_id', session.user.id)
+                    .single();
+
+                if (profile && profile.role === 'user') {
+                    window.location.href = '/welcome/index.html';
+                } else if (profile) {
+                    window.location.href = '/demo/index.html';
+                }
+            }
+        });
     </script>
 </body>
 

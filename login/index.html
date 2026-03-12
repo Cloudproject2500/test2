@@ -106,8 +106,18 @@
                 alert('Error logging in: ' + error.message);
             } else {
                 console.log('Login successful:', data);
-                // Redirect to dashboard/demo
-                window.location.href = '/demo/index.html';
+                // Check if user has selected a role
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('user_id', data.user.id)
+                    .single();
+
+                if (profile && profile.role === 'user') {
+                    window.location.href = '/welcome/';
+                } else {
+                    window.location.href = '/demo/index.html';
+                }
             }
         }
 

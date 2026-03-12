@@ -43,18 +43,64 @@
         import { supabase } from '../../src/lib/supabase.js'
 
         const handleCallback = async () => {
+            // Check if the URL literally contains an error before Supabase even tries parsing
+            if (window.location.hash && window.location.hash.includes('error=')) {
+                // Parse the hash parameters
+                const hashParams = new URLSearchParams(window.location.hash.substring(1));
+                const errorDesc = hashParams.get('error_description') || 'Invalid or expired link.';
+
+                document.body.innerHTML = `
+                    <div style="text-align:center; font-family:'Outfit',sans-serif; margin-top: 50px; padding: 2rem;">
+                        <h2 style="color: #ef4444; font-size: 2rem; margin-bottom: 0.5rem;">Oops! Link Expired ⚠️</h2>
+                        <p style="color: #64748b; font-size: 1.1rem; max-width: 400px; margin: 0 auto;">
+                          ${errorDesc.replace(/\+/g, ' ')}
+                        </p>
+                        <p style="font-size: 0.9em; margin-top: 2rem;">
+                          Please close this tab, go back to the app, and request a new signup link.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+
             const { data, error } = await supabase.auth.getSession()
 
             if (error) {
                 console.error('Error handling callback:', error.message)
-                // Redirect to login with error?
                 window.location.href = '/login/?error=auth_failed'
                 return
             }
 
             if (data.session) {
-                // Successful login, redirect to demo or dashboard
-                window.location.href = '/demo/index.html'
+                // Successful login, check if they are a new user
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('role')
+                    .eq('user_id', data.session.user.id)
+                    .single();
+
+                let destination = '/demo/index.html';
+                if (profile && profile.role === 'user') {
+                    // Default role means they haven't chosen yet
+                    destination = '/welcome/';
+                }
+
+                // Update the UI to show success
+                document.body.innerHTML = `
+                    <div style="text-align:center; font-family:'Outfit',sans-serif; margin-top: 50px; padding: 2rem;">
+                        <h2 style="color: #10b981; font-size: 2rem; margin-bottom: 0.5rem;">Email Confirmed! 🎉</h2>
+                        <p style="color: #64748b; font-size: 1.1rem;">You can safely close this tab and return to your original screen.</p>
+                        <p style="font-size: 0.9em; margin-top: 2rem;">If you aren't redirected automatically, <a href="${destination}" style="color: #3b82f6; font-weight: bold;">click here to continue</a>.</p>
+                    </div>
+                `;
+
+                // Attempt to close the window (works in some mail clients/configs)
+                setTimeout(() => window.close(), 100);
+
+                // Fallback: if the window doesn't close (e.g. mobile browser), redirect them after 3 seconds
+                setTimeout(() => {
+                    window.location.href = destination;
+                }, 3000);
             } else {
                 // No session found, maybe redirect to login
                 window.location.href = '/login/'

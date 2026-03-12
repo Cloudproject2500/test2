@@ -208,3 +208,37 @@ body {
     color: #94a3b8;
     font-size: 0.875rem;
 }
+
+/* Loading State for Button */
+.btn-primary.loading {
+    position: relative;
+    color: transparent;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.btn-primary.loading::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
