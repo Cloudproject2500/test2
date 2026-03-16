@@ -22,5 +22,5 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.classList.remove('slide-in');
             }, 400);
         }, 400);
-    }, 1700);
+    }, 1500);
 });
