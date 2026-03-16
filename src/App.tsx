@@ -187,6 +187,8 @@ function App() {
             onAddEvent={handleAddCalendarEvent}
             onDeleteEvent={handleDeleteCalendarEvent}
             onUpdateEvent={handleUpdateCalendarEvent}
+            personalColor={personalColor}
+            workspaceColor={workspaceColor}
           />
         );
       case 'courses':

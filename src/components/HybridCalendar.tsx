@@ -7,9 +7,11 @@ interface HybridCalendarProps {
     onAddEvent: (event: Omit<CalendarEvent, 'id'>) => void;
     onDeleteEvent: (id: string) => void;
     onUpdateEvent: (event: CalendarEvent) => void;
+    personalColor: string;
+    workspaceColor: string;
 }
 
-const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onDeleteEvent, onUpdateEvent }) => {
+const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onDeleteEvent, onUpdateEvent, personalColor, workspaceColor }) => {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -139,8 +141,9 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                                                 fontSize: '10px',
                                                 padding: '2px 4px',
                                                 borderRadius: '3px',
-                                                background: e.type === 'academic' ? 'var(--accent-blue)' :
-                                                    e.type === 'lifestyle' ? 'var(--success)' : '#8B5CF6', // Purple for personal
+                                                background: e.type === 'personal' ? personalColor :
+                                                            e.type === 'workspace' ? workspaceColor :
+                                                            e.type === 'academic' ? 'var(--accent-blue)' : 'var(--success)',
                                                 color: 'white',
                                                 whiteSpace: 'nowrap',
                                                 overflow: 'hidden',
@@ -167,20 +170,7 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                     </div>
                 </div>
 
-                <div style={{ marginTop: '2rem', display: 'flex', gap: '1.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem' }}>
-                        <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'var(--accent-blue)' }}></div>
-                        Academic
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem' }}>
-                        <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: 'var(--success)' }}></div>
-                        Lifestyle
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.75rem' }}>
-                        <div style={{ width: '10px', height: '10px', borderRadius: '2px', background: '#8B5CF6' }}></div>
-                        Personal
-                    </div>
-                </div>
+                {/* Legends removed as per user request */}
             </div>
 
             {/* Add Event Modal */}
