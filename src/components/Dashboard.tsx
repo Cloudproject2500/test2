@@ -711,8 +711,8 @@ const Dashboard: React.FC<DashboardProps> = ({
                 {/* PROGRESS SECTION */}
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem' }}>Your Progress</h2>
                 <section className="dashboard-progress-section">
-                    <div className="premium-card" style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '2rem' }}>
-                        <div className="pie-chart" style={{ background: distribution?.gradient || 'var(--bg-card)', flexShrink: 0, margin: 0 }}>
+                    <div className="premium-card flex-center">
+                        <div className="pie-chart" style={{ background: distribution?.gradient || 'var(--bg-card)' }}>
                             <div className="pie-chart-inner">
                                 <div>
                                     <span style={{ display: 'block', fontWeight: 700, color: 'var(--text-primary)' }}>{totalEvents}</span>
@@ -720,32 +720,29 @@ const Dashboard: React.FC<DashboardProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            {[
-                                { label: 'Personal', color: personalColor, value: distribution?.percentages.p || 0, count: distribution?.counts.personal || 0 },
-                                { label: 'Workspace', color: workspaceColor, value: distribution?.percentages.w || 0, count: distribution?.counts.workspace || 0 },
-                                { label: 'Academic', color: 'var(--accent-blue)', value: distribution?.percentages.a || 0, count: distribution?.counts.academic || 0 },
-                                { label: 'Lifestyle', color: 'var(--success)', value: distribution?.percentages.l || 0, count: distribution?.counts.lifestyle || 0 },
-                            ].map((item) => (
-                                <div key={item.label}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem', fontSize: '0.75rem', fontWeight: 600 }}>
-                                        <span style={{ color: 'var(--text-secondary)' }}>{item.label}</span>
-                                        <span style={{ color: 'var(--text-primary)' }}>{item.count}</span>
-                                    </div>
-                                    <div style={{ height: '6px', background: 'rgba(0,0,0,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
-                                        <div style={{ height: '100%', width: `${item.value}%`, background: item.color, borderRadius: '3px', transition: 'width 0.5s ease' }}></div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
                     </div>
-                    <div className="premium-card">
-                        <h3 style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1rem', textAlign: 'center' }}>Weekly Task Completion</h3>
-                        <div className="bar-chart-container">
+                    <div className="premium-card" style={{ display: 'flex', flexDirection: 'column' }}>
+                        <h3 style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', textAlign: 'center', fontWeight: 600 }}>Weekly Event Flow</h3>
+                        <div className="bar-chart-container" style={{ flex: 1, padding: '0 1rem' }}>
                             {['M', 'T', 'W', 'Th', 'F', 'S', 'Su'].map((day, i) => (
                                 <div key={day} className="bar-column">
-                                    <div className="bar-fill" style={{ height: `${(thisWeekEventCounts[i] / maxEventsInWeek) * 100}%` }}></div>
-                                    <span className="bar-label">{day}</span>
+                                    <div style={{ flex: 1, width: '36px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px', position: 'relative', overflow: 'hidden' }}>
+                                        <div 
+                                            className="bar-fill" 
+                                            style={{ 
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: `${(thisWeekEventCounts[i] / maxEventsInWeek) * 100}%`,
+                                                background: `linear-gradient(180deg, ${personalColor}, ${workspaceColor})`,
+                                                borderRadius: '8px 8px 0 0',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                                transition: 'height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                                            }}
+                                        ></div>
+                                    </div>
+                                    <span className="bar-label" style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.75rem', marginTop: '0.5rem' }}>{day}</span>
                                 </div>
                             ))}
                         </div>
