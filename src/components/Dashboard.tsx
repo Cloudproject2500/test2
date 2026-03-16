@@ -544,7 +544,7 @@ const Dashboard: React.FC<DashboardProps> = ({
         const p = (counts.personal / total) * 100;
         const w = (counts.workspace / total) * 100;
         const a = (counts.academic / total) * 100;
-        // l (lifestyle) is implicitly handled by the remaining percentage
+        const l = (counts.lifestyle / total) * 100;
 
         return {
             gradient: `conic-gradient(
@@ -553,12 +553,14 @@ const Dashboard: React.FC<DashboardProps> = ({
                 var(--accent-blue) ${p + w}% ${p + w + a}%,
                 var(--success) ${p + w + a}% 100%
             )`,
-            total
+            total,
+            counts,
+            percentages: { p, w, a, l }
         };
     };
 
-    const totalEvents = calendarEvents.length;
     const distribution = calculateDistribution();
+    const totalEvents = calendarEvents.length;
     const brandBlue = '#3b82f6';
 
     return (
@@ -709,14 +711,32 @@ const Dashboard: React.FC<DashboardProps> = ({
                 {/* PROGRESS SECTION */}
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem' }}>Your Progress</h2>
                 <section className="dashboard-progress-section">
-                    <div className="premium-card flex-center">
-                        <div className="pie-chart" style={{ background: distribution?.gradient || 'var(--bg-card)' }}>
+                    <div className="premium-card" style={{ display: 'flex', alignItems: 'center', gap: '2rem', padding: '2rem' }}>
+                        <div className="pie-chart" style={{ background: distribution?.gradient || 'var(--bg-card)', flexShrink: 0, margin: 0 }}>
                             <div className="pie-chart-inner">
                                 <div>
                                     <span style={{ display: 'block', fontWeight: 700, color: 'var(--text-primary)' }}>{totalEvents}</span>
                                     <span>Total Events</span>
                                 </div>
                             </div>
+                        </div>
+                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            {[
+                                { label: 'Personal', color: personalColor, value: distribution?.percentages.p || 0, count: distribution?.counts.personal || 0 },
+                                { label: 'Workspace', color: workspaceColor, value: distribution?.percentages.w || 0, count: distribution?.counts.workspace || 0 },
+                                { label: 'Academic', color: 'var(--accent-blue)', value: distribution?.percentages.a || 0, count: distribution?.counts.academic || 0 },
+                                { label: 'Lifestyle', color: 'var(--success)', value: distribution?.percentages.l || 0, count: distribution?.counts.lifestyle || 0 },
+                            ].map((item) => (
+                                <div key={item.label}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem', fontSize: '0.75rem', fontWeight: 600 }}>
+                                        <span style={{ color: 'var(--text-secondary)' }}>{item.label}</span>
+                                        <span style={{ color: 'var(--text-primary)' }}>{item.count}</span>
+                                    </div>
+                                    <div style={{ height: '6px', background: 'rgba(0,0,0,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
+                                        <div style={{ height: '100%', width: `${item.value}%`, background: item.color, borderRadius: '3px', transition: 'width 0.5s ease' }}></div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <div className="premium-card">
