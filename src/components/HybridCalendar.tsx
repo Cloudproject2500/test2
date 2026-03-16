@@ -22,6 +22,7 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
         date: '',
         time: '',
         place: '',
+        type: 'personal' as 'personal' | 'workspace' | 'academic' | 'lifestyle'
     });
 
     // Calendar Helper Functions
@@ -46,10 +47,10 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                 date: newEvent.date,
                 time: newEvent.time,
                 place: newEvent.place,
-                type: 'personal' // Default new events to personal
+                type: newEvent.type
             });
             setShowModal(false);
-            setNewEvent({ title: '', date: '', time: '', place: '' });
+            setNewEvent({ title: '', date: '', time: '', place: '', type: 'personal' });
         }
     };
 
@@ -238,6 +239,31 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                                     style={{ width: '100%', padding: '0.5rem', borderRadius: '6px', border: '1px solid var(--border-color)' }}
                                     placeholder="e.g., Library"
                                 />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600 }}>Category</label>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', cursor: 'pointer' }}>
+                                        <input
+                                            type="radio"
+                                            name="eventType"
+                                            value="personal"
+                                            checked={newEvent.type === 'personal'}
+                                            onChange={() => setNewEvent({ ...newEvent, type: 'personal' })}
+                                        />
+                                        Personal
+                                    </label>
+                                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', cursor: 'pointer' }}>
+                                        <input
+                                            type="radio"
+                                            name="eventType"
+                                            value="workspace"
+                                            checked={newEvent.type === 'workspace'}
+                                            onChange={() => setNewEvent({ ...newEvent, type: 'workspace' })}
+                                        />
+                                        Workspace
+                                    </label>
+                                </div>
                             </div>
 
                             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1rem' }}>
