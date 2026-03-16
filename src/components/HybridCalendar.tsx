@@ -17,6 +17,7 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
 
     // Modal State
     const [showModal, setShowModal] = useState(false);
+    const [editingEventId, setEditingEventId] = useState<string | null>(null);
     const [newEvent, setNewEvent] = useState({
         title: '',
         date: '',
@@ -38,19 +39,42 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
     const daysInMonth = getDaysInMonth(currentDate);
     const firstDay = getFirstDayOfMonth(currentDate);
 
-    // Event Handlers
+    const openEditModal = (event: CalendarEvent) => {
+        setNewEvent({
+            title: event.title,
+            date: event.date,
+            time: event.time,
+            place: event.place || '',
+            type: event.type
+        });
+        setEditingEventId(event.id);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setEditingEventId(null);
+        setNewEvent({ title: '', date: '', time: '', place: '', type: 'personal' });
+    };
+
     const handleSaveEvent = (e: React.FormEvent) => {
         e.preventDefault();
         if (newEvent.title && newEvent.date) {
-            onAddEvent({
-                title: newEvent.title,
-                date: newEvent.date,
-                time: newEvent.time,
-                place: newEvent.place,
-                type: newEvent.type
-            });
-            setShowModal(false);
-            setNewEvent({ title: '', date: '', time: '', place: '', type: 'personal' });
+            if (editingEventId) {
+                onUpdateEvent({
+                    ...newEvent,
+                    id: editingEventId
+                });
+            } else {
+                onAddEvent({
+                    title: newEvent.title,
+                    date: newEvent.date,
+                    time: newEvent.time,
+                    place: newEvent.place,
+                    type: newEvent.type
+                });
+            }
+            closeModal();
         }
     };
 
@@ -79,7 +103,11 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button
                             className="btn-primary"
-                            onClick={() => setShowModal(true)}
+                            onClick={() => {
+                                setEditingEventId(null);
+                                setNewEvent({ title: '', date: '', time: '', place: '', type: 'personal' });
+                                setShowModal(true);
+                            }}
                             style={{ background: 'var(--accent-blue)', color: 'white', border: 'none' }}
                         >
                             + Add Event
@@ -138,22 +166,27 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
 
                                     <div className="thin-scrollbar" style={{ marginTop: '0.25rem', display: 'flex', flexDirection: 'column', gap: '2px', overflowY: 'auto', maxHeight: '90px' }}>
                                         {dayEvents.map((e) => (
-                                            <div key={e.id} style={{
-                                                fontSize: '10px',
-                                                padding: '2px 4px',
-                                                borderRadius: '3px',
-                                                background: e.type === 'personal' ? personalColor :
-                                                            e.type === 'workspace' ? workspaceColor :
-                                                            e.type === 'academic' ? 'var(--accent-blue)' : 'var(--success)',
-                                                color: 'white',
-                                                whiteSpace: 'nowrap',
-                                                overflow: 'hidden',
-                                                textOverflow: 'ellipsis',
-                                                cursor: 'pointer',
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center'
-                                            }} title={`${e.time} - ${e.title} @ ${e.place}`}>
+                                            <div 
+                                                key={e.id} 
+                                                style={{
+                                                    fontSize: '10px',
+                                                    padding: '2px 4px',
+                                                    borderRadius: '3px',
+                                                    background: e.type === 'personal' ? personalColor :
+                                                                e.type === 'workspace' ? workspaceColor :
+                                                                e.type === 'academic' ? 'var(--accent-blue)' : 'var(--success)',
+                                                    color: 'white',
+                                                    whiteSpace: 'nowrap',
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between',
+                                                    alignItems: 'center'
+                                                }} 
+                                                title={`${e.time} - ${e.title} @ ${e.place}`}
+                                                onClick={(ev) => { ev.stopPropagation(); openEditModal(e); }}
+                                            >
                                                 <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
                                                     {e.time && <span style={{ opacity: 0.8, marginRight: '4px' }}>{e.time}</span>}
                                                     {e.title}
@@ -187,7 +220,7 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                     alignItems: 'center',
                     justifyContent: 'center',
                     zIndex: 1000
-                }} onClick={() => setShowModal(false)}>
+                }} onClick={closeModal}>
                     <div style={{
                         backgroundColor: 'white',
                         padding: '2rem',
@@ -196,7 +229,7 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                         maxWidth: '90%',
                         boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
                     }} onClick={e => e.stopPropagation()}>
-                        <h3 style={{ marginTop: 0, marginBottom: '1.5rem', fontSize: '1.5rem' }}>Add New Event</h3>
+                        <h3 style={{ marginTop: 0, marginBottom: '1.5rem', fontSize: '1.5rem' }}>{editingEventId ? 'Edit Event' : 'Add New Event'}</h3>
                         <form onSubmit={handleSaveEvent} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             <div>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem', fontWeight: 600 }}>Event Name</label>
@@ -269,7 +302,7 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1rem' }}>
                                 <button
                                     type="button"
-                                    onClick={() => setShowModal(false)}
+                                    onClick={closeModal}
                                     className="btn-primary"
                                     style={{ background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)' }}
                                 >
