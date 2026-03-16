@@ -102,14 +102,14 @@ body {
     align-items: center;
     justify-content: space-between;
     min-height: 100vh;
-    padding: 10rem 8% 8rem 8%;
-    gap: 4rem;
+    padding: 8rem 10% 6rem 10%;
+    gap: 2rem;
     color: black;
 }
 
 .hero-content {
-    flex: 1;
-    max-width: 650px;
+    flex: 1.2;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -117,24 +117,24 @@ body {
 }
 
 .hero-image-container {
-    flex: 1.2;
+    flex: 0.8;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     position: relative;
 }
 
 .hero-illustration {
     width: 100%;
-    max-width: 700px;
+    max-width: 500px;
     height: auto;
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08));
-    animation: floating 6s ease-in-out infinite;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05));
+    animation: floating 8s ease-in-out infinite;
 }
 
 @keyframes floating {
     0% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+    50% { transform: translateY(-10px); }
     100% { transform: translateY(0px); }
 }
 
