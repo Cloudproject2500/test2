@@ -108,7 +108,7 @@ body {
 }
 
 .hero-content {
-    flex: 1;
+    flex: 0.8;
     max-width: 650px;
     display: flex;
     flex-direction: column;
@@ -117,7 +117,7 @@ body {
 }
 
 .hero-image-container {
-    flex: 1.2;
+    flex: 1.5;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,9 +126,9 @@ body {
 
 .hero-illustration {
     width: 100%;
-    max-width: 750px;
+    max-width: 950px;
     height: auto;
-    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.06));
+    filter: drop-shadow(0 20px 50px rgba(0,0,0,0.08));
     animation: floating 6s ease-in-out infinite;
     border-radius: 20px;
 }
