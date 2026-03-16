@@ -586,12 +586,12 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
 
                         {/* Box 3: Upcoming Events */}
                         <div className="mini-card" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem', borderRadius: '16px' }} onClick={() => onViewChange('calendar')}>
-                            <h3 style={{ 
-                                fontSize: '1rem', 
-                                fontWeight: 700, 
-                                color: 'var(--text-primary)', 
-                                marginBottom: '1.5rem', 
-                                textTransform: 'uppercase', 
+                            <h3 style={{
+                                fontSize: '1rem',
+                                fontWeight: 700,
+                                color: 'var(--text-primary)',
+                                marginBottom: '1.5rem',
+                                textTransform: 'uppercase',
                                 letterSpacing: '0.05em',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -709,15 +709,15 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
                                     currentYear === realToday.getFullYear();
 
                                 return (
-                                    <div key={day} style={{ 
-                                        background: 'var(--bg-card)', 
-                                        height: '100px', 
-                                        padding: '0.5rem', 
-                                        position: 'relative', 
-                                        display: 'flex', 
-                                        flexDirection: 'column', 
+                                    <div key={day} style={{
+                                        background: 'var(--bg-card)',
+                                        height: '100px',
+                                        padding: '0.5rem',
+                                        position: 'relative',
+                                        display: 'flex',
+                                        flexDirection: 'column',
                                         gap: '4px',
-                                        overflow: 'hidden' 
+                                        overflow: 'hidden'
                                     }}>
                                         <span style={{
                                             display: 'inline-flex',
@@ -744,13 +744,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
                                                     const isPersonal = e.title.toLowerCase().includes('bookkeeping');
                                                     const bgColor = isPersonal ? personalColor : workspaceColor;
                                                     return (
-                                                        <div 
-                                                            key={idx} 
-                                                            style={{ 
-                                                                background: bgColor, 
-                                                                color: 'white', 
-                                                                fontSize: '0.7rem', 
-                                                                padding: '2px 6px', 
+                                                        <div
+                                                            key={idx}
+                                                            style={{
+                                                                background: bgColor,
+                                                                color: 'white',
+                                                                fontSize: '0.7rem',
+                                                                padding: '2px 6px',
                                                                 borderRadius: '4px',
                                                                 whiteSpace: 'nowrap',
                                                                 overflow: 'hidden',
@@ -779,13 +779,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
                             const indicatorColor = isPersonal ? personalColor : workspaceColor;
 
                             return (
-                                <div 
-                                    key={i} 
-                                    className="mini-card" 
-                                    style={{ 
-                                        minHeight: '80px', 
-                                        flex: 'none', 
-                                        position: 'relative', 
+                                <div
+                                    key={i}
+                                    className="mini-card"
+                                    style={{
+                                        minHeight: '80px',
+                                        flex: 'none',
+                                        position: 'relative',
                                         marginBottom: '12px',
                                         borderLeft: `4px solid ${indicatorColor}`,
                                         paddingLeft: '12px'
