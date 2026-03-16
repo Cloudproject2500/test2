@@ -529,6 +529,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
     const thisWeekEventCounts = getWeeklyEventCounts();
     const maxEventsInWeek = Math.max(...thisWeekEventCounts, 1);
+    const todayIndex = (new Date().getDay() === 0 ? 6 : new Date().getDay() - 1);
 
     // Pie Chart distribution
     const calculateDistribution = () => {
@@ -724,27 +725,48 @@ const Dashboard: React.FC<DashboardProps> = ({
                     <div className="premium-card" style={{ display: 'flex', flexDirection: 'column' }}>
                         <h3 style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1.5rem', textAlign: 'center', fontWeight: 600 }}>Weekly Event Flow</h3>
                         <div className="bar-chart-container" style={{ flex: 1, padding: '0 1rem' }}>
-                            {['M', 'T', 'W', 'Th', 'F', 'S', 'Su'].map((day, i) => (
-                                <div key={day} className="bar-column">
-                                    <div style={{ flex: 1, width: '36px', background: 'rgba(0,0,0,0.03)', borderRadius: '8px', position: 'relative', overflow: 'hidden' }}>
-                                        <div 
-                                            className="bar-fill" 
-                                            style={{ 
-                                                position: 'absolute',
-                                                bottom: 0,
-                                                left: 0,
-                                                width: '100%',
-                                                height: `${(thisWeekEventCounts[i] / maxEventsInWeek) * 100}%`,
-                                                background: `linear-gradient(180deg, ${personalColor}, ${workspaceColor})`,
-                                                borderRadius: '8px 8px 0 0',
-                                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                                transition: 'height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)'
-                                            }}
-                                        ></div>
+                            {['M', 'T', 'W', 'Th', 'F', 'S', 'Su'].map((day, i) => {
+                                const isToday = i === todayIndex;
+                                return (
+                                    <div key={day} className="bar-column">
+                                        <div style={{ 
+                                            flex: 1, 
+                                            width: '36px', 
+                                            background: isToday ? 'rgba(59, 130, 246, 0.08)' : 'rgba(0,0,0,0.03)', 
+                                            border: isToday ? `1.5px solid ${workspaceColor}` : 'none',
+                                            borderRadius: '8px', 
+                                            position: 'relative', 
+                                            overflow: 'hidden',
+                                            boxShadow: isToday ? `0 0 15px ${workspaceColor}22` : 'none'
+                                        }}>
+                                            <div 
+                                                className="bar-fill" 
+                                                style={{ 
+                                                    position: 'absolute',
+                                                    bottom: 0,
+                                                    left: 0,
+                                                    width: '100%',
+                                                    height: `${(thisWeekEventCounts[i] / maxEventsInWeek) * 100}%`,
+                                                    background: isToday 
+                                                        ? `linear-gradient(180deg, ${workspaceColor}, ${personalColor})`
+                                                        : `linear-gradient(180deg, ${personalColor}, ${workspaceColor})`,
+                                                    borderRadius: '8px 8px 0 0',
+                                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                                    transition: 'height 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                                                }}
+                                            ></div>
+                                        </div>
+                                        <span className="bar-label" style={{ 
+                                            fontWeight: isToday ? 800 : 600, 
+                                            color: isToday ? workspaceColor : 'var(--text-secondary)', 
+                                            fontSize: '0.75rem', 
+                                            marginTop: '0.5rem',
+                                            transform: isToday ? 'scale(1.1)' : 'none',
+                                            transition: 'transform 0.3s ease'
+                                        }}>{day}</span>
                                     </div>
-                                    <span className="bar-label" style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.75rem', marginTop: '0.5rem' }}>{day}</span>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </div>
                 </section>

@@ -114,9 +114,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                         padding: isCollapsed ? '0.5rem' : '0.5rem 0.75rem'
                     }}
                 >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <img src="/logo1.png" alt="TaskMate Logo" style={{ height: '36px', width: '36px', objectFit: 'contain' }} />
-                    </div>
+                    {!isCollapsed && (
+                        <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--accent-blue)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
+                            TaskMate
+                        </span>
+                    )}
                     <button
                         onClick={() => setIsCollapsed(!isCollapsed)}
                         style={{
@@ -138,19 +140,19 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
 
                 {!isCollapsed && (
-                    <div className="sidebar-section-title" style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                    <div className="sidebar-section-title" style={{
+                        display: 'flex',
+                        alignItems: 'center',
                         gap: '10px',
                         fontSize: '0.75rem',
                         margin: '1.5rem 0 0.75rem 0'
                     }}>
-                        <div 
+                        <div
                             onClick={() => document.getElementById('personal-color-picker')?.click()}
-                            style={{ 
-                                width: '14px', 
-                                height: '14px', 
-                                borderRadius: '50%', 
+                            style={{
+                                width: '14px',
+                                height: '14px',
+                                borderRadius: '50%',
                                 background: personalColor,
                                 cursor: 'pointer',
                                 transition: 'transform 0.2s ease',
@@ -159,9 +161,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                             className="color-dot"
                             title="Change color"
                         />
-                        <input 
+                        <input
                             id="personal-color-picker"
-                            type="color" 
+                            type="color"
                             style={{ display: 'none' }}
                             value={personalColor}
                             onChange={(e) => {
@@ -337,19 +339,19 @@ const Sidebar: React.FC<SidebarProps> = ({
             {/* Middle Section: Workspace */}
             <div className="sidebar-section">
                 {!isCollapsed && (
-                    <div className="sidebar-section-title" style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
+                    <div className="sidebar-section-title" style={{
+                        display: 'flex',
+                        alignItems: 'center',
                         gap: '10px',
                         fontSize: '0.75rem',
                         margin: '1.5rem 0 0.75rem 0'
                     }}>
-                        <div 
+                        <div
                             onClick={() => document.getElementById('workspace-color-picker')?.click()}
-                            style={{ 
-                                width: '14px', 
-                                height: '14px', 
-                                borderRadius: '50%', 
+                            style={{
+                                width: '14px',
+                                height: '14px',
+                                borderRadius: '50%',
                                 background: workspaceColor,
                                 cursor: 'pointer',
                                 transition: 'transform 0.2s ease',
@@ -358,9 +360,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                             className="color-dot"
                             title="Change color"
                         />
-                        <input 
+                        <input
                             id="workspace-color-picker"
-                            type="color" 
+                            type="color"
                             style={{ display: 'none' }}
                             value={workspaceColor}
                             onChange={(e) => {
