@@ -778,7 +778,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                         </div>
                     </div>
 
-                    <div className="dashboard-widget-column" style={{ overflowY: 'auto', maxHeight: 'none', paddingRight: '12px' }}>
+                    <div className="dashboard-widget-column thin-scrollbar" style={{ overflowY: 'auto', maxHeight: '650px', paddingRight: '12px' }}>
                         {calendarEvents.map((event) => {
                             const isPersonal = event.type === 'personal';
                             const indicatorColor = isPersonal ? personalColor : workspaceColor;
