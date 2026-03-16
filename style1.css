@@ -505,10 +505,10 @@ body {
 }
 
 .calendar-showcase-inner {
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1.6fr;
+    grid-template-columns: 1fr 2.2fr;
     gap: 4rem;
     align-items: center;
 }
