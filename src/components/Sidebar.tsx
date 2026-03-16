@@ -430,18 +430,16 @@ const Sidebar: React.FC<SidebarProps> = ({
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Inbox</span>}
                     {!isCollapsed && <span className="badge-purple" style={{ marginLeft: 'auto', borderRadius: '10px', padding: '0 6px', fontSize: '10px' }}>3</span>}
                 </a>
-                <div
-                    className="nav-item"
-                    style={{
-                        cursor: 'not-allowed',
-                        opacity: 0.5,
-                        justifyContent: isCollapsed ? 'center' : 'flex-start'
-                    }}
+                <a
+                    href="#settings"
+                    className={`nav-item ${currentView === 'settings' ? 'active' : ''}`}
+                    onClick={(e) => { e.preventDefault(); onViewChange('settings'); }}
+                    style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
                     title={isCollapsed ? "Settings" : ''}
                 >
                     <span className="nav-icon" style={{ marginRight: isCollapsed ? 0 : '0.75rem' }}>⚙️</span>
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Settings</span>}
-                </div>
+                </a>
             </div>
         </aside>
     );

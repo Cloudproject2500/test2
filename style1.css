@@ -108,7 +108,7 @@ body {
 }
 
 .hero-content {
-    flex: 0.8;
+    flex: 1;
     max-width: 650px;
     display: flex;
     flex-direction: column;
@@ -117,7 +117,7 @@ body {
 }
 
 .hero-image-container {
-    flex: 1.5;
+    flex: 1.2;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,17 +126,25 @@ body {
 
 .hero-illustration {
     width: 100%;
-    max-width: 950px;
+    max-width: 750px;
     height: auto;
-    filter: drop-shadow(0 20px 50px rgba(0,0,0,0.08));
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.06));
     animation: floating 6s ease-in-out infinite;
     border-radius: 20px;
 }
 
 @keyframes floating {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0px); }
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-15px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
 }
 
 .hero-title {

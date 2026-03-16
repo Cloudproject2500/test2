@@ -9,6 +9,7 @@ import HybridCalendar from './components/HybridCalendar';
 import CoursesView from './components/CoursesView';
 import DeadlinesView from './components/DeadlinesView';
 import PersonalTodoView from './components/PersonalTodoView';
+import Settings from './components/Settings';
 import type { LifePage, PersonalTodo, CalendarEvent } from './types';
 
 function App() {
@@ -16,8 +17,16 @@ function App() {
   const [currentView, setCurrentView] = useState('dashboard');
   const [showTutorial, setShowTutorial] = useState(false);
 
-  const [theme] = useState(() => {
+  const [theme, setTheme] = useState(() => {
     return localStorage.getItem('taskmate_theme') || 'glass';
+  });
+
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    return localStorage.getItem('taskmate_dark_mode') === 'true';
+  });
+
+  const [customFontColor, setCustomFontColor] = useState(() => {
+    return localStorage.getItem('taskmate_font_color') || 'var(--text-primary)';
   });
 
   const [personalColor, setPersonalColor] = useState(() => localStorage.getItem('taskmate_personal_color') || '#22c55e');
@@ -27,6 +36,16 @@ function App() {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('taskmate_theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-mode', isDarkMode ? 'dark' : 'light');
+    localStorage.setItem('taskmate_dark_mode', String(isDarkMode));
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--user-font-color', customFontColor);
+    localStorage.setItem('taskmate_font_color', customFontColor);
+  }, [customFontColor]);
 
   useEffect(() => {
     const checkTutorial = async () => {
@@ -195,6 +214,17 @@ function App() {
         return <CoursesView />;
       case 'deadlines':
         return <DeadlinesView />;
+      case 'settings':
+        return (
+          <Settings 
+            isDarkMode={isDarkMode}
+            onDarkModeToggle={setIsDarkMode}
+            customFontColor={customFontColor}
+            onFontColorChange={setCustomFontColor}
+            currentTheme={theme}
+            onThemeChange={setTheme}
+          />
+        );
 
       default:
         const matchedPage = lifePages.find(p => p.id === currentView);
