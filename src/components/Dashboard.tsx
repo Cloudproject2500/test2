@@ -1,5 +1,5 @@
 import React from 'react';
-import type { LifePage, PersonalTodo } from '../types';
+import type { LifePage, PersonalTodo, CalendarEvent } from '../types';
 
 interface DashboardProps {
     lifePages: LifePage[];
@@ -7,6 +7,9 @@ interface DashboardProps {
     onViewChange: (view: string) => void;
     personalColor: string;
     workspaceColor: string;
+    calendarEvents: CalendarEvent[];
+    onUpdateCalendarEvent: (event: CalendarEvent) => void;
+    onDeleteCalendarEvent: (id: string) => void;
 }
 
 const ImageWidget: React.FC = () => {
@@ -270,7 +273,14 @@ const ImageWidget: React.FC = () => {
     );
 };
 
-const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, workspaceColor }) => {
+const Dashboard: React.FC<DashboardProps> = ({ 
+    onViewChange, 
+    personalColor, 
+    workspaceColor, 
+    calendarEvents,
+    onUpdateCalendarEvent,
+    onDeleteCalendarEvent 
+}) => {
 
     const [greeting, setGreeting] = React.useState('');
     const [currentDate, setCurrentDate] = React.useState(new Date());
@@ -457,20 +467,15 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
         setReminders(prev => prev.filter((_, i) => i !== index));
     };
 
-    // Calendar Side List State
-    const [calendarList, setCalendarList] = React.useState([
-        { title: 'TEK Club meeting', date: '2026-03-18', time: '12:00 PM' },
-        { title: 'Business Night', date: '2026-03-18', time: '6:30 PM' },
-        { title: 'STUCO Team dinner', date: '2026-03-20', time: '08:00 PM' },
-        { title: 'Weekly Bookkeeping', date: '2026-03-22', time: '00:00 PM' }
-    ]);
-
-    const updateCalendarEvent = (index: number, field: 'title' | 'date' | 'time', value: string) => {
-        setCalendarList(prev => prev.map((e, i) => i === index ? { ...e, [field]: value } : e));
+    const updateCalendarEvent = (id: string, field: keyof CalendarEvent, value: string) => {
+        const event = calendarEvents.find(e => e.id === id);
+        if (event) {
+            onUpdateCalendarEvent({ ...event, [field]: value });
+        }
     };
 
-    const deleteCalendarEvent = (index: number) => {
-        setCalendarList(prev => prev.filter((_, i) => i !== index));
+    const deleteCalendarEvent = (id: string) => {
+        onDeleteCalendarEvent(id);
     };
 
     React.useEffect(() => {
@@ -735,17 +740,17 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
                                             {day}
                                         </span>
                                         <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'hidden' }}>
-                                            {calendarList
+                                            {calendarEvents
                                                 .filter(e => {
                                                     const eDate = new Date(e.date);
                                                     return eDate.getDate() === day && eDate.getMonth() === currentMonth && eDate.getFullYear() === currentYear;
                                                 })
-                                                .map((e, idx) => {
-                                                    const isPersonal = e.title.toLowerCase().includes('bookkeeping');
+                                                .map((event) => {
+                                                    const isPersonal = event.type === 'personal';
                                                     const bgColor = isPersonal ? personalColor : workspaceColor;
                                                     return (
                                                         <div
-                                                            key={idx}
+                                                            key={event.id}
                                                             style={{
                                                                 background: bgColor,
                                                                 color: 'white',
@@ -759,9 +764,9 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
                                                                 width: '100%',
                                                                 display: 'block'
                                                             }}
-                                                            title={e.title}
+                                                            title={event.title}
                                                         >
-                                                            {e.title}
+                                                            {event.title}
                                                         </div>
                                                     );
                                                 })
@@ -774,13 +779,13 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
                     </div>
 
                     <div className="dashboard-widget-column" style={{ overflowY: 'auto', maxHeight: 'none', paddingRight: '12px' }}>
-                        {calendarList.map((event, i) => {
-                            const isPersonal = event.title.toLowerCase().includes('bookkeeping');
+                        {calendarEvents.map((event) => {
+                            const isPersonal = event.type === 'personal';
                             const indicatorColor = isPersonal ? personalColor : workspaceColor;
 
                             return (
                                 <div
-                                    key={i}
+                                    key={event.id}
                                     className="mini-card"
                                     style={{
                                         minHeight: '80px',
@@ -795,23 +800,23 @@ const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, work
                                         <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                                             <EditableText
                                                 value={event.title}
-                                                onChange={(v) => updateCalendarEvent(i, 'title', v)}
+                                                onChange={(v) => updateCalendarEvent(event.id, 'title', v)}
                                                 style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', display: 'block', marginBottom: '2px' }}
                                             />
                                             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                                 <EditableDate
                                                     value={event.date}
-                                                    onChange={(v) => updateCalendarEvent(i, 'date', v)}
+                                                    onChange={(v) => updateCalendarEvent(event.id, 'date', v)}
                                                     style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}
                                                 />
                                                 <EditableText
                                                     value={event.time}
-                                                    onChange={(v) => updateCalendarEvent(i, 'time', v)}
+                                                    onChange={(v) => updateCalendarEvent(event.id, 'time', v)}
                                                     style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}
                                                 />
                                             </div>
                                         </div>
-                                        {deleteBtn((e) => { e.stopPropagation(); deleteCalendarEvent(i); })}
+                                        {deleteBtn((e) => { e.stopPropagation(); deleteCalendarEvent(event.id); })}
                                     </div>
                                 </div>
                             );

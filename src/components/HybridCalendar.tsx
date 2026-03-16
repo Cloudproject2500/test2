@@ -1,37 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-// Define the Event interface
-interface CalendarEvent {
-    id: string;
-    title: string;
-    date: string; // ISO Date string (YYYY-MM-DD)
-    time: string;
-    place: string;
-    type: 'academic' | 'lifestyle' | 'personal';
+import type { CalendarEvent } from '../types';
+
+interface HybridCalendarProps {
+    events: CalendarEvent[];
+    onAddEvent: (event: Omit<CalendarEvent, 'id'>) => void;
+    onDeleteEvent: (id: string) => void;
+    onUpdateEvent: (event: CalendarEvent) => void;
 }
 
-const HybridCalendar: React.FC = () => {
+const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onDeleteEvent, onUpdateEvent }) => {
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const [currentDate, setCurrentDate] = useState(new Date());
-
-    // State for Events
-    const [events, setEvents] = useState<CalendarEvent[]>([
-        // Initial mock events (using dynamic dates for current month functionality)
-        { id: '1', title: 'CS101 Final', date: '', time: '10:00', place: 'Room 304', type: 'academic' },
-        { id: '2', title: 'Gym Session', date: '', time: '18:00', place: 'Campus Gym', type: 'lifestyle' },
-    ]);
-
-    // Initialize mock events to the current month for demo purposes
-    useEffect(() => {
-        const year = currentDate.getFullYear();
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        setEvents([
-            { id: '1', title: 'CS101 Final', date: `${year}-${month}-15`, time: '10:00', place: 'Room 304', type: 'academic' },
-            { id: '2', title: 'Gym Session', date: `${year}-${month}-15`, time: '18:00', place: 'Campus Gym', type: 'lifestyle' },
-            { id: '3', title: 'Math Quiz', date: `${year}-${month}-18`, time: '14:00', place: 'Room 101', type: 'academic' },
-            { id: '4', title: 'Hobby: Painting', date: `${year}-${month}-22`, time: '20:00', place: 'Home', type: 'lifestyle' },
-        ]);
-    }, []); // Run once on mount
 
     // Modal State
     const [showModal, setShowModal] = useState(false);
@@ -59,15 +39,13 @@ const HybridCalendar: React.FC = () => {
     const handleSaveEvent = (e: React.FormEvent) => {
         e.preventDefault();
         if (newEvent.title && newEvent.date) {
-            const event: CalendarEvent = {
-                id: Math.random().toString(36).substr(2, 9),
+            onAddEvent({
                 title: newEvent.title,
                 date: newEvent.date,
                 time: newEvent.time,
                 place: newEvent.place,
                 type: 'personal' // Default new events to personal
-            };
-            setEvents([...events, event]);
+            });
             setShowModal(false);
             setNewEvent({ title: '', date: '', time: '', place: '' });
         }
@@ -167,10 +145,19 @@ const HybridCalendar: React.FC = () => {
                                                 whiteSpace: 'nowrap',
                                                 overflow: 'hidden',
                                                 textOverflow: 'ellipsis',
-                                                cursor: 'pointer'
+                                                cursor: 'pointer',
+                                                display: 'flex',
+                                                justifyContent: 'space-between',
+                                                alignItems: 'center'
                                             }} title={`${e.time} - ${e.title} @ ${e.place}`}>
-                                                {e.time && <span style={{ opacity: 0.8, marginRight: '4px' }}>{e.time}</span>}
-                                                {e.title}
+                                                <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
+                                                    {e.time && <span style={{ opacity: 0.8, marginRight: '4px' }}>{e.time}</span>}
+                                                    {e.title}
+                                                </div>
+                                                <span 
+                                                    style={{ marginLeft: '4px', opacity: 0.6, fontSize: '12px' }} 
+                                                    onClick={(ev) => { ev.stopPropagation(); onDeleteEvent(e.id); }}
+                                                >×</span>
                                             </div>
                                         ))}
                                     </div>

@@ -9,7 +9,7 @@ import HybridCalendar from './components/HybridCalendar';
 import CoursesView from './components/CoursesView';
 import DeadlinesView from './components/DeadlinesView';
 import PersonalTodoView from './components/PersonalTodoView';
-import type { LifePage, PersonalTodo } from './types';
+import type { LifePage, PersonalTodo, CalendarEvent } from './types';
 
 function App() {
 
@@ -69,6 +69,25 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>(() => {
+    const saved = localStorage.getItem('taskmate_calendar_events');
+    if (saved) return JSON.parse(saved);
+
+    const year = new Date().getFullYear();
+    const month = String(new Date().getMonth() + 1).padStart(2, '0');
+
+    return [
+      { id: 'c1', title: 'TEK Club meeting', date: `${year}-${month}-18`, time: '12:00 PM', type: 'personal' },
+      { id: 'c2', title: 'Business Night', date: `${year}-${month}-18`, time: '06:30 PM', type: 'workspace' },
+      { id: 'c3', title: 'STUCO Team dinner', date: `${year}-${month}-20`, time: '08:00 PM', type: 'workspace' },
+      { id: 'c4', title: 'Weekly Bookkeeping', date: `${year}-${month}-22`, time: '00:00 AM', type: 'personal' },
+      { id: 'h1', title: 'CS101 Final', date: `${year}-${month}-15`, time: '10:00 AM', type: 'academic', place: 'Room 304' },
+      { id: 'h2', title: 'Gym Session', date: `${year}-${month}-15`, time: '06:00 PM', type: 'lifestyle', place: 'Campus Gym' },
+      { id: 'h3', title: 'Math Quiz', date: `${year}-${month}-18`, time: '02:00 PM', type: 'academic', place: 'Room 101' },
+      { id: 'h4', title: 'Hobby: Painting', date: `${year}-${month}-22`, time: '08:00 PM', type: 'lifestyle', place: 'Home' },
+    ];
+  });
+
   const saveTodos = (updated: PersonalTodo[]) => {
     setPersonalTodos(updated);
     localStorage.setItem('taskmate_personal_todos', JSON.stringify(updated));
@@ -98,6 +117,28 @@ function App() {
   const handleDeleteTodo = (id: string) => {
     const updated = personalTodos.filter(t => t.id !== id);
     saveTodos(updated);
+  };
+
+  const handleAddCalendarEvent = (event: Omit<CalendarEvent, 'id'>) => {
+    const newEvent: CalendarEvent = {
+      ...event,
+      id: Math.random().toString(36).substr(2, 9)
+    };
+    const updated = [...calendarEvents, newEvent];
+    setCalendarEvents(updated);
+    localStorage.setItem('taskmate_calendar_events', JSON.stringify(updated));
+  };
+
+  const handleDeleteCalendarEvent = (id: string) => {
+    const updated = calendarEvents.filter(e => e.id !== id);
+    setCalendarEvents(updated);
+    localStorage.setItem('taskmate_calendar_events', JSON.stringify(updated));
+  };
+
+  const handleUpdateCalendarEvent = (updatedEvent: CalendarEvent) => {
+    const updated = calendarEvents.map(e => e.id === updatedEvent.id ? updatedEvent : e);
+    setCalendarEvents(updated);
+    localStorage.setItem('taskmate_calendar_events', JSON.stringify(updated));
   };
 
 
@@ -140,7 +181,14 @@ function App() {
       case 'inbox':
         return <Inbox />;
       case 'calendar':
-        return <HybridCalendar />;
+        return (
+          <HybridCalendar
+            events={calendarEvents}
+            onAddEvent={handleAddCalendarEvent}
+            onDeleteEvent={handleDeleteCalendarEvent}
+            onUpdateEvent={handleUpdateCalendarEvent}
+          />
+        );
       case 'courses':
         return <CoursesView />;
       case 'deadlines':
@@ -167,6 +215,9 @@ function App() {
           onViewChange={setCurrentView}
           personalColor={personalColor}
           workspaceColor={workspaceColor}
+          calendarEvents={calendarEvents}
+          onUpdateCalendarEvent={handleUpdateCalendarEvent}
+          onDeleteCalendarEvent={handleDeleteCalendarEvent}
         />;
     }
   };

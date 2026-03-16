@@ -63,6 +63,15 @@ export interface PersonalTodo {
     color?: string;
 }
 
+export interface CalendarEvent {
+    id: string;
+    title: string;
+    date: string; // ISO Date string (YYYY-MM-DD)
+    time: string;
+    place?: string;
+    type: 'academic' | 'lifestyle' | 'personal' | 'workspace';
+}
+
 
 
 
