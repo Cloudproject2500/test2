@@ -154,7 +154,9 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                                     borderBottom: '1px solid #f0f0f0',
                                     padding: '0.5rem',
                                     backgroundColor: isCurrentMonth ? 'transparent' : '#f9fafb',
-                                    minHeight: '120px'
+                                    minHeight: '120px',
+                                    minWidth: 0, // Prevent cell from expanding horizontally
+                                    overflow: 'hidden' // Ensure content stays within cell
                                 }}>
                                     <span style={{
                                         fontSize: '0.75rem',
@@ -182,7 +184,9 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                                                     cursor: 'pointer',
                                                     display: 'flex',
                                                     justifyContent: 'space-between',
-                                                    alignItems: 'center'
+                                                    alignItems: 'center',
+                                                    width: '100%', // Ensure it fits the container width
+                                                    maxWidth: '100%'
                                                 }} 
                                                 title={`${e.time} - ${e.title} @ ${e.place}`}
                                                 onClick={(ev) => { ev.stopPropagation(); openEditModal(e); }}
