@@ -22,18 +22,18 @@
 :root[data-mode="dark"],
 html[data-mode="dark"],
 [data-mode="dark"] body {
-  --bg-main: #020617 !important;
-  --bg-sidebar: #0f172a !important;
-  --bg-card: #1e293b !important;
-  --bg-card-hover: #334155 !important;
-  --bg-hover: #334155 !important;
+  --bg-main: #000000 !important;
+  --bg-sidebar: #050505 !important;
+  --bg-card: #0a0a0a !important;
+  --bg-card-hover: #121212 !important;
+  --bg-hover: #121212 !important;
   --text-primary: #f8fafc !important;
   --text-secondary: #94a3b8 !important;
-  --border-color: #334155 !important;
-  --shadow-soft: 0 4px 24px -2px rgba(0, 0, 0, 0.4) !important;
-  --shadow-hover: 0 10px 30px -4px rgba(0, 0, 0, 0.6) !important;
-  --bg-primary: #020617 !important;
-  --bg-secondary: #0f172a !important;
+  --border-color: #1a1a1a !important;
+  --shadow-soft: 0 4px 24px -2px rgba(0, 0, 0, 0.6) !important;
+  --shadow-hover: 0 10px 30px -4px rgba(0, 0, 0, 0.8) !important;
+  --bg-primary: #000000 !important;
+  --bg-secondary: #050505 !important;
 }
 
 [data-mode="dark"] .premium-card {

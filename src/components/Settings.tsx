@@ -5,17 +5,13 @@ interface SettingsProps {
     onDarkModeToggle: (isDark: boolean) => void;
     customFontColor: string;
     onFontColorChange: (color: string) => void;
-    currentTheme: string;
-    onThemeChange: (theme: string) => void;
 }
 
 const Settings: React.FC<SettingsProps> = ({
     isDarkMode,
     onDarkModeToggle,
     customFontColor,
-    onFontColorChange,
-    currentTheme,
-    onThemeChange
+    onFontColorChange
 }) => {
     return (
         <div className="settings-view" style={{ 
@@ -94,31 +90,6 @@ const Settings: React.FC<SettingsProps> = ({
                     </div>
                 </div>
 
-                <div style={{ marginBottom: '1.5rem' }}>
-                    <div style={{ fontWeight: 600, marginBottom: '0.5rem' }}>Core Theme</div>
-                    <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1rem' }}>Select your preferred UI style</div>
-                    <div style={{ display: 'flex', gap: '1rem' }}>
-                        {['glass', 'saas', 'soft'].map(t => (
-                            <button
-                                key={t}
-                                onClick={() => onThemeChange(t)}
-                                style={{
-                                    padding: '0.75rem 1.5rem',
-                                    borderRadius: '8px',
-                                    border: currentTheme === t ? '2px solid var(--accent-blue)' : '1px solid var(--border-color)',
-                                    background: currentTheme === t ? 'var(--bg-hover)' : 'var(--bg-card)',
-                                    color: 'var(--text-primary)',
-                                    fontWeight: 600,
-                                    cursor: 'pointer',
-                                    textTransform: 'capitalize',
-                                    flex: 1
-                                }}
-                            >
-                                {t}
-                            </button>
-                        ))}
-                    </div>
-                </div>
             </section>
         </div>
     );

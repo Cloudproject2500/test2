@@ -221,8 +221,6 @@ function App() {
             onDarkModeToggle={setIsDarkMode}
             customFontColor={customFontColor}
             onFontColorChange={setCustomFontColor}
-            currentTheme={theme}
-            onThemeChange={setTheme}
           />
         );
 
