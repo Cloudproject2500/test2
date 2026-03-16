@@ -98,21 +98,45 @@ body {
     flex: 1;
     background: white;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
     min-height: 100vh;
-    padding: 10rem 5% 12rem 5%;
-    text-align: left;
+    padding: 10rem 8% 8rem 8%;
+    gap: 4rem;
     color: black;
 }
 
 .hero-content {
-    max-width: 800px;
+    flex: 1;
+    max-width: 650px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     z-index: 2;
+}
+
+.hero-image-container {
+    flex: 1.2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.hero-illustration {
+    width: 100%;
+    max-width: 750px;
+    height: auto;
+    filter: drop-shadow(0 20px 40px rgba(0,0,0,0.06));
+    animation: floating 6s ease-in-out infinite;
+    border-radius: 20px;
+}
+
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
 }
 
 .hero-title {
