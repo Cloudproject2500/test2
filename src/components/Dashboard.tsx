@@ -518,7 +518,10 @@ const Dashboard: React.FC<DashboardProps> = ({
 
         const counts = [0, 0, 0, 0, 0, 0, 0]; // M, T, W, Th, F, S, Su
         calendarEvents.forEach(event => {
-            const eventDate = new Date(event.date);
+            // event.date is in YYYY-MM-DD format
+            const [y, m, d] = event.date.split('-').map(Number);
+            const eventDate = new Date(y, m - 1, d); // Parse as local date
+            
             if (eventDate >= startOfWeek && eventDate < endOfWeek) {
                 const eventDay = (eventDate.getDay() === 0 ? 6 : eventDate.getDay() - 1);
                 counts[eventDay]++;
@@ -739,6 +742,22 @@ const Dashboard: React.FC<DashboardProps> = ({
                                             overflow: 'hidden',
                                             boxShadow: isToday ? `0 0 15px ${workspaceColor}22` : 'none'
                                         }}>
+                                            {thisWeekEventCounts[i] > 0 && (
+                                                <div style={{
+                                                    position: 'absolute',
+                                                    top: '8px',
+                                                    left: '0',
+                                                    width: '100%',
+                                                    textAlign: 'center',
+                                                    fontSize: '0.65rem',
+                                                    fontWeight: 800,
+                                                    color: isToday ? workspaceColor : 'var(--text-secondary)',
+                                                    zIndex: 2,
+                                                    pointerEvents: 'none'
+                                                }}>
+                                                    {thisWeekEventCounts[i]}
+                                                </div>
+                                            )}
                                             <div 
                                                 className="bar-fill" 
                                                 style={{ 
