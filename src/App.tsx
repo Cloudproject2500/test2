@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
 import Dashboard from './components/Dashboard';
 import TutorialOverlay from './components/TutorialOverlay';
-import SimulationDashboard from './components/SimulationDashboard';
+
 import Sidebar from './components/Sidebar';
 import Inbox from './components/Inbox';
 import HybridCalendar from './components/HybridCalendar';
@@ -15,6 +15,18 @@ function App() {
 
   const [currentView, setCurrentView] = useState('dashboard');
   const [showTutorial, setShowTutorial] = useState(false);
+
+  const [theme] = useState(() => {
+    return localStorage.getItem('taskmate_theme') || 'glass';
+  });
+
+  const [personalColor, setPersonalColor] = useState(() => localStorage.getItem('taskmate_personal_color') || '#22c55e');
+  const [workspaceColor, setWorkspaceColor] = useState(() => localStorage.getItem('taskmate_workspace_color') || '#3b82f6');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('taskmate_theme', theme);
+  }, [theme]);
 
   useEffect(() => {
     const checkTutorial = async () => {
@@ -109,6 +121,18 @@ function App() {
     if (currentView === id) setCurrentView('dashboard');
   };
 
+  const handleRenameLifePage = (id: string, newName: string) => {
+    const updated = lifePages.map(p => p.id === id ? { ...p, name: newName } : p);
+    setLifePages(updated);
+    localStorage.setItem('taskmate_life_pages', JSON.stringify(updated));
+  };
+
+  const handleChangeLifePageIcon = (id: string, newIcon: string) => {
+    const updated = lifePages.map(p => p.id === id ? { ...p, icon: newIcon } : p);
+    setLifePages(updated);
+    localStorage.setItem('taskmate_life_pages', JSON.stringify(updated));
+  };
+
 
 
   const renderView = () => {
@@ -121,8 +145,7 @@ function App() {
         return <CoursesView />;
       case 'deadlines':
         return <DeadlinesView />;
-      case 'simulation': // New Simulation View
-        return <SimulationDashboard />;
+
       default:
         const matchedPage = lifePages.find(p => p.id === currentView);
         if (matchedPage) {
@@ -139,24 +162,29 @@ function App() {
           );
         }
         return <Dashboard
-
           lifePages={lifePages}
           personalTodos={personalTodos}
           onViewChange={setCurrentView}
-
+          personalColor={personalColor}
+          workspaceColor={workspaceColor}
         />;
     }
   };
 
   return (
-    <div className="App" style={{ display: 'flex' }}>
+    <div className="App" style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
       <Sidebar
-
         currentView={currentView}
         onViewChange={setCurrentView}
         lifePages={lifePages}
         onAddLifePage={handleAddLifePage}
         onDeleteLifePage={handleDeleteLifePage}
+        onRenameLifePage={handleRenameLifePage}
+        onChangeLifePageIcon={handleChangeLifePageIcon}
+        personalColor={personalColor}
+        setPersonalColor={setPersonalColor}
+        workspaceColor={workspaceColor}
+        setWorkspaceColor={setWorkspaceColor}
       />
       {showTutorial && <TutorialOverlay onClose={handleCloseTutorial} />}
       {renderView()}

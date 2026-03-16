@@ -1,0 +1,114 @@
+/* =========================================================================
+   THEMES CONVEYANCE FILE
+   This file manages the physical appearance tokens for the dashboard.
+========================================================================= */
+
+/* 
+  -------------------------------------------------------------
+  1. GLASSMORPHISM THEME (Apple / Next-gen Aesthetic)
+  -------------------------------------------------------------
+  Features soft mesh gradient backgrounds, blurred components, 
+  translucent borders, and soft shadows.
+*/
+:root[data-theme="glass"] {
+    /* Backgrounds */
+    --bg-main: #ffffff;
+    --bg-sidebar: rgba(255, 255, 255, 0.45);
+    --bg-card: rgba(255, 255, 255, 0.65);
+    --bg-card-hover: rgba(255, 255, 255, 0.85);
+    --bg-hover: rgba(255, 255, 255, 0.5);
+    
+    /* Backdrops */
+    --backdrop-blur: blur(24px);
+    
+    /* Text */
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --text-sidebar-active: #2563eb;
+    --text-sidebar-inactive: #64748b;
+    
+    /* Borders & Shapes */
+    --border-color: #e2e8f0;
+    --border-thickness: 1px;
+    --radius-card: 16px;
+    --radius-button: 10px;
+    --radius-pill: 99px;
+    
+    /* Shadows */
+    --shadow-soft: 0 4px 24px -2px rgba(0, 0, 0, 0.04);
+    --shadow-hover: 0 10px 30px -4px rgba(0, 0, 0, 0.08);
+}
+
+
+/* 
+  -------------------------------------------------------------
+  2. SAAS THEME (Linear / Notion Aesthetic)
+  -------------------------------------------------------------
+  Features strict high contrast, stark white and black panels,
+  sharp 1-pixel borders, tighter radii, and minimal shadows.
+*/
+:root[data-theme="saas"] {
+    /* Backgrounds */
+    --bg-main: #fcfcfc;
+    --bg-sidebar: #0f172a;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f8fafc;
+    --bg-hover: #1e293b; 
+    
+    /* Backdrops */
+    --backdrop-blur: none;
+    
+    /* Text */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-sidebar-active: #ffffff;
+    --text-sidebar-inactive: #94a3b8;
+    
+    /* Borders & Shapes */
+    --border-color: #e2e8f0;
+    --border-thickness: 1px;
+    --radius-card: 6px;
+    --radius-button: 4px;
+    --radius-pill: 4px; /* Harder corners */
+    
+    /* Shadows */
+    --shadow-soft: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+
+/* 
+  -------------------------------------------------------------
+  3. SOFT NEUMORPHIC THEME (Startup Aesthetic)
+  -------------------------------------------------------------
+  Features very chunky radii, pastel-heavy backgrounds, completely
+  invisible borders, and deep, physical-feeling drop shadows.
+*/
+:root[data-theme="soft"] {
+    /* Backgrounds */
+    --bg-main: #f0f7ff; /* Very soft pastel blue tint */
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-hover: #fafafa;
+    --bg-hover: #f1f5f9;
+    
+    /* Backdrops */
+    --backdrop-blur: none;
+    
+    /* Text */
+    --text-primary: #334155;
+    --text-secondary: #94a3b8;
+    --text-sidebar-active: #3b82f6;
+    --text-sidebar-inactive: #94a3b8;
+    
+    /* Borders & Shapes */
+    --border-color: transparent;
+    --border-thickness: 0px;
+    --radius-card: 24px;
+    --radius-button: 16px;
+    --radius-pill: 99px;
+    
+    /* Shadows */
+    --shadow-soft: 0 10px 25px -5px rgba(112, 144, 176, 0.12);
+    --shadow-hover: 0 20px 35px -5px rgba(112, 144, 176, 0.18);
+}

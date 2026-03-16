@@ -12,7 +12,7 @@
 }
 
 body {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     color: var(--text-black);
     min-height: 100vh;
     display: flex;
@@ -25,7 +25,8 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 1rem 1rem;
-    background-color: transparent;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
     position: fixed;
     width: 100%;
     top: 0;
@@ -96,22 +97,17 @@ body {
 .hero {
     flex: 1;
     background: white;
-    /* Changed to white */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    /* Left align */
     justify-content: center;
+    min-height: 100vh;
     padding-top: 10rem;
     padding-bottom: 12rem;
-    /* Increased from 8rem to extend bottom */
     padding-left: 5%;
-    /* Side padding */
     padding-right: 5%;
     text-align: left;
-    /* Text left */
     color: black;
-    /* Text black */
 }
 
 .hero-content {
@@ -123,25 +119,109 @@ body {
 }
 
 .hero-title {
-    font-family: 'Outfit', sans-serif;
-    font-size: 60px;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    text-shadow: none;
-    color: black;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.3;
+    letter-spacing: -0.04em;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
     text-align: left;
+}
+
+.rotating-wrapper {
+    display: inline-block;
+    overflow: visible;
+    vertical-align: text-bottom;
+    height: 1.3em;
+    padding-left: 10px;
+    position: relative;
+}
+
+.rotating-word {
+    display: inline-block;
+    font-style: italic;
+    font-weight: 800;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.rotating-word.slide-out {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+.rotating-word.slide-in {
+    animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .hero-description {
     font-size: 1.25rem;
-    color: black;
+    color: #64748b;
     text-align: left;
-    margin-bottom: 2rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    font-weight: 400;
     max-width: 600px;
 }
 
+.hero-cta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    color: #ffffff;
+    padding: 0.875rem 1.75rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #ffffff;
+    color: #0f172a;
+    padding: 0.875rem 1.75rem;
+    border-radius: 9999px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    border-color: #cbd5e1;
+    background-color: #f8fafc;
+}
+
 .hero-subtitle {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 4rem;
     font-weight: 500;
     line-height: 1.2;
@@ -192,7 +272,7 @@ body {
     border: none;
     padding: 0.8rem 2rem;
     border-radius: 12px;
-    font-family: 'Google Sans', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 700;
     font-size: 1rem;
     cursor: pointer;
@@ -220,8 +300,7 @@ body {
 
 .content-spacer {
     height: 100vh;
-    background-color: #f8f9fa;
-    /* Added styles for text alignment */
+    background-color: #f8fafc;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -231,17 +310,19 @@ body {
 }
 
 .content-spacer h2 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 55px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: #0f172a;
     margin-top: 1rem;
     margin-bottom: 2rem;
-    /* Remove default top margin */
-    text-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
 }
 
 .content-spacer p {
     font-size: 1.25rem;
-    color: #4b5563;
+    color: #64748b;
     max-width: 600px;
     line-height: 1.6;
 }
@@ -254,10 +335,10 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 1rem;
+    padding: 8rem 5%;
     text-align: center;
     background-color: #ffffff;
-    height: 120vh;
+    min-height: 100vh;
 }
 
 .bottom-section .content-spacer {
@@ -270,25 +351,23 @@ body {
 .content-spacer3 {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    /* From bottom-section override */
+    justify-content: center;
     align-items: center;
-    padding: 2rem;
-    padding-top: 5rem;
-    /* From bottom-section override */
+    padding: 8rem 5%;
     text-align: center;
-    background-color: #f8f9fa;
-    /* Assuming same bg as spacer 1 or default? Use default gray/white */
-    height: 80vh;
-    /* From bottom-section override */
+    background-color: #ffffff;
+    min-height: 80vh;
 }
 
 .content-spacer3 h2 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 59px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: #0f172a;
     margin-top: 1rem;
     margin-bottom: 2rem;
-    text-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
 }
 
 .content-spacer3 p {
@@ -301,22 +380,183 @@ body {
 /* ---------------------------------------- */
 
 .content-spacer1 h2 {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 55px;
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.04em;
+    color: #0f172a;
     margin-top: 100px;
     text-align: center;
-    text-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
     margin-bottom: 30px;
 }
 
 .content-spacer1 p {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 1.25rem;
+    color: #64748b;
     text-align: center;
-    text-shadow: 0 5px 3px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
 }
 
-/* ---------------------------------------- */
+/* --- Feature Grid (Categorize Section) --- */
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 4rem;
+}
+
+.feature-card {
+    background: #ffffff;
+    border: none;
+    border-radius: 20px;
+    padding: 2.5rem 2.5rem;
+    text-align: left;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card:nth-child(1) {
+    border-top: 6px solid #3b82f6;
+}
+
+.feature-card:nth-child(2) {
+    border-top: 6px solid #ec4899;
+}
+
+.feature-card:nth-child(3) {
+    border-top: 6px solid #22c55e;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.4);
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.feature-card h3 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+}
+
+.feature-card p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+    color: #64748b;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.tag-showcase {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.pill {
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.pill-red {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.pill-blue {
+    background: #e0f2fe;
+    color: #0ea5e9;
+}
+
+.pill-green {
+    background: #dcfce7;
+    color: #22c55e;
+}
+
+/* --- Calendar Showcase Section --- */
+.calendar-showcase {
+    background-color: #f8fafc;
+    padding: 10rem 5%;
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-showcase-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.calendar-showcase-text h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.04em;
+    color: #0f172a;
+    margin-bottom: 1.5rem;
+}
+
+.calendar-showcase-text p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.3rem;
+    color: #64748b;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    max-width: 480px;
+}
+
+.calendar-showcase-image {
+    width: 100%;
+}
+
+.screenshot-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #ffffff;
+    border: 2px dashed #cbd5e1;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    color: #94a3b8;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.95rem;
+}
+
+.calendar-showcase-image img {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
 
 .below .content-spacer {
     height: 120vh;
@@ -343,7 +583,7 @@ body {
     display: flex;
     overflow: hidden;
     position: relative;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     text-align: left;
     /* reset text alignment */
 }
@@ -905,5 +1145,64 @@ body {
 
     to {
         transform: rotate(360deg);
+    }
+}
+
+/* --- 4K / Large Screen Scaling --- */
+@media (min-width: 2000px) {
+    .hero-title {
+        font-size: 6rem;
+    }
+
+    .hero-description {
+        font-size: 1.6rem;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        font-size: 1.2rem;
+        padding: 1.1rem 2.2rem;
+    }
+
+    .content-spacer h2,
+    .content-spacer1 h2 {
+        font-size: 4.5rem;
+    }
+
+    .content-spacer p,
+    .content-spacer1 p {
+        font-size: 1.5rem;
+    }
+
+    .content-spacer3 h2 {
+        font-size: 4.5rem;
+    }
+
+    .content-spacer3 p {
+        font-size: 1.5rem;
+    }
+
+    .calendar-showcase-text h2 {
+        font-size: 4.5rem;
+    }
+
+    .calendar-showcase-text p {
+        font-size: 1.5rem;
+    }
+
+    .calendar-showcase-inner {
+        max-width: 1400px;
+    }
+
+    .feature-grid {
+        max-width: 1400px;
+    }
+
+    .feature-card h3 {
+        font-size: 1.5rem;
+    }
+
+    .feature-card p {
+        font-size: 1.1rem;
     }
 }

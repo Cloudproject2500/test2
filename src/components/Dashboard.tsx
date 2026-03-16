@@ -5,119 +5,822 @@ interface DashboardProps {
     lifePages: LifePage[];
     personalTodos: PersonalTodo[];
     onViewChange: (view: string) => void;
+    personalColor: string;
+    workspaceColor: string;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ lifePages, personalTodos, onViewChange }) => {
+const ImageWidget: React.FC = () => {
+    const [image, setImage] = React.useState<string | null>(null);
+    const [isHovered, setIsHovered] = React.useState(false);
+    const [isEditing, setIsEditing] = React.useState(false);
+    const [position, setPosition] = React.useState({ x: 50, y: 50 });
+    const [scale, setScale] = React.useState(1);
+    const fileInputRef = React.useRef<HTMLInputElement>(null);
 
+    // Modal Drag State
+    const [isDragging, setIsDragging] = React.useState(false);
+    const [dragStart, setDragStart] = React.useState({ x: 0, y: 0 });
+    const [tempPosition, setTempPosition] = React.useState({ x: 50, y: 50 });
+    const [tempScale, setTempScale] = React.useState(1);
 
-
-
-
-    const getPageProgress = (pageId: string) => {
-        const pageTodos = personalTodos.filter(t => t.pageId === pageId);
-        if (pageTodos.length === 0) return null;
-        const completed = pageTodos.filter(t => t.completed).length;
-        return {
-            completed,
-            total: pageTodos.length,
-            percentage: Math.round((completed / pageTodos.length) * 100)
-        };
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => setImage(reader.result as string);
+            reader.readAsDataURL(file);
+        }
     };
+
+    const openModal = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setTempPosition(position); // Reset temp to current saved
+        setTempScale(scale);
+        setIsEditing(true);
+    };
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        setIsDragging(true);
+        setDragStart({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging) return;
+        const deltaX = dragStart.x - e.clientX;
+        const deltaY = dragStart.y - e.clientY;
+
+        setTempPosition(prev => ({
+            x: Math.max(0, Math.min(100, prev.x + (deltaX * 0.15))),
+            y: Math.max(0, Math.min(100, prev.y + (deltaY * 0.15)))
+        }));
+
+        setDragStart({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseUp = () => setIsDragging(false);
+
+    const saveAndCloseModal = () => {
+        setPosition(tempPosition);
+        setScale(tempScale);
+        setIsEditing(false);
+    };
+
+    return (
+        <>
+            {/* The Dashboard Widget Block */}
+            <div
+                className="premium-card"
+                style={{
+                    flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                    border: image ? 'none' : '1px dashed #cbd5e1',
+                    borderRadius: '16px',
+                    cursor: 'pointer',
+                    background: 'var(--bg-card)',
+                    padding: image ? 0 : '1.5rem',
+                    overflow: 'hidden',
+                    position: 'relative',
+                    minHeight: 0
+                }}
+                onClick={() => { if (!image) fileInputRef.current?.click(); }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                {image ? (
+                    <>
+                        <img
+                            src={image}
+                            alt="Widget"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                objectPosition: `${position.x}% ${position.y}%`,
+                                transform: `scale(${scale})`,
+                                pointerEvents: 'none',
+                                transition: 'transform 0.2s ease',
+                                transformOrigin: `${position.x}% ${position.y}%`
+                            }}
+                        />
+
+                        {/* Hover Edit Pencil Icon */}
+                        {isHovered && (
+                            <>
+                                <div style={{ position: 'absolute', top: '12px', left: '12px' }}>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setImage(null);
+                                            setPosition({ x: 50, y: 50 });
+                                            setScale(1);
+                                            if (fileInputRef.current) fileInputRef.current.value = '';
+                                        }}
+                                        style={{
+                                            background: 'rgba(255,255,255,0.95)',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '8px',
+                                            width: '32px', height: '32px',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                                        }}
+                                        title="Delete Image"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M3 6h18"></path>
+                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div style={{ position: 'absolute', top: '12px', right: '12px' }}>
+                                    <button
+                                        onClick={openModal}
+                                        style={{
+                                            background: 'rgba(255,255,255,0.95)',
+                                            border: '1px solid #e2e8f0',
+                                            borderRadius: '8px',
+                                            width: '32px', height: '32px',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            cursor: 'pointer',
+                                            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+                                        }}
+                                        title="Reposition Image"
+                                    >
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                            <path d="M12 20h9"></path>
+                                            <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </>
+                        )}
+                    </>
+                ) : (
+                    <>
+                        <span style={{ color: '#94a3b8', fontSize: '2rem', fontWeight: 300, marginBottom: '0.5rem' }}>+</span>
+                        <span style={{ color: '#94a3b8', fontSize: '0.8125rem', fontWeight: 500 }}>Add image or GIF</span>
+                    </>
+                )}
+                <input type="file" accept="image/*" style={{ display: 'none' }} ref={fileInputRef} onChange={handleImageUpload} />
+            </div>
+
+            {/* Reposition Modal Overlay */}
+            {isEditing && image && (
+                <div
+                    style={{
+                        position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh',
+                        background: 'rgba(0,0,0,0.85)', zIndex: 99999,
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+                    }}
+                >
+                    <div style={{ color: 'white', marginBottom: '1.5rem', fontSize: '1.25rem', fontWeight: 600 }}>
+                        Drag image to reposition
+                    </div>
+
+                    {/* The Visual Cropper Window */}
+                    <div
+                        style={{
+                            width: '400px', height: '300px', // Approximate widget aspect ratio
+                            border: '2px solid white',
+                            position: 'relative',
+                            overflow: 'hidden',
+                            cursor: isDragging ? 'grabbing' : 'grab',
+                            boxShadow: '0 0 0 9999px rgba(0,0,0,0.5)', // Darkens everything OUTSIDE this box
+                            userSelect: 'none',
+                            WebkitUserSelect: 'none'
+                        }}
+                        onMouseDown={handleMouseDown}
+                        onMouseMove={handleMouseMove}
+                        onMouseUp={handleMouseUp}
+                        onMouseLeave={handleMouseUp}
+                    >
+                        <img
+                            src={image}
+                            alt="Crop preview"
+                            style={{
+                                width: '100%', height: '100%',
+                                objectFit: 'cover',
+                                objectPosition: `${tempPosition.x}% ${tempPosition.y}%`,
+                                transform: `scale(${tempScale})`,
+                                transition: 'transform 0.2s ease',
+                                transformOrigin: `${tempPosition.x}% ${tempPosition.y}%`,
+                                pointerEvents: 'none'
+                            }}
+                        />
+                    </div>
+
+                    {/* Zoom Controls */}
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem', zIndex: 100000, position: 'relative', background: 'rgba(255,255,255,0.1)', padding: '0.5rem', borderRadius: '8px' }}>
+                        <button
+                            onClick={() => setTempScale(s => Math.max(1, s - 0.1))}
+                            style={{ background: 'transparent', color: 'white', border: '1px solid white', borderRadius: '4px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.25rem' }}
+                            title="Zoom Out"
+                        >
+                            -
+                        </button>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.875rem', width: '60px', fontFamily: 'monospace' }}>
+                            {Math.round(tempScale * 100)}%
+                        </div>
+                        <button
+                            onClick={() => setTempScale(s => Math.min(3, s + 0.1))}
+                            style={{ background: 'transparent', color: 'white', border: '1px solid white', borderRadius: '4px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '1.25rem' }}
+                            title="Zoom In"
+                        >
+                            +
+                        </button>
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', zIndex: 100000, position: 'relative' }}>
+                        <button
+                            onClick={saveAndCloseModal}
+                            style={{
+                                background: '#3b82f6',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '8px',
+                                padding: '0.75rem 2rem',
+                                fontSize: '1rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                opacity: 1,
+                                boxShadow: '0 4px 6px rgba(59, 130, 246, 0.3)'
+                            }}
+                        >
+                            Save Position
+                        </button>
+                        <button
+                            onClick={() => setIsEditing(false)}
+                            style={{
+                                background: '#1e293b',
+                                color: 'white',
+                                border: '1px solid #94a3b8',
+                                borderRadius: '8px',
+                                padding: '0.75rem 2rem',
+                                fontSize: '1rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                opacity: 1
+                            }}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+};
+
+const Dashboard: React.FC<DashboardProps> = ({ onViewChange, personalColor, workspaceColor }) => {
+
+    const [greeting, setGreeting] = React.useState('');
+    const [currentDate, setCurrentDate] = React.useState(new Date());
+
+    // Editable inline text helper
+    const EditableText = ({ value, onChange, style, placeholder }: { value: string; onChange: (v: string) => void; style?: React.CSSProperties; placeholder?: string }) => {
+        const [isEditing, setIsEditing] = React.useState(false);
+        const [draft, setDraft] = React.useState(value);
+
+        if (isEditing) {
+            return (
+                <input
+                    autoFocus
+                    value={draft}
+                    onChange={(e) => setDraft(e.target.value)}
+                    onBlur={() => { onChange(draft); setIsEditing(false); }}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { onChange(draft); setIsEditing(false); } if (e.key === 'Escape') { setDraft(value); setIsEditing(false); } }}
+                    onClick={(e) => e.stopPropagation()}
+                    placeholder={placeholder || 'Type here...'}
+                    style={{
+                        ...style,
+                        border: '1px solid var(--accent-blue, #3b82f6)',
+                        borderRadius: '4px',
+                        padding: '2px 6px',
+                        outline: 'none',
+                        width: '100%',
+                        background: 'var(--bg-card, #fff)',
+                        color: 'var(--text-primary)',
+                        fontFamily: 'inherit'
+                    }}
+                />
+            );
+        }
+
+        return (
+            <span
+                style={{ cursor: 'text', minWidth: '80px', minHeight: '1.2em', display: 'inline-block', ...style }}
+                onClick={(e) => { e.stopPropagation(); setDraft(value); setIsEditing(true); }}
+                title="Click to edit"
+            >
+                {value || <span style={{ opacity: 0.4, fontStyle: 'italic' }}>{placeholder || 'Click to type...'}</span>}
+            </span>
+        );
+    };
+
+    // Editable Date picker helper
+    const EditableDate = ({ value, onChange, style }: { value: string; onChange: (v: string) => void; style?: React.CSSProperties }) => {
+        const [isEditing, setIsEditing] = React.useState(false);
+        const [draft, setDraft] = React.useState(value);
+
+        // Helper to format date string into readable format (e.g., Mar 20)
+        const formatDisplayDate = (dateStr: string) => {
+            if (!dateStr) return 'Select date';
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return dateStr;
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+        };
+
+        if (isEditing) {
+            return (
+                <input
+                    autoFocus
+                    type="date"
+                    value={draft}
+                    onChange={(e) => setDraft(e.target.value)}
+                    onBlur={() => { onChange(draft); setIsEditing(false); }}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') { onChange(draft); setIsEditing(false); }
+                        if (e.key === 'Escape') { setDraft(value); setIsEditing(false); }
+                    }}
+                    onClick={(e) => e.stopPropagation()}
+                    style={{
+                        ...style,
+                        border: '1px solid var(--accent-blue, #3b82f6)',
+                        borderRadius: '4px',
+                        padding: '2px 6px',
+                        outline: 'none',
+                        background: 'var(--bg-card, #fff)',
+                        color: 'var(--text-primary)',
+                        fontFamily: 'inherit'
+                    }}
+                />
+            );
+        }
+
+        return (
+            <span
+                style={{ cursor: 'pointer', ...style }}
+                onClick={(e) => { e.stopPropagation(); setDraft(value); setIsEditing(true); }}
+                title="Click to select date"
+            >
+                {formatDisplayDate(value)}
+            </span>
+        );
+    };
+
+    // Delete button style helper
+    const deleteBtn = (onClick: (e: React.MouseEvent) => void) => (
+        <button
+            onClick={onClick}
+            style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#cbd5e1',
+                fontSize: '1rem',
+                padding: '2px 4px',
+                lineHeight: 1,
+                flexShrink: 0,
+                marginLeft: '8px',
+                transition: 'color 0.15s ease'
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = '#ef4444')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = '#cbd5e1')}
+            title="Delete"
+        >
+            ✕
+        </button>
+    );
+
+    // Interactive Tasks State
+    const [todayTasks, setTodayTasks] = React.useState([
+        { title: 'Review CS 301 lecture notes', checked: false },
+        { title: 'Submit MATH 245 problem set', checked: true },
+        { title: 'Read Chapter 7 — Mechanics', checked: false },
+        { title: 'Office hours with Dr. Lin', checked: false }
+    ]);
+
+    const toggleTask = (index: number) => {
+        setTodayTasks(prev => prev.map((t, i) => i === index ? { ...t, checked: !t.checked } : t));
+    };
+
+    const updateTaskTitle = (index: number, newTitle: string) => {
+        setTodayTasks(prev => prev.map((t, i) => i === index ? { ...t, title: newTitle } : t));
+    };
+
+    const deleteTask = (index: number) => {
+        setTodayTasks(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // Schedule State
+    const [scheduleEvents, setScheduleEvents] = React.useState([
+        { title: 'PHYS 201 Lecture', time: '9:00 AM', color: '#f59e0b' },
+        { title: 'Office Hours', time: '10:30 AM', color: '#94a3b8' },
+        { title: 'CS 301 Lab', time: '1:00 PM', color: '#3b82f6' },
+        { title: 'Study Group', time: '3:00 PM', color: '#14b8a6' }
+    ]);
+
+    const updateScheduleTitle = (index: number, newTitle: string) => {
+        setScheduleEvents(prev => prev.map((e, i) => i === index ? { ...e, title: newTitle } : e));
+    };
+
+    const deleteScheduleEvent = (index: number) => {
+        setScheduleEvents(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // Upcoming Events State
+    const [upcomingEvents, setUpcomingEvents] = React.useState([
+        { title: 'Midterm Exam — CS 301', date: '2026-03-20' },
+        { title: 'Group Presentation', date: '2026-03-22' },
+        { title: 'Career Fair', date: '2026-03-25' }
+    ]);
+
+    const updateUpcomingEvent = (index: number, field: 'title' | 'date', value: string) => {
+        setUpcomingEvents(prev => prev.map((e, i) => i === index ? { ...e, [field]: value } : e));
+    };
+
+    const deleteUpcomingEvent = (index: number) => {
+        setUpcomingEvents(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // Reminders State
+    const [reminders, setReminders] = React.useState([
+        { title: 'Return library books', color: '#ef4444' },
+        { title: 'Register for summer courses', color: '#cbd5e1' },
+        { title: 'Email Prof. Adams about draft', color: '#cbd5e1' }
+    ]);
+
+    const updateReminderTitle = (index: number, newTitle: string) => {
+        setReminders(prev => prev.map((r, i) => i === index ? { ...r, title: newTitle } : r));
+    };
+
+    const deleteReminder = (index: number) => {
+        setReminders(prev => prev.filter((_, i) => i !== index));
+    };
+
+    // Calendar Side List State
+    const [calendarList, setCalendarList] = React.useState([
+        { title: 'TEK Club meeting', date: '2026-03-18', time: '12:00 PM' },
+        { title: 'Business Night', date: '2026-03-18', time: '6:30 PM' },
+        { title: 'STUCO Team dinner', date: '2026-03-20', time: '08:00 PM' },
+        { title: 'Weekly Bookkeeping', date: '2026-03-22', time: '00:00 PM' }
+    ]);
+
+    const updateCalendarEvent = (index: number, field: 'title' | 'date' | 'time', value: string) => {
+        setCalendarList(prev => prev.map((e, i) => i === index ? { ...e, [field]: value } : e));
+    };
+
+    const deleteCalendarEvent = (index: number) => {
+        setCalendarList(prev => prev.filter((_, i) => i !== index));
+    };
+
+    React.useEffect(() => {
+        const hour = new Date().getHours();
+        if (hour < 12) setGreeting('Good morning, Kevin');
+        else if (hour < 18) setGreeting('Good afternoon, Kevin');
+        else setGreeting('Good evening, Kevin');
+    }, []);
+
+    // Calendar Calculations
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth(); // 0-11
+
+    const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay(); // 0 (Sun) to 6 (Sat)
+    const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate(); // 28, 29, 30, or 31
+
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    const monthYearString = `${monthNames[currentMonth]} ${currentYear}`;
+
+    const handlePrevMonth = () => {
+        setCurrentDate(new Date(currentYear, currentMonth - 1, 1));
+    };
+
+    const handleNextMonth = () => {
+        setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
+    };
+
+    // Placeholder data representing user progress
+    const thisWeekTasks = [12, 18, 15, 22, 9, 14, 5];
+    const maxTasks = Math.max(...thisWeekTasks);
 
     const brandBlue = '#3b82f6';
 
     return (
-        <main className="main-wrapper">
+        <main className="main-wrapper" style={{ padding: '2rem 1rem' }}>
             <div className="container">
-                {/* 
-                  HEADER SECTION:
-                  Contains navigation breadcrumbs, welcome message, and subtitle.
-                */}
-                <header style={{ marginBottom: '3rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1rem' }}>
-                        <span>Dashboard</span>
-                    </div>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>Welcome back, user</h2>
-                    <p style={{ color: 'var(--text-secondary)', fontSize: '1.125rem' }}>
-                        Manage your lifestyle and workspace in one place.
-                    </p>
+
+                {/* DYNAMIC HEADER */}
+                <header style={{ marginBottom: '2.5rem' }}>
+                    <h1 style={{ fontSize: '3rem', fontWeight: 800, color: brandBlue }}>
+                        {greeting}
+                    </h1>
                 </header>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
+                {/* TOP GRID SECTION */}
+                <section className="dashboard-top-section">
+                    <div className="dashboard-2x2-grid">
 
+                        {/* Box 1: Today's Task */}
+                        <div className="mini-card" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem', borderRadius: '16px' }} onClick={() => onViewChange('work')}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Today's Task</h3>
+                            <ul style={{ listStyle: 'none', margin: 0, padding: 0, flex: 1, overflowY: 'auto' }}>
+                                {todayTasks.map((task, i) => (
+                                    <li key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
+                                        <div
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                toggleTask(i);
+                                            }}
+                                            style={{
+                                                width: '20px',
+                                                height: '20px',
+                                                borderRadius: '6px',
+                                                border: task.checked ? 'none' : '2px solid #cbd5e1',
+                                                background: task.checked ? '#3b82f6' : 'transparent',
+                                                marginRight: '16px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.15s ease',
+                                                flexShrink: 0
+                                            }}
+                                        >
+                                            {task.checked && <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6L5 9L10 3" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                                        </div>
+                                        <EditableText
+                                            value={task.title}
+                                            onChange={(v) => updateTaskTitle(i, v)}
+                                            style={{
+                                                fontSize: '0.9375rem',
+                                                fontWeight: 600,
+                                                color: task.checked ? '#cbd5e1' : 'var(--text-primary)',
+                                                textDecoration: task.checked ? 'line-through' : 'none',
+                                                flex: 1,
+                                                transition: 'color 0.15s ease'
+                                            }}
+                                        />
+                                        {deleteBtn((e) => { e.stopPropagation(); deleteTask(i); })}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
 
-                    {/* 
-                      SECTION 2: DYNAMIC LIFE PROGRESS SUMMARIES
-                      Iterates through 'lifePages' (Lifestyle, Fitness, Hobbies) and shows a progress bar
-                      based on completed todos in that category.
-                    */}
-                    {lifePages.map(page => {
-                        const progress = getPageProgress(page.id);
-                        return (
-                            <section
-                                key={page.id}
-                                className="premium-card"
-                                style={{ cursor: 'pointer', transition: 'transform 0.2s' }}
-                                onClick={() => onViewChange(page.id)}
-                                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px)'}
-                                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-                            >
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                    <h3 style={{ fontSize: '1.125rem', fontWeight: '600' }}>
-                                        {page.icon} {page.name} Progress
-                                    </h3>
-                                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>View Details →</span>
+                        {/* Box 2: Today's Schedule */}
+                        <div className="mini-card" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem', borderRadius: '16px' }} onClick={() => onViewChange('calendar')}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Today's Schedule</h3>
+                            <ul style={{ listStyle: 'none', margin: 0, padding: 0, flex: 1, overflowY: 'auto' }}>
+                                {scheduleEvents.map((event, i) => (
+                                    <li key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
+                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: event.color, marginRight: '16px', flexShrink: 0 }}></div>
+                                        <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#94a3b8', width: '70px', flexShrink: 0 }}>{event.time}</span>
+                                        <EditableText
+                                            value={event.title}
+                                            onChange={(v) => updateScheduleTitle(i, v)}
+                                            style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-primary)', flex: 1 }}
+                                        />
+                                        {deleteBtn((e) => { e.stopPropagation(); deleteScheduleEvent(i); })}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Box 3: Upcoming Events */}
+                        <div className="mini-card" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem', borderRadius: '16px' }} onClick={() => onViewChange('calendar')}>
+                            <h3 style={{ 
+                                fontSize: '1rem', 
+                                fontWeight: 700, 
+                                color: 'var(--text-primary)', 
+                                marginBottom: '1.5rem', 
+                                textTransform: 'uppercase', 
+                                letterSpacing: '0.05em',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px'
+                            }}>
+                                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: workspaceColor, flexShrink: 0 }}></div>
+                                Upcoming Events
+                            </h3>
+                            <ul style={{ listStyle: 'none', margin: 0, padding: 0, flex: 1, overflowY: 'auto' }}>
+                                {upcomingEvents.map((event, i) => (
+                                    <li key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                                        <EditableText
+                                            value={event.title}
+                                            onChange={(v) => updateUpcomingEvent(i, 'title', v)}
+                                            style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-primary)', flex: 1 }}
+                                        />
+                                        <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0, marginLeft: '8px' }}>
+                                            <EditableDate
+                                                value={event.date}
+                                                onChange={(v) => updateUpcomingEvent(i, 'date', v)}
+                                                style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#94a3b8' }}
+                                            />
+                                            {deleteBtn((e) => { e.stopPropagation(); deleteUpcomingEvent(i); })}
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* Box 4: Reminders */}
+                        <div className="mini-card" style={{ cursor: 'pointer', display: 'flex', flexDirection: 'column', height: '100%', padding: '1.5rem', borderRadius: '16px' }} onClick={() => onViewChange('personal')}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Reminders</h3>
+                            <ul style={{ listStyle: 'none', margin: 0, padding: 0, flex: 1, overflowY: 'auto' }}>
+                                {reminders.map((reminder, i) => (
+                                    <li key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
+                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: reminder.color, marginRight: '16px', flexShrink: 0 }}></div>
+                                        <EditableText
+                                            value={reminder.title}
+                                            onChange={(v) => updateReminderTitle(i, v)}
+                                            style={{ fontSize: '0.9375rem', fontWeight: 600, color: 'var(--text-primary)', flex: 1 }}
+                                        />
+                                        {deleteBtn((e) => { e.stopPropagation(); deleteReminder(i); })}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+
+                    {/* WIDGET/IMAGE COLUMN */}
+                    <div className="dashboard-widget-column">
+                        <ImageWidget />
+                        <ImageWidget />
+                    </div>
+                </section>
+
+                <div className="section-divider"></div>
+
+                {/* PROGRESS SECTION */}
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem' }}>Your Progress</h2>
+                <section className="dashboard-progress-section">
+                    <div className="premium-card flex-center">
+                        <div className="pie-chart">
+                            <div className="pie-chart-inner">
+                                <div>
+                                    <span style={{ display: 'block', fontWeight: 700, color: 'var(--text-primary)' }}>126</span>
+                                    <span>Total Tasks</span>
                                 </div>
-
-                                {progress ? (
-                                    <div>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                                            <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>Daily Tasks</span>
-                                            <span style={{ fontSize: '1.25rem', fontWeight: 800, color: brandBlue }}>
-                                                {progress.completed} / {progress.total}
-                                            </span>
-                                        </div>
-                                        <div style={{ height: '8px', background: '#F3F4F6', borderRadius: '4px', overflow: 'hidden' }}>
-                                            <div style={{ height: '100%', width: `${progress.percentage}%`, background: brandBlue, transition: 'width 0.5s ease' }} />
-                                        </div>
-                                        <p style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'right' }}>
-                                            {progress.percentage}% Achieved
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <div className="flex-center" style={{ height: '100px', flexDirection: 'column', border: '1px dashed var(--border-color)', borderRadius: '8px' }}>
-                                        <p style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>No goals set yet</p>
-                                        <p style={{ color: brandBlue, fontSize: '0.625rem', fontWeight: 600, marginTop: '4px' }}>Build your todo list →</p>
-                                    </div>
-                                )}
-                            </section>
-                        );
-                    })}
-
-                    {/* 
-                      SECTION 3: LIFE BALANCE ANALYTICS
-                      A static visual representation of the work-life balance ratio.
-                      Currently hardcoded to 65% Academic and 35% Lifestyle.
-                    */}
-                    <section className="premium-card">
-                        <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1.5rem' }}>📊 Life Balance</h3>
-                        <div style={{ height: '8px', background: '#eee', borderRadius: '4px', overflow: 'hidden', display: 'flex' }}>
-                            <div style={{ width: '65%', background: brandBlue }}></div>
-                            <div style={{ width: '35%', background: 'var(--success)' }}></div>
+                            </div>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.75rem', fontSize: '0.75rem' }}>
-                            <span>Academic (65%)</span>
-                            <span>Lifestyle (35%)</span>
+                    </div>
+                    <div className="premium-card">
+                        <h3 style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '1rem', textAlign: 'center' }}>Weekly Task Completion</h3>
+                        <div className="bar-chart-container">
+                            {['M', 'T', 'W', 'Th', 'F', 'S', 'Su'].map((day, i) => (
+                                <div key={day} className="bar-column">
+                                    <div className="bar-fill" style={{ height: `${(thisWeekTasks[i] / maxTasks) * 100}%` }}></div>
+                                    <span className="bar-label">{day}</span>
+                                </div>
+                            ))}
                         </div>
-                    </section>
-                </div>
+                    </div>
+                </section>
 
-                {/* 
-                  FOOTER SECTION:
-                  Copyright and version information.
-                */}
+                <div className="section-divider"></div>
+
+                {/* EVENTS SECTION */}
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem' }}>Your Events</h2>
+                <section className="dashboard-events-section">
+                    <div className="premium-card" style={{ padding: '0' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem 1.5rem', borderBottom: '1px solid var(--border-color)' }}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: 600 }}>{monthYearString}</h3>
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <button onClick={handlePrevMonth} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}>&lt;</button>
+                                <button onClick={handleNextMonth} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}>&gt;</button>
+                            </div>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '1px', background: 'var(--border-color)', padding: '1px' }}>
+                            {/* Days Header */}
+                            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
+                                <div key={d} style={{ background: 'var(--bg-card)', padding: '0.5rem', textAlign: 'center', fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)' }}>
+                                    {d}
+                                </div>
+                            ))}
+                            {/* Blank leading days */}
+                            {[...Array(firstDayOfMonth)].map((_, i) => (
+                                <div key={`empty-${i}`} style={{ background: 'var(--bg-card)', height: '100px', opacity: 0.5 }}></div>
+                            ))}
+                            {/* Days of month */}
+                            {[...Array(daysInMonth)].map((_, i) => {
+                                const day = i + 1;
+                                const realToday = new Date();
+                                const isToday =
+                                    day === realToday.getDate() &&
+                                    currentMonth === realToday.getMonth() &&
+                                    currentYear === realToday.getFullYear();
+
+                                return (
+                                    <div key={day} style={{ 
+                                        background: 'var(--bg-card)', 
+                                        height: '100px', 
+                                        padding: '0.5rem', 
+                                        position: 'relative', 
+                                        display: 'flex', 
+                                        flexDirection: 'column', 
+                                        gap: '4px',
+                                        overflow: 'hidden' 
+                                    }}>
+                                        <span style={{
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            width: '24px',
+                                            height: '24px',
+                                            borderRadius: '50%',
+                                            background: isToday ? 'var(--accent-blue)' : 'transparent',
+                                            color: isToday ? 'white' : 'var(--text-primary)',
+                                            fontSize: '0.875rem',
+                                            fontWeight: isToday ? 600 : 400,
+                                            marginBottom: '4px'
+                                        }}>
+                                            {day}
+                                        </span>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'hidden' }}>
+                                            {calendarList
+                                                .filter(e => {
+                                                    const eDate = new Date(e.date);
+                                                    return eDate.getDate() === day && eDate.getMonth() === currentMonth && eDate.getFullYear() === currentYear;
+                                                })
+                                                .map((e, idx) => {
+                                                    const isPersonal = e.title.toLowerCase().includes('bookkeeping');
+                                                    const bgColor = isPersonal ? personalColor : workspaceColor;
+                                                    return (
+                                                        <div 
+                                                            key={idx} 
+                                                            style={{ 
+                                                                background: bgColor, 
+                                                                color: 'white', 
+                                                                fontSize: '0.7rem', 
+                                                                padding: '2px 6px', 
+                                                                borderRadius: '4px',
+                                                                whiteSpace: 'nowrap',
+                                                                overflow: 'hidden',
+                                                                textOverflow: 'ellipsis',
+                                                                fontWeight: 500,
+                                                                width: '100%',
+                                                                display: 'block'
+                                                            }}
+                                                            title={e.title}
+                                                        >
+                                                            {e.title}
+                                                        </div>
+                                                    );
+                                                })
+                                            }
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="dashboard-widget-column" style={{ overflowY: 'auto', maxHeight: 'none', paddingRight: '12px' }}>
+                        {calendarList.map((event, i) => {
+                            const isPersonal = event.title.toLowerCase().includes('bookkeeping');
+                            const indicatorColor = isPersonal ? personalColor : workspaceColor;
+
+                            return (
+                                <div 
+                                    key={i} 
+                                    className="mini-card" 
+                                    style={{ 
+                                        minHeight: '80px', 
+                                        flex: 'none', 
+                                        position: 'relative', 
+                                        marginBottom: '12px',
+                                        borderLeft: `4px solid ${indicatorColor}`,
+                                        paddingLeft: '12px'
+                                    }}
+                                >
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                        <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                                            <EditableText
+                                                value={event.title}
+                                                onChange={(v) => updateCalendarEvent(i, 'title', v)}
+                                                style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-primary)', display: 'block', marginBottom: '2px' }}
+                                            />
+                                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                <EditableDate
+                                                    value={event.date}
+                                                    onChange={(v) => updateCalendarEvent(i, 'date', v)}
+                                                    style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}
+                                                />
+                                                <EditableText
+                                                    value={event.time}
+                                                    onChange={(v) => updateCalendarEvent(i, 'time', v)}
+                                                    style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}
+                                                />
+                                            </div>
+                                        </div>
+                                        {deleteBtn((e) => { e.stopPropagation(); deleteCalendarEvent(i); })}
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </section>
+
                 <footer style={{ marginTop: '4rem', paddingBottom: '2rem', opacity: 0.6, fontSize: '0.8125rem' }}>
-                    <p>© 2026 TaskMate OS Architect. Management Platform v1.9.0</p>
+                    <p>© 2026 TaskMate OS Architect. Management Platform v2.0.0</p>
                 </footer>
             </div>
         </main>
