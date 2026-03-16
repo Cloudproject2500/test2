@@ -98,44 +98,21 @@ body {
     flex: 1;
     background: white;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     min-height: 100vh;
-    padding: 8rem 10% 6rem 10%;
-    gap: 2rem;
+    padding: 10rem 5% 12rem 5%;
+    text-align: center;
     color: black;
 }
 
 .hero-content {
-    flex: 1.2;
-    max-width: 600px;
+    max-width: 800px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    z-index: 2;
-}
-
-.hero-image-container {
-    flex: 0.8;
-    display: flex;
-    justify-content: flex-end;
     align-items: center;
-    position: relative;
-}
-
-.hero-illustration {
-    width: 100%;
-    max-width: 500px;
-    height: auto;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.05));
-    animation: floating 8s ease-in-out infinite;
-}
-
-@keyframes floating {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+    z-index: 2;
 }
 
 .hero-title {
@@ -146,7 +123,7 @@ body {
     letter-spacing: -0.04em;
     color: #0f172a;
     margin-bottom: 1.5rem;
-    text-align: left;
+    text-align: center;
 }
 
 .rotating-wrapper {
@@ -189,7 +166,7 @@ body {
 .hero-description {
     font-size: 1.25rem;
     color: #64748b;
-    text-align: left;
+    text-align: center;
     margin-bottom: 2.5rem;
     line-height: 1.6;
     font-weight: 400;
