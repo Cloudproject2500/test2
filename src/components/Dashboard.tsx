@@ -503,10 +503,62 @@ const Dashboard: React.FC<DashboardProps> = ({
         setCurrentDate(new Date(currentYear, currentMonth + 1, 1));
     };
 
-    // Placeholder data representing user progress
-    const thisWeekTasks = [12, 18, 15, 22, 9, 14, 5];
-    const maxTasks = Math.max(...thisWeekTasks);
+    // Real-time Chart Data Calculation
+    const getWeeklyEventCounts = () => {
+        const now = new Date();
+        const startOfWeek = new Date(now);
+        // Set to Monday of the current week
+        const day = now.getDay();
+        const diff = now.getDate() - (day === 0 ? 6 : day - 1);
+        startOfWeek.setDate(diff);
+        startOfWeek.setHours(0, 0, 0, 0);
 
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 7);
+
+        const counts = [0, 0, 0, 0, 0, 0, 0]; // M, T, W, Th, F, S, Su
+        calendarEvents.forEach(event => {
+            const eventDate = new Date(event.date);
+            if (eventDate >= startOfWeek && eventDate < endOfWeek) {
+                const eventDay = (eventDate.getDay() === 0 ? 6 : eventDate.getDay() - 1);
+                counts[eventDay]++;
+            }
+        });
+        return counts;
+    };
+
+    const thisWeekEventCounts = getWeeklyEventCounts();
+    const maxEventsInWeek = Math.max(...thisWeekEventCounts, 1);
+
+    // Pie Chart distribution
+    const calculateDistribution = () => {
+        const counts = {
+            personal: calendarEvents.filter(e => e.type === 'personal').length,
+            workspace: calendarEvents.filter(e => e.type === 'workspace').length,
+            academic: calendarEvents.filter(e => e.type === 'academic').length,
+            lifestyle: calendarEvents.filter(e => e.type === 'lifestyle').length,
+        };
+        const total = Object.values(counts).reduce((a, b) => a + b, 0);
+        if (total === 0) return null;
+
+        const p = (counts.personal / total) * 100;
+        const w = (counts.workspace / total) * 100;
+        const a = (counts.academic / total) * 100;
+        // l (lifestyle) is implicitly handled by the remaining percentage
+
+        return {
+            gradient: `conic-gradient(
+                ${personalColor} 0% ${p}%,
+                ${workspaceColor} ${p}% ${p + w}%,
+                var(--accent-blue) ${p + w}% ${p + w + a}%,
+                var(--success) ${p + w + a}% 100%
+            )`,
+            total
+        };
+    };
+
+    const totalEvents = calendarEvents.length;
+    const distribution = calculateDistribution();
     const brandBlue = '#3b82f6';
 
     return (
@@ -658,11 +710,11 @@ const Dashboard: React.FC<DashboardProps> = ({
                 <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem' }}>Your Progress</h2>
                 <section className="dashboard-progress-section">
                     <div className="premium-card flex-center">
-                        <div className="pie-chart">
+                        <div className="pie-chart" style={{ background: distribution?.gradient || 'var(--bg-card)' }}>
                             <div className="pie-chart-inner">
                                 <div>
-                                    <span style={{ display: 'block', fontWeight: 700, color: 'var(--text-primary)' }}>126</span>
-                                    <span>Total Tasks</span>
+                                    <span style={{ display: 'block', fontWeight: 700, color: 'var(--text-primary)' }}>{totalEvents}</span>
+                                    <span>Total Events</span>
                                 </div>
                             </div>
                         </div>
@@ -672,7 +724,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                         <div className="bar-chart-container">
                             {['M', 'T', 'W', 'Th', 'F', 'S', 'Su'].map((day, i) => (
                                 <div key={day} className="bar-column">
-                                    <div className="bar-fill" style={{ height: `${(thisWeekTasks[i] / maxTasks) * 100}%` }}></div>
+                                    <div className="bar-fill" style={{ height: `${(thisWeekEventCounts[i] / maxEventsInWeek) * 100}%` }}></div>
                                     <span className="bar-label">{day}</span>
                                 </div>
                             ))}
