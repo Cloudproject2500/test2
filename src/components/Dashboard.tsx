@@ -283,6 +283,8 @@ const Dashboard: React.FC<DashboardProps> = ({
 }) => {
 
     const [greeting, setGreeting] = React.useState('');
+    const [userName, setUserName] = React.useState(() => localStorage.getItem('taskmate_username') || 'Kevin');
+    const [isEditingName, setIsEditingName] = React.useState(false);
     const [currentDate, setCurrentDate] = React.useState(new Date());
 
     // Editable inline text helper
@@ -480,10 +482,12 @@ const Dashboard: React.FC<DashboardProps> = ({
 
     React.useEffect(() => {
         const hour = new Date().getHours();
-        if (hour < 12) setGreeting('Good morning, Kevin');
-        else if (hour < 18) setGreeting('Good afternoon, Kevin');
-        else setGreeting('Good evening, Kevin');
-    }, []);
+        let prefix = '';
+        if (hour < 12) prefix = 'Good morning';
+        else if (hour < 18) prefix = 'Good afternoon';
+        else prefix = 'Good evening';
+        setGreeting(prefix);
+    }, [userName]);
 
     // Calendar Calculations
     const currentYear = currentDate.getFullYear();
@@ -573,8 +577,52 @@ const Dashboard: React.FC<DashboardProps> = ({
 
                 {/* DYNAMIC HEADER */}
                 <header style={{ marginBottom: '2.5rem' }}>
-                    <h1 style={{ fontSize: '3rem', fontWeight: 800, color: brandBlue }}>
-                        {greeting}
+                    <h1 style={{ fontSize: '3rem', fontWeight: 800, color: brandBlue, display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        <span>{greeting},</span>
+                        {isEditingName ? (
+                            <input 
+                                autoFocus
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
+                                onBlur={() => {
+                                    setIsEditingName(false);
+                                    localStorage.setItem('taskmate_username', userName);
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        setIsEditingName(false);
+                                        localStorage.setItem('taskmate_username', userName);
+                                    }
+                                }}
+                                style={{
+                                    fontSize: 'inherit',
+                                    fontWeight: 'inherit',
+                                    color: 'inherit',
+                                    background: 'transparent',
+                                    border: 'none',
+                                    borderBottom: `2px solid ${brandBlue}`,
+                                    outline: 'none',
+                                    padding: 0,
+                                    margin: 0,
+                                    width: `${Math.max(userName.length, 1)}ch`,
+                                    minWidth: '150px'
+                                }}
+                            />
+                        ) : (
+                            <span 
+                                onClick={() => setIsEditingName(true)}
+                                style={{ 
+                                    cursor: 'pointer',
+                                    borderBottom: '2px solid transparent',
+                                    transition: 'all 0.2s'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.borderBottom = `2px solid ${brandBlue}44`}
+                                onMouseLeave={(e) => e.currentTarget.style.borderBottom = '2px solid transparent'}
+                                title="Click to rename"
+                            >
+                                {userName}
+                            </span>
+                        )}
                     </h1>
                 </header>
 
