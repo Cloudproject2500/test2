@@ -26,7 +26,7 @@ function App() {
   });
 
   const [customFontColor, setCustomFontColor] = useState(() => {
-    return localStorage.getItem('taskmate_font_color') || 'var(--text-primary)';
+    return localStorage.getItem('taskmate_font_color') || '#37352f';
   });
 
   const [personalColor, setPersonalColor] = useState(() => localStorage.getItem('taskmate_personal_color') || '#22c55e');

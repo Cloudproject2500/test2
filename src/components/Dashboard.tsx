@@ -118,7 +118,7 @@ const ImageWidget: React.FC = () => {
                                             if (fileInputRef.current) fileInputRef.current.value = '';
                                         }}
                                         style={{
-                                            background: 'rgba(255,255,255,0.95)',
+                                            background: 'var(--bg-card)',
                                             border: '1px solid #e2e8f0',
                                             borderRadius: '8px',
                                             width: '32px', height: '32px',
@@ -138,7 +138,7 @@ const ImageWidget: React.FC = () => {
                                     <button
                                         onClick={openModal}
                                         style={{
-                                            background: 'rgba(255,255,255,0.95)',
+                                            background: 'var(--bg-card)',
                                             border: '1px solid #e2e8f0',
                                             borderRadius: '8px',
                                             width: '32px', height: '32px',
@@ -735,7 +735,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                                         <div style={{ 
                                             flex: 1, 
                                             width: '36px', 
-                                            background: isToday ? 'rgba(59, 130, 246, 0.08)' : 'rgba(0,0,0,0.03)', 
+                                            background: isToday ? 'rgba(59, 130, 246, 0.1)' : 'var(--bg-hover)', 
                                             border: isToday ? `1.5px solid ${workspaceColor}` : 'none',
                                             borderRadius: '8px', 
                                             position: 'relative', 
