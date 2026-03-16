@@ -99,11 +99,11 @@ body {
     background: white;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     min-height: 100vh;
     padding: 10rem 5% 12rem 5%;
-    text-align: center;
+    text-align: left;
     color: black;
 }
 
@@ -111,7 +111,7 @@ body {
     max-width: 800px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     z-index: 2;
 }
 
@@ -123,7 +123,7 @@ body {
     letter-spacing: -0.04em;
     color: #0f172a;
     margin-bottom: 1.5rem;
-    text-align: center;
+    text-align: left;
 }
 
 .rotating-wrapper {
@@ -166,7 +166,7 @@ body {
 .hero-description {
     font-size: 1.25rem;
     color: #64748b;
-    text-align: center;
+    text-align: left;
     margin-bottom: 2.5rem;
     line-height: 1.6;
     font-weight: 400;
