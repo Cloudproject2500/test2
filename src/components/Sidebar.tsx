@@ -114,11 +114,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                         padding: isCollapsed ? '0.5rem' : '0.5rem 0.75rem'
                     }}
                 >
-                    {!isCollapsed && (
-                        <span style={{ fontWeight: 800, fontSize: '1.25rem', color: 'var(--accent-blue)', letterSpacing: '-0.02em', whiteSpace: 'nowrap' }}>
-                            TaskMate
-                        </span>
-                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <img src="/logo1.png" alt="TaskMate Logo" style={{ height: '36px', width: '36px', objectFit: 'contain' }} />
+                    </div>
                     <button
                         onClick={() => setIsCollapsed(!isCollapsed)}
                         style={{
