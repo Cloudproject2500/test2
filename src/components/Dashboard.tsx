@@ -739,7 +739,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                                         }}>
                                             {day}
                                         </span>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflow: 'hidden' }}>
+                                        <div className="thin-scrollbar" style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflowY: 'auto', flex: 1, minHeight: 0 }}>
                                             {calendarEvents
                                                 .filter(e => {
                                                     const eDate = new Date(e.date);
