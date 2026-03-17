@@ -569,7 +569,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
     const distribution = calculateDistribution();
     const totalEvents = calendarEvents.length;
-    const brandBlue = '#3b82f6';
+    const activeColor = 'var(--user-font-color, #3b82f6)';
 
     return (
         <main className="main-wrapper" style={{ padding: '2rem 1rem' }}>
@@ -577,7 +577,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
                 {/* DYNAMIC HEADER */}
                 <header style={{ marginBottom: '2.5rem' }}>
-                    <h1 style={{ fontSize: '3rem', fontWeight: 800, color: brandBlue, display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    <h1 style={{ fontSize: '3rem', fontWeight: 800, color: activeColor, display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                         <span>{greeting},</span>
                         {isEditingName ? (
                             <input 
@@ -600,7 +600,6 @@ const Dashboard: React.FC<DashboardProps> = ({
                                     color: 'inherit',
                                     background: 'transparent',
                                     border: 'none',
-                                    borderBottom: `2px solid ${brandBlue}`,
                                     outline: 'none',
                                     padding: 0,
                                     margin: 0,
@@ -616,7 +615,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                                     borderBottom: '2px solid transparent',
                                     transition: 'all 0.2s'
                                 }}
-                                onMouseEnter={(e) => e.currentTarget.style.borderBottom = `2px solid ${brandBlue}44`}
+                                onMouseEnter={(e) => e.currentTarget.style.borderBottom = `2px solid ${activeColor}44`}
                                 onMouseLeave={(e) => e.currentTarget.style.borderBottom = '2px solid transparent'}
                                 title="Click to rename"
                             >
