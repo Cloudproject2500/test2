@@ -23,17 +23,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 400);
         }, 400);
     }, 1500);
-
-    // --- Hero Stack Interactive Carousel ---
-    const screens = document.querySelectorAll('.hero-screen');
-    screens.forEach(screen => {
-        screen.addEventListener('click', () => {
-            if (screen.classList.contains('back')) {
-                screens.forEach(s => {
-                    s.classList.toggle('front');
-                    s.classList.toggle('back');
-                });
-            }
-        });
-    });
 });

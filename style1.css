@@ -98,39 +98,23 @@ body {
     flex: 1;
     background: white;
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
     min-height: 100vh;
-    padding: 10rem 8% 8rem 8%;
-    gap: 4rem;
+    padding: 10rem 8% 8rem 5%;
+    gap: 2rem;
     color: black;
 }
 
 .hero-content {
     flex: 1;
-    max-width: 650px;
+    max-width: 800px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    text-align: left;
     z-index: 2;
-}
-
-.hero-image-container {
-    flex: 1.2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.hero-illustration {
-    width: 100%;
-    max-width: 750px;
-    height: auto;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.06));
-    animation: floating 6s ease-in-out infinite;
-    border-radius: 20px;
 }
 
 @keyframes floating {
@@ -145,54 +129,6 @@ body {
     100% {
         transform: translateY(0px) rotateX(0deg);
     }
-}
-
-.hero-stack {
-    position: relative;
-    width: 100%;
-    max-width: 800px;
-    height: 500px;
-    perspective: 1000px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-screen {
-    position: absolute;
-    width: 100%;
-    max-width: 750px;
-    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    cursor: pointer;
-    border-radius: 20px;
-}
-
-.hero-screen img {
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    display: block;
-}
-
-.hero-screen.front {
-    z-index: 10;
-    transform: translateZ(0) scale(1);
-    filter: blur(0);
-    opacity: 1;
-}
-
-.hero-screen.back {
-    z-index: 5;
-    transform: translateZ(-100px) translateY(-40px) translateX(40px) rotateX(5deg) rotateY(-5deg);
-    filter: blur(2px);
-    opacity: 0.8;
-}
-
-.hero-screen.back:hover {
-    transform: translateZ(-80px) translateY(-45px) translateX(45px) rotateX(5deg) rotateY(-5deg);
-    opacity: 0.95;
-    filter: blur(0);
 }
 
 .hero-title {
@@ -247,7 +183,7 @@ body {
     font-size: 1.25rem;
     color: #64748b;
     text-align: left;
-    margin-bottom: 2.5rem;
+    margin: 0 0 2.5rem 0;
     line-height: 1.6;
     font-weight: 400;
     max-width: 600px;
