@@ -577,7 +577,7 @@ const Dashboard: React.FC<DashboardProps> = ({
 
                 {/* DYNAMIC HEADER */}
                 <header style={{ marginBottom: '2.5rem' }}>
-                    <h1 style={{ fontSize: '3rem', fontWeight: 800, color: activeColor, display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                    <h1 style={{ fontSize: '2.25rem', fontWeight: 800, color: activeColor, display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                         <span>{greeting},</span>
                         {isEditingName ? (
                             <input 
