@@ -135,16 +135,64 @@ body {
 
 @keyframes floating {
     0% {
-        transform: translateY(0px);
+        transform: translateY(0px) rotateX(0deg);
     }
 
     50% {
-        transform: translateY(-15px);
+        transform: translateY(-15px) rotateX(2deg);
     }
 
     100% {
-        transform: translateY(0px);
+        transform: translateY(0px) rotateX(0deg);
     }
+}
+
+.hero-stack {
+    position: relative;
+    width: 100%;
+    max-width: 800px;
+    height: 500px;
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-screen {
+    position: absolute;
+    width: 100%;
+    max-width: 750px;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+    border-radius: 20px;
+}
+
+.hero-screen img {
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    display: block;
+}
+
+.hero-screen.front {
+    z-index: 10;
+    transform: translateZ(0) scale(1);
+    filter: blur(0);
+    opacity: 1;
+}
+
+.hero-screen.back {
+    z-index: 5;
+    transform: translateZ(-100px) translateY(-40px) translateX(40px) rotateX(5deg) rotateY(-5deg);
+    filter: blur(2px);
+    opacity: 0.8;
+}
+
+.hero-screen.back:hover {
+    transform: translateZ(-80px) translateY(-45px) translateX(45px) rotateX(5deg) rotateY(-5deg);
+    opacity: 0.95;
+    filter: blur(0);
 }
 
 .hero-title {
