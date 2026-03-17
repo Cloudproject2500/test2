@@ -135,11 +135,10 @@ const HybridCalendar: React.FC<HybridCalendarProps> = ({ events, onAddEvent, onD
                             const dayNum = i - firstDay + 1;
                             const isCurrentMonth = dayNum > 0 && dayNum <= daysInMonth;
 
-                            // Date string for this cell
-                            const cellDate = isCurrentMonth
-                                ? new Date(currentDate.getFullYear(), currentDate.getMonth(), dayNum)
-                                : null;
-                            const dateStr = cellDate ? cellDate.toISOString().split('T')[0] : '';
+                            // Date string for this cell (YYYY-MM-DD) - Timezone agnostic
+                            const dateStr = isCurrentMonth
+                                ? `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`
+                                : '';
 
                             // Filter events for this day
                             const dayEvents = isCurrentMonth

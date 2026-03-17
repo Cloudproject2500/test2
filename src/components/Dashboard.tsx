@@ -899,8 +899,8 @@ const Dashboard: React.FC<DashboardProps> = ({
                                         <div className="thin-scrollbar" style={{ display: 'flex', flexDirection: 'column', gap: '2px', overflowY: 'auto', flex: 1, minHeight: 0 }}>
                                             {calendarEvents
                                                 .filter(e => {
-                                                    const eDate = new Date(e.date);
-                                                    return eDate.getDate() === day && eDate.getMonth() === currentMonth && eDate.getFullYear() === currentYear;
+                                                    const [y, m, d] = e.date.split('-').map(Number);
+                                                    return d === day && (m - 1) === currentMonth && y === currentYear;
                                                 })
                                                 .map((event) => {
                                                     const isPersonal = event.type === 'personal';
