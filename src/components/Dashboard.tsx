@@ -681,7 +681,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                             <ul style={{ listStyle: 'none', margin: 0, padding: 0, flex: 1, overflowY: 'auto' }}>
                                 {scheduleEvents.map((event, i) => (
                                     <li key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: event.color, marginRight: '16px', flexShrink: 0 }}></div>
+                                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#94a3b8', marginRight: '16px', flexShrink: 0 }}></div>
                                         <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: '#94a3b8', width: '70px', flexShrink: 0 }}>{event.time}</span>
                                         <EditableText
                                             value={event.title}
@@ -737,7 +737,7 @@ const Dashboard: React.FC<DashboardProps> = ({
                             <ul style={{ listStyle: 'none', margin: 0, padding: 0, flex: 1, overflowY: 'auto' }}>
                                 {reminders.map((reminder, i) => (
                                     <li key={i} style={{ display: 'flex', alignItems: 'center', marginBottom: '1.25rem' }}>
-                                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: reminder.color, marginRight: '16px', flexShrink: 0 }}></div>
+                                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#94a3b8', marginRight: '16px', flexShrink: 0 }}></div>
                                         <EditableText
                                             value={reminder.title}
                                             onChange={(v) => updateReminderTitle(i, v)}
