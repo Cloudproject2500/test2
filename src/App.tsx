@@ -12,25 +12,29 @@ import PersonalTodoView from './components/PersonalTodoView';
 import Settings from './components/Settings';
 import type { LifePage, PersonalTodo, CalendarEvent } from './types';
 
+// Safety helper for localStorage
+const getSafeStorage = (key: string, fallback: string) => {
+  try {
+    return localStorage.getItem(key) || fallback;
+  } catch (e) {
+    console.warn('LocalStorage access failed:', e);
+    return fallback;
+  }
+};
+
 function App() {
 
   const [currentView, setCurrentView] = useState('dashboard');
   const [showTutorial, setShowTutorial] = useState(false);
 
-  const [theme] = useState(() => {
-    return localStorage.getItem('taskmate_theme') || 'glass';
-  });
+  const [theme] = useState(() => getSafeStorage('taskmate_theme', 'glass'));
 
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    return localStorage.getItem('taskmate_dark_mode') === 'true';
-  });
+  const [isDarkMode, setIsDarkMode] = useState(() => getSafeStorage('taskmate_dark_mode', 'false') === 'true');
 
-  const [customFontColor, setCustomFontColor] = useState(() => {
-    return localStorage.getItem('taskmate_font_color') || '#37352f';
-  });
+  const [customFontColor, setCustomFontColor] = useState(() => getSafeStorage('taskmate_font_color', '#37352f'));
 
-  const [personalColor, setPersonalColor] = useState(() => localStorage.getItem('taskmate_personal_color') || '#22c55e');
-  const [workspaceColor, setWorkspaceColor] = useState(() => localStorage.getItem('taskmate_workspace_color') || '#3b82f6');
+  const [personalColor, setPersonalColor] = useState(() => getSafeStorage('taskmate_personal_color', '#22c55e'));
+  const [workspaceColor, setWorkspaceColor] = useState(() => getSafeStorage('taskmate_workspace_color', '#3b82f6'));
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
@@ -49,16 +53,20 @@ function App() {
 
   useEffect(() => {
     const checkTutorial = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('has_seen_tutorial')
-          .eq('user_id', user.id)
-          .single();
-        if (profile && profile.has_seen_tutorial === false) {
-          setShowTutorial(true);
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('has_seen_tutorial')
+            .eq('user_id', user.id)
+            .single();
+          if (profile && profile.has_seen_tutorial === false) {
+            setShowTutorial(true);
+          }
         }
+      } catch (err) {
+        console.warn('Auth check skipped or failed:', err);
       }
     };
     checkTutorial();
@@ -79,17 +87,17 @@ function App() {
   ];
 
   const [lifePages, setLifePages] = useState<LifePage[]>(() => {
-    const saved = localStorage.getItem('taskmate_life_pages');
+    const saved = getSafeStorage('taskmate_life_pages', '');
     return saved ? JSON.parse(saved) : initialLifePages;
   });
 
   const [personalTodos, setPersonalTodos] = useState<PersonalTodo[]>(() => {
-    const saved = localStorage.getItem('taskmate_personal_todos');
+    const saved = getSafeStorage('taskmate_personal_todos', '');
     return saved ? JSON.parse(saved) : [];
   });
 
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>(() => {
-    const saved = localStorage.getItem('taskmate_calendar_events');
+    const saved = getSafeStorage('taskmate_calendar_events', '');
     if (saved) return JSON.parse(saved);
 
     const year = new Date().getFullYear();
