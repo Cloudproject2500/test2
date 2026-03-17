@@ -17,7 +17,7 @@ function App() {
   const [currentView, setCurrentView] = useState('dashboard');
   const [showTutorial, setShowTutorial] = useState(false);
 
-  const [theme, setTheme] = useState(() => {
+  const [theme] = useState(() => {
     return localStorage.getItem('taskmate_theme') || 'glass';
   });
 
