@@ -38,17 +38,29 @@ function App() {
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('taskmate_theme', theme);
+    try {
+      localStorage.setItem('taskmate_theme', theme);
+    } catch (e) {
+      console.warn('LocalStorage setItem failed:', e);
+    }
   }, [theme]);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-mode', isDarkMode ? 'dark' : 'light');
-    localStorage.setItem('taskmate_dark_mode', String(isDarkMode));
+    try {
+      localStorage.setItem('taskmate_dark_mode', String(isDarkMode));
+    } catch (e) {
+      console.warn('LocalStorage setItem failed:', e);
+    }
   }, [isDarkMode]);
 
   useEffect(() => {
     document.documentElement.style.setProperty('--user-font-color', customFontColor);
-    localStorage.setItem('taskmate_font_color', customFontColor);
+    try {
+      localStorage.setItem('taskmate_font_color', customFontColor);
+    } catch (e) {
+      console.warn('LocalStorage setItem failed:', e);
+    }
   }, [customFontColor]);
 
   useEffect(() => {
