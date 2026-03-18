@@ -32,7 +32,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
 
     return (
         <div className="course-card" style={{
-            backgroundColor: 'white',
+            backgroundColor: 'var(--bg-card, white)',
             border: '1px solid var(--border-color)',
             borderRadius: '8px',
             marginBottom: '12px',
@@ -67,7 +67,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
                     borderTop: '1px solid var(--border-color)',
                     fontSize: '13px',
                     color: 'var(--text-secondary)',
-                    backgroundColor: '#F9FAFB'
+                    backgroundColor: 'var(--bg-secondary)'
                 }}>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', paddingTop: '12px' }}>
                         <div>

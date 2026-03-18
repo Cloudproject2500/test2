@@ -36,7 +36,7 @@ const CoursesView: React.FC = () => {
             padding: '20px',
             gap: '24px',
             overflow: 'hidden',
-            backgroundColor: '#F9FAFB'
+            backgroundColor: 'var(--bg-primary)'
         }}>
             {/* Left Column: Courses List */}
             <div style={{ flex: '1', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
@@ -52,12 +52,12 @@ const CoursesView: React.FC = () => {
                         flexWrap: 'wrap',
                         gap: '16px',
                         alignItems: 'center',
-                        backgroundColor: 'white',
+                        backgroundColor: 'var(--bg-card, white)',
                         padding: '16px',
                         borderRadius: '12px',
                         border: '1px solid var(--border-color)',
                         marginBottom: '24px',
-                        boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+                        boxShadow: 'var(--card-shadow)'
                     }}>
                         {/* Search */}
                         <div style={{ flex: '1 1 300px' }}>
@@ -73,7 +73,8 @@ const CoursesView: React.FC = () => {
                                     border: '1px solid var(--border-color)',
                                     fontSize: '14px',
                                     outline: 'none',
-                                    backgroundColor: '#F9FAFB'
+                                    backgroundColor: 'var(--bg-secondary)',
+                                    color: 'var(--text-primary)'
                                 }}
                             />
                         </div>
@@ -89,7 +90,7 @@ const CoursesView: React.FC = () => {
                                         borderRadius: '6px',
                                         border: '1px solid',
                                         borderColor: selectedDays.includes(day) ? 'var(--accent-blue)' : 'var(--border-color)',
-                                        backgroundColor: selectedDays.includes(day) ? 'var(--accent-blue)' : 'white',
+                                        backgroundColor: selectedDays.includes(day) ? 'var(--accent-blue)' : 'var(--bg-card, white)',
                                         color: selectedDays.includes(day) ? 'white' : 'var(--text-secondary)',
                                         fontSize: '13px',
                                         fontWeight: 600,
