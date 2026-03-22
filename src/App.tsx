@@ -254,7 +254,7 @@ function App() {
   const renderView = () => {
     switch (currentView) {
       case 'inbox':
-        return <Inbox />;
+        return <Inbox userRole={userRole} />;
       case 'calendar':
         return (
           <HybridCalendar
@@ -304,6 +304,7 @@ function App() {
           calendarEvents={calendarEvents}
           onUpdateCalendarEvent={handleUpdateCalendarEvent}
           onDeleteCalendarEvent={handleDeleteCalendarEvent}
+          userRole={userRole}
         />;
     }
   };

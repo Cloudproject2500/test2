@@ -1,7 +1,11 @@
 import React from 'react';
 
-const Inbox: React.FC = () => {
-    const notifications = [
+interface InboxProps {
+    userRole?: string | null;
+}
+
+const Inbox: React.FC<InboxProps> = ({ userRole }) => {
+    const notifications = userRole === 'student' ? [] : [
         { id: 1, type: 'urgent', title: 'CS101 Assignment Due', description: 'Due in less than 24 hours', time: '2h ago' },
         { id: 2, type: 'general', title: 'MATH202 Announcement', description: 'Midterm results are posted', time: '5h ago' },
         { id: 3, type: 'general', title: 'Lifestyle Tip', description: 'Time for your scheduled cardio!', time: '1d ago' },
