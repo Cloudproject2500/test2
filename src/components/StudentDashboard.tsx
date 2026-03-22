@@ -402,12 +402,7 @@ const StudentDashboard: React.FC<DashboardProps> = ({
     );
 
     // Interactive Tasks State
-    const [todayTasks, setTodayTasks] = React.useState([
-        { title: 'Review CS 301 lecture notes', checked: false },
-        { title: 'Submit MATH 245 problem set', checked: true },
-        { title: 'Read Chapter 7 — Mechanics', checked: false },
-        { title: 'Office hours with Dr. Lin', checked: false }
-    ]);
+    const [todayTasks, setTodayTasks] = React.useState<any[]>([]);
 
     const toggleTask = (index: number) => {
         setTodayTasks(prev => prev.map((t, i) => i === index ? { ...t, checked: !t.checked } : t));
@@ -422,12 +417,7 @@ const StudentDashboard: React.FC<DashboardProps> = ({
     };
 
     // Schedule State
-    const [scheduleEvents, setScheduleEvents] = React.useState([
-        { title: 'PHYS 201 Lecture', time: '9:00 AM', color: '#f59e0b' },
-        { title: 'Office Hours', time: '10:30 AM', color: '#94a3b8' },
-        { title: 'CS 301 Lab', time: '1:00 PM', color: '#3b82f6' },
-        { title: 'Study Group', time: '3:00 PM', color: '#14b8a6' }
-    ]);
+    const [scheduleEvents, setScheduleEvents] = React.useState<any[]>([]);
 
     const updateScheduleTitle = (index: number, newTitle: string) => {
         setScheduleEvents(prev => prev.map((e, i) => i === index ? { ...e, title: newTitle } : e));
