@@ -11,6 +11,7 @@ export default defineConfig({
                 demo: resolve(__dirname, 'demo/index.html'),
                 login: resolve(__dirname, 'login/index.html'),
                 signup: resolve(__dirname, 'signup/index.html'),
+                welcome: resolve(__dirname, 'welcome/index.html'),
                 callback: resolve(__dirname, 'auth/callback/index.html'),
             },
         },

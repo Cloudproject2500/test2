@@ -5,27 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome - TaskMate</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Outfit:wght@100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/mini-logo.svg" />
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <header class="header">
-        <div class="logo-container">
-            <a href="/">
-                <img src="/logo1.png" alt="TaskMate Logo" class="logo-icon" style="height: 32px;">
-                <span class="logo-text">TaskMate</span>
-            </a>
-        </div>
-    </header>
+
 
     <main class="welcome-container">
-        <h1 class="welcome-title">Welcome to TaskMate! 🎉</h1>
+        <h1 class="welcome-title">Welcome to <span class="text-blue">TaskMate</span>!</h1>
         <p class="welcome-subtitle">To personalize your experience, please tell us how you'll be using TaskMate.</p>
 
         <div class="role-selection">
@@ -48,41 +37,7 @@
         <p style="font-weight: 600; color: #1e293b;">Setting up your workspace...</p>
     </div>
 
-    <script type="module">
-        import { supabase } from '../src/lib/supabase.ts'
-
-        window.selectRole = async (role) => {
-            const overlay = document.getElementById('loadingOverlay');
-            overlay.style.display = 'flex';
-
-            try {
-                // Get the current logged in user
-                const { data: { user }, error: userError } = await supabase.auth.getUser();
-
-                if (userError || !user) {
-                    throw new Error("You must be logged in to select a role.");
-                }
-
-                // Update the user's role in the custom profiles table
-                const { error: updateError } = await supabase
-                    .from('profiles')
-                    .update({ role: role })
-                    .eq('user_id', user.id);
-
-                if (updateError) {
-                    throw updateError;
-                }
-
-                // Redirect to main dashboard
-                window.location.href = '/demo/index.html';
-
-            } catch (err) {
-                console.error("Error setting role:", err);
-                alert("Failed to save your selection: " + err.message);
-                overlay.style.display = 'none';
-            }
-        };
-    </script>
+    <script type="module" src="./welcome.ts"></script>
 </body>
 
 </html>

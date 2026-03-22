@@ -79,10 +79,10 @@
                     .eq('user_id', data.session.user.id)
                     .single();
 
-                let destination = '/demo/index.html';
-                if (profile && profile.role === 'user') {
-                    // Default role means they haven't chosen yet
-                    destination = '/welcome/';
+                let destination = '/welcome/index.html';
+                if (profile && profile.role !== 'user') {
+                    // They already have a role, go to dashboard
+                    destination = '/demo/index.html';
                 }
 
                 // Update the UI to show success
