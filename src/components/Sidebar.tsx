@@ -9,6 +9,11 @@ interface SidebarProps {
     onDeleteLifePage: (id: string) => void;
     onRenameLifePage: (id: string, newName: string) => void;
     onChangeLifePageIcon: (id: string, newIcon: string) => void;
+    workspacePages: LifePage[];
+    onAddWorkspacePage: (name: string) => void;
+    onDeleteWorkspacePage: (id: string) => void;
+    onRenameWorkspacePage: (id: string, newName: string) => void;
+    onChangeWorkspacePageIcon: (id: string, newIcon: string) => void;
     personalColor: string;
     setPersonalColor: (color: string) => void;
     workspaceColor: string;
@@ -38,17 +43,6 @@ const EMOJI_OPTIONS = [
     '🐙', '🦑', '🦐', '🦞', '🦀', '🐡', '🐠', '🐟', '🐬', '🐳', 
     '🦓', '🐘', '🦏', '🦛', '🦒', '🐎', '🦍', '🦧', '🐩', '🐕', 
     '🐈', '🦜', '🦢', '🦩', '🕊️',
-    // Food & Drink
-    '🍏', '🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🫐', 
-    '🍈', '🍒', '🍑', '🥭', '🍍', '🥥', '🥝', '🍅', '🍆', '🥑', 
-    '🥦', '🥬', '🥒', '🌶️', '🌽', '🥕', '🫒', '🧄', '🧅', '🍄', 
-    '🥜', '🫘', '🌰', '🍞', '🥐', '🥖', '🫓', '🥨', ' bagel', '🥞', 
-    '🧀', '🍖', '🍗', '🥩', '🥓', '🍔', '🍟', '🍕', '🌭', '🥪', 
-    '🌮', '🌯', '🫔', '🥗', '🥘', '🫕', '🥣', '🍝', '🍜', '🍲', 
-    '🍛', '🍣', '🍱', '🥟', '🦪', '🍤', '🍙', '🍚', '🍘', '🍥', 
-    '🥠', '🥮', '🍡', '🍦', '🍧', '🍨', '🍩', '🍪', '🎂', '🍰', 
-    '🧁', '🥧', '🍫', '🍬', '🍭', '🍮', '🍯', '🍼', '🥛', '☕', 
-    '🫖', '🍵', '🍶', '🍾', '🍷', '🍸', '🍹', '🍺', '🍻',
     // Travel & Places
     '🚗', '🚕', '🚙', '🚌', '🛵', '🚲', '🚜', '🚛', '🚚', '🏎️', 
     '🚑', '🚒', '🚓', '🚁', '🚀', '🛸', '🛰️', '⛵', '🛥️', '🚢', 
@@ -66,7 +60,7 @@ const EMOJI_OPTIONS = [
     '‼️', '⁉️', '🔅', '🔆', '〽️', '⚠️', '🚸', '🔱', '⚜️', '🔰', 
     '♻️', '✅', '🈯', '💹', '❇️', '✳️', '❎', '🌐', '💠', 'Ⓜ️', 
     '🌀', '💤', '🏧', '🚾', '♿', '🅿️', '🈳', '🈂️', '🛂', '🛃', 
-    '🛄', '🛅', '🚹', '🚺', '🚼', '🚻', '🚮', '🎦', '📶', '🈁', 
+    '🛄', '🛅', '🛅', '🚹', '🚺', '🚼', '🚻', '🚮', '🎦', '📶', '🈁', 
     '🔣', 'ℹ️', '🔤', '🔡', '🔠', '🆖', '🆗', '🆙', '🆒', '🆕', 
     '🆓', '0️⃣', '1️⃣', '2️⃣', '3️⃣', '4️⃣', '5️⃣', '6️⃣', '7️⃣', '8️⃣', 
     '9️⃣', '🔟', '🔢', '▶️', '⏸️', '⏯️', '⏹️', '⏺️', '⏏️', '⏭️', 
@@ -79,10 +73,6 @@ const EMOJI_OPTIONS = [
     '🏀', '🏈', '⚽', '⚾', '🎾', '🏐', '🏉', '🥏', '🏓', '🏸',
     '🥊', '🥋', '⛳', '⛸️', '🎿', '🛷', '🏄', '🏊', '🤽', '🚣',
     '🧗', '🏇', '🤺', '🎳', '🏒', '🥍', '🤸', '🤾', '🏌️', '🥇',
-    // Food & Drink
-    '🍕', '🍔', '🌮', '🌯', '🍜', '🍣', '🍱', '🍝', '🥗', '🥩',
-    '🍗', '🍖', '🥐', '🍞', '🧁', '🎂', '🍩', '🍪', '🍫', '🍦',
-    '🍰', '🥤', '☕', '🍵', '🧃', '🍺', '🍷', '🥂', '🧋', '🥑',
     // Vehicles & Travel
     '🚗', '🚕', '🏎️', '🚓', '🚑', '🚒', '🚐', '🚌', '🚎', '🏍️',
     '🛵', '🚲', '🛴', '🚁', '✈️', '🛩️', '🚢', '🚂', '🚆', '🚇',
@@ -100,21 +90,25 @@ const Sidebar: React.FC<SidebarProps> = ({
     onDeleteLifePage,
     onRenameLifePage,
     onChangeLifePageIcon,
+    workspacePages,
+    onAddWorkspacePage,
+    onDeleteWorkspacePage,
+    onRenameWorkspacePage,
+    onChangeWorkspacePageIcon,
     personalColor,
     setPersonalColor,
     workspaceColor,
     setWorkspaceColor,
     inboxBadgeCount
 }) => {
-    const [isAddingPage, setIsAddingPage] = useState(false);
+    const [isCollapsed, setIsCollapsed] = useState(localStorage.getItem('taskmate_sidebar_collapsed') === 'true');
+    const [addingSection, setAddingSection] = useState<'personal' | 'workspace' | null>(null);
     const [newPageName, setNewPageName] = useState('');
-    const [isCollapsed, setIsCollapsed] = useState(false);
     const [editingPageId, setEditingPageId] = useState<string | null>(null);
     const [editingName, setEditingName] = useState('');
     const [emojiPickerPageId, setEmojiPickerPageId] = useState<string | null>(null);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
 
-    // Close emoji picker when clicking outside
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (emojiPickerRef.current && !emojiPickerRef.current.contains(e.target as Node)) {
@@ -125,12 +119,16 @@ const Sidebar: React.FC<SidebarProps> = ({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleAddPage = (e?: React.FormEvent | React.FocusEvent) => {
-        if (e && e.preventDefault) e.preventDefault();
+    const handleAddPage = (e: React.FormEvent) => {
+        e.preventDefault();
         if (newPageName.trim()) {
-            onAddLifePage(newPageName.trim());
+            if (addingSection === 'personal') {
+                onAddLifePage(newPageName.trim());
+            } else if (addingSection === 'workspace') {
+                onAddWorkspacePage(newPageName.trim());
+            }
             setNewPageName('');
-            setIsAddingPage(false);
+            setAddingSection(null);
         }
     };
 
@@ -141,7 +139,14 @@ const Sidebar: React.FC<SidebarProps> = ({
 
     const handleFinishRename = () => {
         if (editingPageId && editingName.trim()) {
-            onRenameLifePage(editingPageId, editingName.trim());
+            const isLifePage = lifePages.some(p => p.id === editingPageId);
+            const isWorkspacePage = workspacePages.some(p => p.id === editingPageId);
+
+            if (isLifePage) {
+                onRenameLifePage(editingPageId, editingName.trim());
+            } else if (isWorkspacePage) {
+                onRenameWorkspacePage(editingPageId, editingName.trim());
+            }
         }
         setEditingPageId(null);
         setEditingName('');
@@ -152,13 +157,18 @@ const Sidebar: React.FC<SidebarProps> = ({
         if (e.key === 'Escape') { setEditingPageId(null); setEditingName(''); }
     };
 
+    const toggleSidebar = () => {
+        const newState = !isCollapsed;
+        setIsCollapsed(newState);
+        localStorage.setItem('taskmate_sidebar_collapsed', String(newState));
+    };
+
     return (
         <aside className="sidebar" style={{
             width: isCollapsed ? '64px' : '240px',
             transition: 'width 0.3s ease',
             overflow: 'visible'
         }}>
-            {/* Top Section: Personal & Info */}
             <div className="sidebar-section">
                 <div
                     className="nav-item flex-center"
@@ -175,7 +185,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         </span>
                     )}
                     <button
-                        onClick={() => setIsCollapsed(!isCollapsed)}
+                        onClick={toggleSidebar}
                         style={{
                             background: 'none',
                             border: 'none',
@@ -188,7 +198,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                             padding: '4px',
                             marginLeft: isCollapsed ? 0 : 'auto'
                         }}
-                        title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
                     >
                         {isCollapsed ? '»' : '«'}
                     </button>
@@ -214,7 +223,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 flexShrink: 0
                             }}
                             className="color-dot"
-                            title="Change color"
                         />
                         <input
                             id="personal-color-picker"
@@ -242,9 +250,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 width: '100%',
                                 justifyContent: isCollapsed ? 'center' : 'flex-start'
                             }}
-                            title={isCollapsed ? page.name : ''}
                         >
-                            {/* Clickable emoji */}
                             <span
                                 className="nav-icon"
                                 style={{ marginRight: isCollapsed ? 0 : '0.75rem', cursor: 'pointer', position: 'relative' }}
@@ -253,12 +259,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                                     e.stopPropagation();
                                     setEmojiPickerPageId(emojiPickerPageId === page.id ? null : page.id);
                                 }}
-                                title="Change emoji"
                             >
                                 {page.icon}
                             </span>
 
-                            {/* Editable name */}
                             {!isCollapsed && (
                                 editingPageId === page.id ? (
                                     <input
@@ -288,7 +292,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                                             e.stopPropagation();
                                             handleStartRename(page);
                                         }}
-                                        title="Double-click to rename"
                                     >
                                         {page.name}
                                     </span>
@@ -296,25 +299,24 @@ const Sidebar: React.FC<SidebarProps> = ({
                             )}
                         </a>
 
-                        {/* Emoji Picker Dropdown */}
                         {emojiPickerPageId === page.id && !isCollapsed && (
                             <div
                                 ref={emojiPickerRef}
+                                className="emoji-picker-container"
                                 style={{
                                     position: 'absolute',
                                     top: '100%',
-                                    left: '4px',
-                                    right: '4px',
-                                    zIndex: 9999,
-                                    background: '#ffffff',
+                                    left: '0px',
+                                    zIndex: 10000,
                                     border: '1px solid var(--border-color, #e2e8f0)',
                                     borderRadius: '12px',
-                                    padding: '8px',
+                                    padding: '12px',
                                     display: 'grid',
-                                    gridTemplateColumns: 'repeat(5, 1fr)',
+                                    gridTemplateColumns: 'repeat(6, 1fr)',
                                     gap: '4px',
-                                    boxShadow: '0 10px 30px rgba(0,0,0,0.15)',
-                                    maxHeight: '220px',
+                                    boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+                                    maxHeight: '300px',
+                                    width: '260px',
                                     overflowY: 'auto'
                                 }}
                             >
@@ -335,8 +337,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                                             padding: '6px',
                                             transition: 'background 0.15s ease'
                                         }}
-                                        onMouseEnter={(e) => { if (page.icon !== emoji) (e.target as HTMLElement).style.background = 'var(--bg-hover, #f1f5f9)'; }}
-                                        onMouseLeave={(e) => { if (page.icon !== emoji) (e.target as HTMLElement).style.background = 'none'; }}
                                     >
                                         {emoji}
                                     </button>
@@ -360,7 +360,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 ))}
 
                 {!isCollapsed && (
-                    isAddingPage ? (
+                    addingSection === 'personal' ? (
                         <form onSubmit={handleAddPage} style={{ padding: '0', marginTop: '4px' }}>
                             <div className="nav-item active" style={{ 
                                 display: 'flex', 
@@ -383,13 +383,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                                         if (newPageName.trim()) {
                                             handleAddPage(e);
                                         } else {
-                                            setIsAddingPage(false);
+                                            setAddingSection(null);
                                         }
                                     }}
                                     onKeyDown={(e) => {
                                         if (e.key === 'Escape') {
                                             setNewPageName('');
-                                            setIsAddingPage(false);
+                                            setAddingSection(null);
                                         }
                                     }}
                                     style={{
@@ -407,7 +407,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         </form>
                     ) : (
                         <button
-                            onClick={() => setIsAddingPage(true)}
+                            onClick={() => setAddingSection('personal')}
                             className="nav-item add-page-btn"
                             style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', opacity: 0.7 }}
                         >
@@ -417,7 +417,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                 )}
             </div>
 
-            {/* Middle Section: Workspace */}
             <div className="sidebar-section">
                 {!isCollapsed && (
                     <div className="sidebar-section-title" style={{
@@ -439,7 +438,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                                 flexShrink: 0
                             }}
                             className="color-dot"
-                            title="Change color"
                         />
                         <input
                             id="workspace-color-picker"
@@ -454,12 +452,133 @@ const Sidebar: React.FC<SidebarProps> = ({
                         Workspace
                     </div>
                 )}
+
+                {workspacePages.map(page => (
+                    <div key={page.id} className="nav-item-container" style={{ position: 'relative' }}>
+                        <a
+                            href={`#${page.id}`}
+                            className={`nav-item ${currentView === page.id ? 'active' : ''}`}
+                            onClick={(e) => { e.preventDefault(); onViewChange(page.id); }}
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                width: '100%',
+                                justifyContent: isCollapsed ? 'center' : 'flex-start'
+                            }}
+                        >
+                            <span
+                                className="nav-icon"
+                                style={{ marginRight: isCollapsed ? 0 : '0.75rem', cursor: 'pointer', position: 'relative' }}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    setEmojiPickerPageId(emojiPickerPageId === page.id ? null : page.id);
+                                }}
+                            >
+                                {page.icon}
+                            </span>
+
+                            {!isCollapsed && (
+                                editingPageId === page.id ? (
+                                    <input
+                                        autoFocus
+                                        type="text"
+                                        value={editingName}
+                                        onChange={(e) => setEditingName(e.target.value)}
+                                        onBlur={handleFinishRename}
+                                        onKeyDown={handleRenameKeyDown}
+                                        onClick={(e) => e.stopPropagation()}
+                                        style={{
+                                            border: '1px solid var(--accent-blue)',
+                                            borderRadius: '4px',
+                                            padding: '2px 6px',
+                                            fontSize: '13px',
+                                            outline: 'none',
+                                            width: '100%',
+                                            background: 'var(--bg-card)',
+                                            color: 'var(--text-primary)'
+                                        }}
+                                    />
+                                ) : (
+                                    <span
+                                        style={{ whiteSpace: 'nowrap', cursor: 'text' }}
+                                        onDoubleClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            handleStartRename(page);
+                                        }}
+                                    >
+                                        {page.name}
+                                    </span>
+                                )
+                            )}
+                        </a>
+
+                        {emojiPickerPageId === page.id && !isCollapsed && (
+                            <div
+                                ref={emojiPickerRef}
+                                className="emoji-picker-container"
+                                style={{
+                                    position: 'absolute',
+                                    top: '100%',
+                                    left: '0px',
+                                    zIndex: 10000,
+                                    border: '1px solid var(--border-color, #e2e8f0)',
+                                    borderRadius: '12px',
+                                    padding: '12px',
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(6, 1fr)',
+                                    gap: '4px',
+                                    boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+                                    maxHeight: '300px',
+                                    width: '260px',
+                                    overflowY: 'auto'
+                                }}
+                            >
+                                {EMOJI_OPTIONS.map(emoji => (
+                                    <button
+                                        key={emoji}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onChangeWorkspacePageIcon(page.id, emoji);
+                                            setEmojiPickerPageId(null);
+                                        }}
+                                        style={{
+                                            background: page.icon === emoji ? 'var(--accent-blue)' : 'none',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            fontSize: '1.2rem',
+                                            cursor: 'pointer',
+                                            padding: '6px',
+                                            transition: 'background 0.15s ease'
+                                        }}
+                                    >
+                                        {emoji}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {!isCollapsed && (
+                            <button
+                                className="delete-item-btn"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onDeleteWorkspacePage(page.id);
+                                }}
+                                title="Delete page"
+                            >
+                                🗑️
+                            </button>
+                        )}
+                    </div>
+                ))}
+
                 <a
                     href="#courses"
                     className={`nav-item ${currentView === 'courses' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); onViewChange('courses'); }}
                     style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
-                    title={isCollapsed ? "Courses" : ''}
                 >
                     <span className="nav-icon" style={{ marginRight: isCollapsed ? 0 : '0.75rem' }}>📚</span>
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Courses</span>}
@@ -469,15 +588,69 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className={`nav-item ${currentView === 'deadlines' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); onViewChange('deadlines'); }}
                     style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
-                    title={isCollapsed ? "Deadlines" : ''}
                 >
                     <span className="nav-icon" style={{ marginRight: isCollapsed ? 0 : '0.75rem' }}>⏰</span>
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Deadlines</span>}
                 </a>
 
+                {!isCollapsed && (
+                    addingSection === 'workspace' ? (
+                        <form onSubmit={handleAddPage} style={{ padding: '0', marginTop: '4px' }}>
+                            <div className="nav-item active" style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                padding: '8px 12px', 
+                                margin: '0 8px', 
+                                borderRadius: '8px', 
+                                border: '1px solid var(--accent-blue)', 
+                                background: 'var(--bg-card)', 
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.05)' 
+                            }}>
+                                <span className="nav-icon" style={{ marginRight: '0.75rem', fontSize: '1rem' }}>📄</span>
+                                <input
+                                    autoFocus
+                                    type="text"
+                                    placeholder="Page name..."
+                                    value={newPageName}
+                                    onChange={(e) => setNewPageName(e.target.value)}
+                                    onBlur={(e) => {
+                                        if (newPageName.trim()) {
+                                            handleAddPage(e);
+                                        } else {
+                                            setAddingSection(null);
+                                        }
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Escape') {
+                                            setNewPageName('');
+                                            setAddingSection(null);
+                                        }
+                                    }}
+                                    style={{
+                                        border: 'none',
+                                        background: 'transparent',
+                                        width: '100%',
+                                        fontSize: '14px',
+                                        outline: 'none',
+                                        color: 'var(--text-primary)',
+                                        fontWeight: 500
+                                    }}
+                                />
+                                <span style={{ fontSize: '10px', color: 'var(--text-secondary)', marginLeft: '8px', opacity: 0.5, fontWeight: 800 }}>↵</span>
+                            </div>
+                        </form>
+                    ) : (
+                        <button
+                            onClick={() => setAddingSection('workspace')}
+                            className="nav-item add-page-btn"
+                            style={{ background: 'none', border: 'none', width: '100%', textAlign: 'left', cursor: 'pointer', opacity: 0.7 }}
+                        >
+                            <span className="nav-icon" style={{ marginRight: '0.75rem' }}>+</span> Add a page
+                        </button>
+                    )
+                )}
             </div>
 
-            {/* Bottom Section: Global Nav */}
             <div className="sidebar-section" style={{ marginTop: 'auto' }}>
                 {!isCollapsed && <div className="sidebar-section-title">Navigation</div>}
                 <a
@@ -485,7 +658,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className={`nav-item ${currentView === 'dashboard' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); onViewChange('dashboard'); }}
                     style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
-                    title={isCollapsed ? "Dashboard" : ''}
                 >
                     <span className="nav-icon" style={{ marginRight: isCollapsed ? 0 : '0.75rem' }}>📊</span>
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Dashboard</span>}
@@ -495,7 +667,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className={`nav-item ${currentView === 'calendar' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); onViewChange('calendar'); }}
                     style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
-                    title={isCollapsed ? "Calendar" : ''}
                 >
                     <span className="nav-icon" style={{ marginRight: isCollapsed ? 0 : '0.75rem' }}>📅</span>
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Calendar</span>}
@@ -505,7 +676,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className={`nav-item ${currentView === 'inbox' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); onViewChange('inbox'); }}
                     style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
-                    title={isCollapsed ? "Inbox" : ''}
                 >
                     <span className="nav-icon" style={{ marginRight: isCollapsed ? 0 : '0.75rem' }}>📥</span>
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Inbox</span>}
@@ -520,7 +690,6 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className={`nav-item ${currentView === 'settings' ? 'active' : ''}`}
                     onClick={(e) => { e.preventDefault(); onViewChange('settings'); }}
                     style={{ justifyContent: isCollapsed ? 'center' : 'flex-start' }}
-                    title={isCollapsed ? "Settings" : ''}
                 >
                     <span className="nav-icon" style={{ marginRight: isCollapsed ? 0 : '0.75rem' }}>⚙️</span>
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Settings</span>}

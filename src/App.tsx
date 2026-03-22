@@ -119,6 +119,11 @@ function App() {
     return saved ? JSON.parse(saved) : initialLifePages;
   });
 
+  const [workspacePages, setWorkspacePages] = useState<LifePage[]>(() => {
+    const saved = getSafeStorage('taskmate_workspace_pages', '');
+    return saved ? JSON.parse(saved) : [];
+  });
+
   const [pageContents, setPageContents] = useState<Record<string, string>>(() => {
     const saved = getSafeStorage('taskmate_page_contents', '');
     return saved ? JSON.parse(saved) : {};
@@ -204,6 +209,38 @@ function App() {
     localStorage.setItem('taskmate_life_pages', JSON.stringify(updated));
   };
 
+  const handleAddWorkspacePage = (name: string) => {
+    const newPage: LifePage = {
+      id: `ws-${Date.now()}`,
+      name: name || 'Untitled',
+      icon: '📄',
+      type: 'custom'
+    };
+    const updated = [...workspacePages, newPage];
+    setWorkspacePages(updated);
+    localStorage.setItem('taskmate_workspace_pages', JSON.stringify(updated));
+    setCurrentView(newPage.id);
+  };
+
+  const handleDeleteWorkspacePage = (id: string) => {
+    const updated = workspacePages.filter(p => p.id !== id);
+    setWorkspacePages(updated);
+    localStorage.setItem('taskmate_workspace_pages', JSON.stringify(updated));
+    if (currentView === id) setCurrentView('dashboard');
+  };
+
+  const handleRenameWorkspacePage = (id: string, newName: string) => {
+    const updated = workspacePages.map(p => p.id === id ? { ...p, name: newName } : p);
+    setWorkspacePages(updated);
+    localStorage.setItem('taskmate_workspace_pages', JSON.stringify(updated));
+  };
+
+  const handleChangeWorkspacePageIcon = (id: string, newIcon: string) => {
+    const updated = workspacePages.map(p => p.id === id ? { ...p, icon: newIcon } : p);
+    setWorkspacePages(updated);
+    localStorage.setItem('taskmate_workspace_pages', JSON.stringify(updated));
+  };
+
 
 
   const renderView = () => {
@@ -236,7 +273,7 @@ function App() {
         );
 
       default:
-        const matchedPage = lifePages.find((p: LifePage) => p.id === currentView);
+        const matchedPage = [...lifePages, ...workspacePages].find((p: LifePage) => p.id === currentView);
         if (matchedPage) {
           return (
             <PersonalPageView
@@ -248,6 +285,7 @@ function App() {
         }
         return <Dashboard
           lifePages={lifePages}
+          workspacePages={workspacePages}
           onViewChange={setCurrentView}
           personalColor={personalColor}
           workspaceColor={workspaceColor}
@@ -259,7 +297,7 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
+    <div className="app-container" style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
       <Sidebar
         currentView={currentView}
         onViewChange={setCurrentView}
@@ -268,6 +306,11 @@ function App() {
         onDeleteLifePage={handleDeleteLifePage}
         onRenameLifePage={handleRenameLifePage}
         onChangeLifePageIcon={handleChangeLifePageIcon}
+        workspacePages={workspacePages}
+        onAddWorkspacePage={handleAddWorkspacePage}
+        onDeleteWorkspacePage={handleDeleteWorkspacePage}
+        onRenameWorkspacePage={handleRenameWorkspacePage}
+        onChangeWorkspacePageIcon={handleChangeWorkspacePageIcon}
         personalColor={personalColor}
         setPersonalColor={setPersonalColor}
         workspaceColor={workspaceColor}

@@ -3,6 +3,7 @@ import type { CalendarEvent, LifePage } from '../types';
 
 export interface DashboardProps {
     lifePages: LifePage[];
+    workspacePages: LifePage[];
     onViewChange: (view: string) => void;
     personalColor: string;
     workspaceColor: string;

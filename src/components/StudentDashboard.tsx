@@ -3,6 +3,7 @@ import type { CalendarEvent, LifePage } from '../types';
 
 interface StudentDashboardProps {
     lifePages: LifePage[];
+    workspacePages: LifePage[];
     onViewChange: (view: string) => void;
     personalColor: string;
     workspaceColor: string;

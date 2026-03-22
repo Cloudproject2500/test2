@@ -31,15 +31,10 @@ const PersonalPageView: React.FC<PersonalPageViewProps> = ({
         <main className="main-wrapper" style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
             <div className="container" style={{ maxWidth: '800px', flex: 1, display: 'flex', flexDirection: 'column', paddingBottom: 0 }}>
                 <header style={{ marginBottom: '2rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
-                        <span>{page.icon}</span> / {page.name}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <h2 style={{ fontSize: '3rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            <span style={{ fontSize: '3rem' }}>{page.icon}</span>
-                            {page.name}
-                        </h2>
-                    </div>
+                    <h2 style={{ fontSize: '3rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <span style={{ fontSize: '3rem' }}>{page.icon}</span>
+                        {page.name}
+                    </h2>
                 </header>
 
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', marginBottom: '40px' }}>

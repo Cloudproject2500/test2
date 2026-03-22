@@ -1,27 +1,28 @@
 @import url('../style1.css');
 
 body {
-    background-color: #f8f9fa;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),
+                url('/back1.jpeg') center center / cover no-repeat fixed;
 }
 
 .header {
-    background-color: white;
-    border-bottom: 1px solid #e2e8f0;
+    background-color: transparent;
+    border-bottom: none;
 }
 
 .logo-text {
-    color: #000000;
+    color: #ffffff;
 }
 
 .nav-link-back {
     text-decoration: none;
-    color: #64748b;
+    color: #ffffff;
     font-weight: 600;
     font-size: 1rem;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .nav-link-back:hover {
@@ -38,13 +39,15 @@ body {
 }
 
 .signup-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     width: 100%;
     max-width: 440px;
-    /* Slightly wider for social buttons */
     padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     text-align: center;
 }
 
@@ -52,12 +55,12 @@ body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: #1e293b;
+    color: #ffffff;
     margin-bottom: 0.5rem;
 }
 
 .signup-subtitle {
-    color: #3b82f6;
+    color: #ffffff;
     margin-bottom: 2rem;
     font-size: 0.95rem;
     font-weight: 500;
@@ -114,7 +117,7 @@ body {
     display: flex;
     align-items: center;
     text-align: center;
-    color: #94a3b8;
+    color: #ffffff;
     font-size: 0.9rem;
     margin-bottom: 2rem;
 }
@@ -123,7 +126,7 @@ body {
 .divider::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .divider span {
@@ -146,16 +149,18 @@ body {
 .form-group label {
     font-size: 0.875rem;
     font-weight: 500;
-    color: #334155;
+    color: #ffffff;
 }
 
 .form-group input {
     padding: 0.75rem 1rem;
-    border: 1px solid #e2e8f0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     font-size: 1rem;
     outline: none;
     transition: all 0.2s;
+    color: white;
 }
 
 .form-group input:focus {
@@ -163,9 +168,13 @@ body {
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
 .input-hint {
     font-size: 0.75rem;
-    color: #64748b;
+    color: #ffffff;
     margin-top: 0.25rem;
 }
 
@@ -195,7 +204,7 @@ body {
 .signup-footer {
     margin-top: 2rem;
     font-size: 0.9rem;
-    color: #64748b;
+    color: #ffffff;
 }
 
 .link-blue {
@@ -211,7 +220,7 @@ body {
 .footer {
     text-align: center;
     padding: 1.5rem;
-    color: #94a3b8;
+    color: #ffffff;
     font-size: 0.875rem;
 }
 
