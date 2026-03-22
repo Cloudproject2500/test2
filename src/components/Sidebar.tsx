@@ -72,8 +72,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const handleAddPage = (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleAddPage = (e?: React.FormEvent | React.FocusEvent) => {
+        if (e && e.preventDefault) e.preventDefault();
         if (newPageName.trim()) {
             onAddLifePage(newPageName.trim());
             setNewPageName('');
@@ -308,23 +308,49 @@ const Sidebar: React.FC<SidebarProps> = ({
 
                 {!isCollapsed && (
                     isAddingPage ? (
-                        <form onSubmit={handleAddPage} style={{ padding: '0 8px', marginTop: '8px' }}>
-                            <input
-                                autoFocus
-                                type="text"
-                                placeholder="Page name..."
-                                value={newPageName}
-                                onChange={(e) => setNewPageName(e.target.value)}
-                                onBlur={() => !newPageName && setIsAddingPage(false)}
-                                style={{
-                                    width: '100%',
-                                    border: '1px solid var(--border-color)',
-                                    borderRadius: '4px',
-                                    padding: '4px 8px',
-                                    fontSize: '12px',
-                                    outline: 'none'
-                                }}
-                            />
+                        <form onSubmit={handleAddPage} style={{ padding: '0', marginTop: '4px' }}>
+                            <div className="nav-item active" style={{ 
+                                display: 'flex', 
+                                alignItems: 'center', 
+                                padding: '8px 12px', 
+                                margin: '0 8px', 
+                                borderRadius: '8px', 
+                                border: '1px solid var(--accent-blue)', 
+                                background: 'var(--bg-card)', 
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.05)' 
+                            }}>
+                                <span className="nav-icon" style={{ marginRight: '0.75rem', fontSize: '1rem' }}>📄</span>
+                                <input
+                                    autoFocus
+                                    type="text"
+                                    placeholder="Page name..."
+                                    value={newPageName}
+                                    onChange={(e) => setNewPageName(e.target.value)}
+                                    onBlur={(e) => {
+                                        if (newPageName.trim()) {
+                                            handleAddPage(e);
+                                        } else {
+                                            setIsAddingPage(false);
+                                        }
+                                    }}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Escape') {
+                                            setNewPageName('');
+                                            setIsAddingPage(false);
+                                        }
+                                    }}
+                                    style={{
+                                        border: 'none',
+                                        background: 'transparent',
+                                        width: '100%',
+                                        fontSize: '14px',
+                                        outline: 'none',
+                                        color: 'var(--text-primary)',
+                                        fontWeight: 500
+                                    }}
+                                />
+                                <span style={{ fontSize: '10px', color: 'var(--text-secondary)', marginLeft: '8px', opacity: 0.5, fontWeight: 800 }}>↵</span>
+                            </div>
                         </form>
                     ) : (
                         <button

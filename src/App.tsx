@@ -110,7 +110,6 @@ function App() {
   };
 
   const initialLifePages: LifePage[] = [
-    { id: 'lifestyle', name: 'Lifestyle', icon: '☘️', type: 'default' },
     { id: 'fitness', name: 'Fitness', icon: '💪', type: 'default' },
     { id: 'hobbies', name: 'Hobbies', icon: '🎨', type: 'default' }
   ];
@@ -138,9 +137,9 @@ function App() {
       { id: 'c3', title: 'STUCO Team dinner', date: `${year}-${month}-20`, time: '08:00 PM', type: 'workspace' },
       { id: 'c4', title: 'Weekly Bookkeeping', date: `${year}-${month}-22`, time: '00:00 AM', type: 'personal' },
       { id: 'h1', title: 'CS101 Final', date: `${year}-${month}-15`, time: '10:00 AM', type: 'academic', place: 'Room 304' },
-      { id: 'h2', title: 'Gym Session', date: `${year}-${month}-15`, time: '06:00 PM', type: 'lifestyle', place: 'Campus Gym' },
+      { id: 'h2', title: 'Gym Session', date: `${year}-${month}-15`, time: '06:00 PM', type: 'personal', place: 'Campus Gym' },
       { id: 'h3', title: 'Math Quiz', date: `${year}-${month}-18`, time: '02:00 PM', type: 'academic', place: 'Room 101' },
-      { id: 'h4', title: 'Hobby: Painting', date: `${year}-${month}-22`, time: '08:00 PM', type: 'lifestyle', place: 'Home' },
+      { id: 'h4', title: 'Hobby: Painting', date: `${year}-${month}-22`, time: '08:00 PM', type: 'personal', place: 'Home' },
     ];
   });
 
