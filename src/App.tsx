@@ -63,6 +63,23 @@ function App() {
     }
   }, [customFontColor]);
 
+  const handleDarkModeToggle = (newIsDark: boolean) => {
+    setIsDarkMode(newIsDark);
+    
+    // Smart font color swap for readability
+    if (newIsDark) {
+      // If switching to dark mode and font is currently black/dark
+      if (customFontColor.toLowerCase() === '#37352f' || customFontColor.toLowerCase() === '#000000' || customFontColor.toLowerCase() === '#1e293b') {
+        setCustomFontColor('#ffffff');
+      }
+    } else {
+      // If switching to light mode and font is currently white
+      if (customFontColor.toLowerCase() === '#ffffff') {
+        setCustomFontColor('#37352f');
+      }
+    }
+  };
+
   useEffect(() => {
     const checkTutorial = async () => {
       try {
@@ -238,7 +255,7 @@ function App() {
         return (
           <Settings 
             isDarkMode={isDarkMode}
-            onDarkModeToggle={setIsDarkMode}
+            onDarkModeToggle={handleDarkModeToggle}
             customFontColor={customFontColor}
             onFontColorChange={setCustomFontColor}
           />
