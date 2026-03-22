@@ -1,9 +1,7 @@
 import React from 'react';
-import type { LifePage, PersonalTodo, CalendarEvent } from '../types';
+import type { CalendarEvent } from '../types';
 
 interface DashboardProps {
-    lifePages: LifePage[];
-    personalTodos: PersonalTodo[];
     onViewChange: (view: string) => void;
     personalColor: string;
     workspaceColor: string;
@@ -273,13 +271,13 @@ const ImageWidget: React.FC = () => {
     );
 };
 
-const Dashboard: React.FC<DashboardProps> = ({ 
-    onViewChange, 
-    personalColor, 
-    workspaceColor, 
+const StudentDashboard: React.FC<DashboardProps> = ({
+    onViewChange,
+    personalColor,
+    workspaceColor,
     calendarEvents,
     onUpdateCalendarEvent,
-    onDeleteCalendarEvent 
+    onDeleteCalendarEvent
 }) => {
 
     const [greeting, setGreeting] = React.useState('');
@@ -440,11 +438,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     };
 
     // Upcoming Events State
-    const [upcomingEvents, setUpcomingEvents] = React.useState([
-        { title: 'Midterm Exam — CS 301', date: '2026-03-20' },
-        { title: 'Group Presentation', date: '2026-03-22' },
-        { title: 'Career Fair', date: '2026-03-25' }
-    ]);
+    const [upcomingEvents, setUpcomingEvents] = React.useState<any[]>([]);
 
     const updateUpcomingEvent = (index: number, field: 'title' | 'date', value: string) => {
         setUpcomingEvents(prev => prev.map((e, i) => i === index ? { ...e, [field]: value } : e));
@@ -455,11 +449,7 @@ const Dashboard: React.FC<DashboardProps> = ({
     };
 
     // Reminders State
-    const [reminders, setReminders] = React.useState([
-        { title: 'Return library books', color: '#ef4444' },
-        { title: 'Register for summer courses', color: '#cbd5e1' },
-        { title: 'Email Prof. Adams about draft', color: '#cbd5e1' }
-    ]);
+    const [reminders, setReminders] = React.useState<any[]>([]);
 
     const updateReminderTitle = (index: number, newTitle: string) => {
         setReminders(prev => prev.map((r, i) => i === index ? { ...r, title: newTitle } : r));
@@ -989,4 +979,4 @@ const Dashboard: React.FC<DashboardProps> = ({
     );
 };
 
-export default Dashboard;
+export default StudentDashboard;

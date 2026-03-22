@@ -28,8 +28,8 @@ window.selectRole = async (role: 'student' | 'instructor') => {
             throw updateError;
         }
 
-        // Redirect to main dashboard
-        window.location.href = '/demo/index.html';
+        // Redirect to student dashboard
+        window.location.href = '/student/index.html';
 
     } catch (err: any) {
         console.error("Error setting role:", err);

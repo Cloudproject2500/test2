@@ -13,6 +13,7 @@ export default defineConfig({
                 signup: resolve(__dirname, 'signup/index.html'),
                 welcome: resolve(__dirname, 'welcome/index.html'),
                 callback: resolve(__dirname, 'auth/callback/index.html'),
+                student: resolve(__dirname, 'student/index.html'),
             },
         },
     },

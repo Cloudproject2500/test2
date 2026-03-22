@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './lib/supabase';
-import Dashboard from './components/Dashboard';
+import StudentDashboard from './components/StudentDashboard';
 import TutorialOverlay from './components/TutorialOverlay';
 
 import Sidebar from './components/Sidebar';
-import Inbox from './components/Inbox';
+import StudentInbox from './components/StudentInbox';
 import HybridCalendar from './components/HybridCalendar';
 import CoursesView from './components/CoursesView';
 import DeadlinesView from './components/DeadlinesView';
@@ -22,7 +22,7 @@ const getSafeStorage = (key: string, fallback: string) => {
   }
 };
 
-function App() {
+function StudentApp() {
 
   const [currentView, setCurrentView] = useState('dashboard');
   const [showTutorial, setShowTutorial] = useState(false);
@@ -92,44 +92,26 @@ function App() {
     }
   };
 
-  const initialLifePages: LifePage[] = [
-    { id: 'lifestyle', name: 'Lifestyle', icon: '☘️', type: 'default' },
-    { id: 'fitness', name: 'Fitness', icon: '💪', type: 'default' },
-    { id: 'hobbies', name: 'Hobbies', icon: '🎨', type: 'default' }
-  ];
+  const initialLifePages: LifePage[] = [];
 
   const [lifePages, setLifePages] = useState<LifePage[]>(() => {
-    const saved = getSafeStorage('taskmate_life_pages', '');
+    const saved = getSafeStorage('taskmate_student_pages', '');
     return saved ? JSON.parse(saved) : initialLifePages;
   });
 
   const [personalTodos, setPersonalTodos] = useState<PersonalTodo[]>(() => {
-    const saved = getSafeStorage('taskmate_personal_todos', '');
+    const saved = getSafeStorage('taskmate_student_todos', '');
     return saved ? JSON.parse(saved) : [];
   });
 
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>(() => {
-    const saved = getSafeStorage('taskmate_calendar_events', '');
-    if (saved) return JSON.parse(saved);
-
-    const year = new Date().getFullYear();
-    const month = String(new Date().getMonth() + 1).padStart(2, '0');
-
-    return [
-      { id: 'c1', title: 'TEK Club meeting', date: `${year}-${month}-18`, time: '12:00 PM', type: 'personal' },
-      { id: 'c2', title: 'Business Night', date: `${year}-${month}-18`, time: '06:30 PM', type: 'workspace' },
-      { id: 'c3', title: 'STUCO Team dinner', date: `${year}-${month}-20`, time: '08:00 PM', type: 'workspace' },
-      { id: 'c4', title: 'Weekly Bookkeeping', date: `${year}-${month}-22`, time: '00:00 AM', type: 'personal' },
-      { id: 'h1', title: 'CS101 Final', date: `${year}-${month}-15`, time: '10:00 AM', type: 'academic', place: 'Room 304' },
-      { id: 'h2', title: 'Gym Session', date: `${year}-${month}-15`, time: '06:00 PM', type: 'lifestyle', place: 'Campus Gym' },
-      { id: 'h3', title: 'Math Quiz', date: `${year}-${month}-18`, time: '02:00 PM', type: 'academic', place: 'Room 101' },
-      { id: 'h4', title: 'Hobby: Painting', date: `${year}-${month}-22`, time: '08:00 PM', type: 'lifestyle', place: 'Home' },
-    ];
+    const saved = getSafeStorage('taskmate_student_events', '');
+    return saved ? JSON.parse(saved) : [];
   });
 
   const saveTodos = (updated: PersonalTodo[]) => {
     setPersonalTodos(updated);
-    localStorage.setItem('taskmate_personal_todos', JSON.stringify(updated));
+    localStorage.setItem('taskmate_student_todos', JSON.stringify(updated));
   };
 
   const handleAddTodo = (pageId: string, text: string, options: Partial<PersonalTodo> = {}) => {
@@ -144,17 +126,17 @@ function App() {
   };
 
   const handleToggleTodo = (id: string) => {
-    const updated = personalTodos.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+    const updated = personalTodos.map((t: PersonalTodo) => t.id === id ? { ...t, completed: !t.completed } : t);
     saveTodos(updated);
   };
 
   const handleUpdateTodoProgress = (id: string, progress: number) => {
-    const updated = personalTodos.map(t => t.id === id ? { ...t, progress } : t);
+    const updated = personalTodos.map((t: PersonalTodo) => t.id === id ? { ...t, progress } : t);
     saveTodos(updated);
   };
 
   const handleDeleteTodo = (id: string) => {
-    const updated = personalTodos.filter(t => t.id !== id);
+    const updated = personalTodos.filter((t: PersonalTodo) => t.id !== id);
     saveTodos(updated);
   };
 
@@ -165,19 +147,19 @@ function App() {
     };
     const updated = [...calendarEvents, newEvent];
     setCalendarEvents(updated);
-    localStorage.setItem('taskmate_calendar_events', JSON.stringify(updated));
+    localStorage.setItem('taskmate_student_events', JSON.stringify(updated));
   };
 
   const handleDeleteCalendarEvent = (id: string) => {
-    const updated = calendarEvents.filter(e => e.id !== id);
+    const updated = calendarEvents.filter((e: CalendarEvent) => e.id !== id);
     setCalendarEvents(updated);
-    localStorage.setItem('taskmate_calendar_events', JSON.stringify(updated));
+    localStorage.setItem('taskmate_student_events', JSON.stringify(updated));
   };
 
   const handleUpdateCalendarEvent = (updatedEvent: CalendarEvent) => {
-    const updated = calendarEvents.map(e => e.id === updatedEvent.id ? updatedEvent : e);
+    const updated = calendarEvents.map((e: CalendarEvent) => e.id === updatedEvent.id ? updatedEvent : e);
     setCalendarEvents(updated);
-    localStorage.setItem('taskmate_calendar_events', JSON.stringify(updated));
+    localStorage.setItem('taskmate_student_events', JSON.stringify(updated));
   };
 
 
@@ -191,26 +173,26 @@ function App() {
     };
     const updated = [...lifePages, newPage];
     setLifePages(updated);
-    localStorage.setItem('taskmate_life_pages', JSON.stringify(updated));
+    localStorage.setItem('taskmate_student_pages', JSON.stringify(updated));
   };
 
   const handleDeleteLifePage = (id: string) => {
-    const updated = lifePages.filter(p => p.id !== id);
+    const updated = lifePages.filter((p: LifePage) => p.id !== id);
     setLifePages(updated);
-    localStorage.setItem('taskmate_life_pages', JSON.stringify(updated));
+    localStorage.setItem('taskmate_student_pages', JSON.stringify(updated));
     if (currentView === id) setCurrentView('dashboard');
   };
 
   const handleRenameLifePage = (id: string, newName: string) => {
-    const updated = lifePages.map(p => p.id === id ? { ...p, name: newName } : p);
+    const updated = lifePages.map((p: LifePage) => p.id === id ? { ...p, name: newName } : p);
     setLifePages(updated);
-    localStorage.setItem('taskmate_life_pages', JSON.stringify(updated));
+    localStorage.setItem('taskmate_student_pages', JSON.stringify(updated));
   };
 
   const handleChangeLifePageIcon = (id: string, newIcon: string) => {
-    const updated = lifePages.map(p => p.id === id ? { ...p, icon: newIcon } : p);
+    const updated = lifePages.map((p: LifePage) => p.id === id ? { ...p, icon: newIcon } : p);
     setLifePages(updated);
-    localStorage.setItem('taskmate_life_pages', JSON.stringify(updated));
+    localStorage.setItem('taskmate_student_pages', JSON.stringify(updated));
   };
 
 
@@ -218,7 +200,7 @@ function App() {
   const renderView = () => {
     switch (currentView) {
       case 'inbox':
-        return <Inbox />;
+        return <StudentInbox />;
       case 'calendar':
         return (
           <HybridCalendar
@@ -245,12 +227,12 @@ function App() {
         );
 
       default:
-        const matchedPage = lifePages.find(p => p.id === currentView);
+        const matchedPage = lifePages.find((p: LifePage) => p.id === currentView);
         if (matchedPage) {
           return (
             <PersonalTodoView
               page={matchedPage}
-              todos={personalTodos.filter(t => t.pageId === matchedPage.id)}
+              todos={personalTodos.filter((t: PersonalTodo) => t.pageId === matchedPage.id)}
               onAddTodo={handleAddTodo}
               onToggleTodo={handleToggleTodo}
               onUpdateProgress={handleUpdateTodoProgress}
@@ -259,9 +241,7 @@ function App() {
             />
           );
         }
-        return <Dashboard
-          lifePages={lifePages}
-          personalTodos={personalTodos}
+        return <StudentDashboard
           onViewChange={setCurrentView}
           personalColor={personalColor}
           workspaceColor={workspaceColor}
@@ -273,7 +253,7 @@ function App() {
   };
 
   return (
-    <div className="App" style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
+    <div className="StudentApp" style={{ display: 'flex', width: '100%', minHeight: '100vh' }}>
       <Sidebar
         currentView={currentView}
         onViewChange={setCurrentView}
@@ -293,4 +273,4 @@ function App() {
   );
 }
 
-export default App;
+export default StudentApp;

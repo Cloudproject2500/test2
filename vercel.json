@@ -5,6 +5,10 @@
     {
       "source": "/demo",
       "destination": "/demo/index.html"
+    },
+    {
+      "source": "/student",
+      "destination": "/student/index.html"
     }
   ]
 }
