@@ -286,6 +286,7 @@ function App() {
         setPersonalColor={setPersonalColor}
         workspaceColor={workspaceColor}
         setWorkspaceColor={setWorkspaceColor}
+        inboxBadgeCount={3}
       />
       {showTutorial && <TutorialOverlay onClose={handleCloseTutorial} />}
       {renderView()}

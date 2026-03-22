@@ -13,6 +13,7 @@ interface SidebarProps {
     setPersonalColor: (color: string) => void;
     workspaceColor: string;
     setWorkspaceColor: (color: string) => void;
+    inboxBadgeCount?: number;
 }
 
 const EMOJI_OPTIONS = [
@@ -49,7 +50,8 @@ const Sidebar: React.FC<SidebarProps> = ({
     personalColor,
     setPersonalColor,
     workspaceColor,
-    setWorkspaceColor
+    setWorkspaceColor,
+    inboxBadgeCount
 }) => {
     const [isAddingPage, setIsAddingPage] = useState(false);
     const [newPageName, setNewPageName] = useState('');
@@ -428,7 +430,11 @@ const Sidebar: React.FC<SidebarProps> = ({
                 >
                     <span className="nav-icon" style={{ marginRight: isCollapsed ? 0 : '0.75rem' }}>📥</span>
                     {!isCollapsed && <span style={{ whiteSpace: 'nowrap' }}>Inbox</span>}
-                    {!isCollapsed && <span className="badge-purple" style={{ marginLeft: 'auto', borderRadius: '10px', padding: '0 6px', fontSize: '10px' }}>3</span>}
+                    {!isCollapsed && inboxBadgeCount !== undefined && inboxBadgeCount > 0 && (
+                        <span className="badge-purple" style={{ marginLeft: 'auto', borderRadius: '10px', padding: '0 6px', fontSize: '10px' }}>
+                            {inboxBadgeCount}
+                        </span>
+                    )}
                 </a>
                 <a
                     href="#settings"
