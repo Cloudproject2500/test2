@@ -8,9 +8,9 @@ import StudentInbox from './components/StudentInbox';
 import HybridCalendar from './components/HybridCalendar';
 import StudentCoursesView from './components/StudentCoursesView';
 import StudentDeadlinesView from './components/StudentDeadlinesView';
-import PersonalTodoView from './components/PersonalTodoView';
+import PersonalPageView from './components/PersonalTodoView';
 import Settings from './components/Settings';
-import type { LifePage, PersonalTodo, CalendarEvent } from './types';
+import type { LifePage, CalendarEvent } from './types';
 
 // Safety helper for localStorage
 const getSafeStorage = (key: string, fallback: string) => {
@@ -116,9 +116,9 @@ function StudentApp() {
     return saved ? JSON.parse(saved) : initialLifePages;
   });
 
-  const [personalTodos, setPersonalTodos] = useState<PersonalTodo[]>(() => {
-    const saved = getSafeStorage('taskmate_student_todos', '');
-    return saved ? JSON.parse(saved) : [];
+  const [pageContents, setPageContents] = useState<Record<string, string>>(() => {
+    const saved = getSafeStorage('taskmate_student_contents', '');
+    return saved ? JSON.parse(saved) : {};
   });
 
   const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>(() => {
@@ -126,35 +126,10 @@ function StudentApp() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  const saveTodos = (updated: PersonalTodo[]) => {
-    setPersonalTodos(updated);
-    localStorage.setItem('taskmate_student_todos', JSON.stringify(updated));
-  };
-
-  const handleAddTodo = (pageId: string, text: string, options: Partial<PersonalTodo> = {}) => {
-    const newTodo: PersonalTodo = {
-      id: Math.random().toString(36).substr(2, 9),
-      pageId,
-      text,
-      completed: false,
-      ...options
-    };
-    saveTodos([...personalTodos, newTodo]);
-  };
-
-  const handleToggleTodo = (id: string) => {
-    const updated = personalTodos.map((t: PersonalTodo) => t.id === id ? { ...t, completed: !t.completed } : t);
-    saveTodos(updated);
-  };
-
-  const handleUpdateTodoProgress = (id: string, progress: number) => {
-    const updated = personalTodos.map((t: PersonalTodo) => t.id === id ? { ...t, progress } : t);
-    saveTodos(updated);
-  };
-
-  const handleDeleteTodo = (id: string) => {
-    const updated = personalTodos.filter((t: PersonalTodo) => t.id !== id);
-    saveTodos(updated);
+  const handleUpdatePageContent = (pageId: string, content: string) => {
+    const updated = { ...pageContents, [pageId]: content };
+    setPageContents(updated);
+    localStorage.setItem('taskmate_student_contents', JSON.stringify(updated));
   };
 
   const handleAddCalendarEvent = (event: Omit<CalendarEvent, 'id'>) => {
@@ -247,18 +222,15 @@ function StudentApp() {
         const matchedPage = lifePages.find((p: LifePage) => p.id === currentView);
         if (matchedPage) {
           return (
-            <PersonalTodoView
+            <PersonalPageView
               page={matchedPage}
-              todos={personalTodos.filter((t: PersonalTodo) => t.pageId === matchedPage.id)}
-              onAddTodo={handleAddTodo}
-              onToggleTodo={handleToggleTodo}
-              onUpdateProgress={handleUpdateTodoProgress}
-              onDeleteTodo={handleDeleteTodo}
-
+              content={pageContents[matchedPage.id] || ''}
+              onUpdateContent={handleUpdatePageContent}
             />
           );
         }
         return <StudentDashboard
+          lifePages={lifePages}
           onViewChange={setCurrentView}
           personalColor={personalColor}
           workspaceColor={workspaceColor}

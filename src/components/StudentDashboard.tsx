@@ -1,7 +1,8 @@
 import React from 'react';
-import type { CalendarEvent } from '../types';
+import type { CalendarEvent, LifePage } from '../types';
 
-interface DashboardProps {
+interface StudentDashboardProps {
+    lifePages: LifePage[];
     onViewChange: (view: string) => void;
     personalColor: string;
     workspaceColor: string;
@@ -271,7 +272,7 @@ const ImageWidget: React.FC = () => {
     );
 };
 
-const StudentDashboard: React.FC<DashboardProps> = ({
+const StudentDashboard: React.FC<StudentDashboardProps> = ({
     onViewChange,
     personalColor,
     workspaceColor,

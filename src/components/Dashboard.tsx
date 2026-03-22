@@ -1,9 +1,8 @@
 import React from 'react';
-import type { LifePage, PersonalTodo, CalendarEvent } from '../types';
+import type { CalendarEvent, LifePage } from '../types';
 
-interface DashboardProps {
+export interface DashboardProps {
     lifePages: LifePage[];
-    personalTodos: PersonalTodo[];
     onViewChange: (view: string) => void;
     personalColor: string;
     workspaceColor: string;
