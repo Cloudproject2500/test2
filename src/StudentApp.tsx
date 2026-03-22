@@ -6,8 +6,8 @@ import TutorialOverlay from './components/TutorialOverlay';
 import Sidebar from './components/Sidebar';
 import StudentInbox from './components/StudentInbox';
 import HybridCalendar from './components/HybridCalendar';
-import CoursesView from './components/CoursesView';
-import DeadlinesView from './components/DeadlinesView';
+import StudentCoursesView from './components/StudentCoursesView';
+import StudentDeadlinesView from './components/StudentDeadlinesView';
 import PersonalTodoView from './components/PersonalTodoView';
 import Settings from './components/Settings';
 import type { LifePage, PersonalTodo, CalendarEvent } from './types';
@@ -230,9 +230,9 @@ function StudentApp() {
           />
         );
       case 'courses':
-        return <CoursesView />;
+        return <StudentCoursesView />;
       case 'deadlines':
-        return <DeadlinesView />;
+        return <StudentDeadlinesView />;
       case 'settings':
         return (
           <Settings 
