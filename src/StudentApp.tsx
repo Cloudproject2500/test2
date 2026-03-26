@@ -192,6 +192,19 @@ function StudentApp() {
     localStorage.setItem('taskmate_student_pages', JSON.stringify(updated));
   };
 
+  const handleUpdatePage = (id: string, updates: Partial<LifePage>) => {
+    const isLifePage = lifePages.some(p => p.id === id);
+    if (isLifePage) {
+      const updated = lifePages.map(p => p.id === id ? { ...p, ...updates } : p);
+      setLifePages(updated);
+      localStorage.setItem('taskmate_student_pages', JSON.stringify(updated));
+    } else {
+      const updated = workspacePages.map(p => p.id === id ? { ...p, ...updates } : p);
+      setWorkspacePages(updated);
+      localStorage.setItem('taskmate_student_workspace_pages', JSON.stringify(updated));
+    }
+  };
+
   const handleAddWorkspacePage = (name: string) => {
     const newPage: LifePage = {
       id: `sws-${Date.now()}`,
@@ -263,6 +276,7 @@ function StudentApp() {
               page={matchedPage}
               content={pageContents[matchedPage.id] || ''}
               onUpdateContent={handleUpdatePageContent}
+              onUpdatePage={handleUpdatePage}
             />
           );
         }

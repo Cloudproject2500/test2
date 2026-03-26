@@ -48,6 +48,8 @@ export interface LifePage {
     name: string;
     icon: string;
     type: 'default' | 'custom';
+    titleSize?: number;
+    titleAlign?: 'left' | 'center' | 'right';
 }
 
 export interface PersonalTodo {
