@@ -56,6 +56,7 @@
                     <p class="input-hint">Must contain at least one special character (!@#$%^&*)</p>
                 </div>
                 <button type="submit" class="btn-primary">Create account</button>
+                <div id="loadingStatusText" class="loading-text">Connecting securely...</div>
             </form>
 
             <div class="signup-footer">
@@ -70,6 +71,8 @@
 
     <script type="module">
         import { supabase } from '../src/lib/supabase.ts'
+
+        let redirecting = false;
 
         const handleGoogleSignIn = async () => {
             const { error } = await supabase.auth.signInWithOAuth({
@@ -90,6 +93,7 @@
 
         const handleEmailSignUp = async (e) => {
             e.preventDefault();
+            if (redirecting) return;
 
             const firstName = document.getElementById('firstName').value;
             const email = document.getElementById('email').value;
@@ -108,6 +112,22 @@
                 submitBtn.disabled = true;
             }
 
+            const loadingText = document.getElementById('loadingStatusText');
+            let timeoutId, timeoutId2;
+
+            if (loadingText) {
+                loadingText.innerText = "Creating your account...";
+                loadingText.classList.add('visible');
+
+                timeoutId = setTimeout(() => {
+                    loadingText.innerText = "Setting up your workspace...";
+                }, 2000);
+                
+                timeoutId2 = setTimeout(() => {
+                    loadingText.innerText = "Almost done...";
+                }, 5000);
+            }
+
             try {
                 console.log('Sending signup request to Supabase...');
                 const { data, error } = await supabase.auth.signUp({
@@ -116,33 +136,35 @@
                     options: {
                         data: {
                             first_name: firstName,
-                        },
-                        emailRedirectTo: `${window.location.origin}/auth/callback/`
+                        }
                     }
                 });
 
                 if (error) {
-                    console.error('Signup explicitly failed:', error.message);
+                    console.error('Signup failed:', error.message);
                     alert('Error signing up: ' + error.message);
-                } else {
-                    console.log('Signup 200 OK! Data returned:', data);
-
-                    if (data.session) {
-                        console.log('Instant session detected! Routing directly to welcome page...');
-                        window.location.href = '/welcome/index.html';
-                    } else if (data.user && data.user.identities && data.user.identities.length === 0) {
-                        console.log('User already registered hit!');
-                        alert('This email is already registered. Please log in instead.');
-                    } else {
-                        console.log('No session returned. Showing check email alert.');
-                        alert('Signup successful! Please check your email for the confirmation link.');
-                    }
+                } else if (data.user && data.user.identities && data.user.identities.length === 0) {
+                    alert('This email is already registered. Please log in instead.');
+                    window.location.href = '/login/';
+                } else if (data.session) {
+                    // Email confirmation is OFF → instant session → redirect immediately
+                    console.log('Session received! Redirecting to welcome page...');
+                    redirecting = true;
+                    window.location.href = '/welcome/index.html';
+                } else if (data.user) {
+                    // User created but no session (email confirmation might still be on)
+                    console.log('User created but no session.');
+                    alert('Account created! Please log in.');
+                    window.location.href = '/login/';
                 }
             } catch (err) {
-                console.error("FATAL JAVASCRIPT EXCEPTION RUNNING SIGNUP:", err);
+                console.error("Signup error:", err);
+                alert("A network error occurred. Please try again.");
             } finally {
-                // Remove loading state when completely done
-                if (submitBtn) {
+                clearTimeout(timeoutId);
+                clearTimeout(timeoutId2);
+                if (loadingText) loadingText.classList.remove('visible');
+                if (submitBtn && !redirecting) {
                     submitBtn.classList.remove('loading');
                     submitBtn.disabled = false;
                 }
@@ -158,27 +180,6 @@
         if (signupForm) {
             signupForm.addEventListener('submit', handleEmailSignUp);
         }
-
-        // Listen for auth state changes so the original tab instantly redirects
-        // when the user clicks the confirmation link in their email!
-        supabase.auth.onAuthStateChange(async (event, session) => {
-            console.log("Auth State Changed detected:", event);
-            if (event === 'SIGNED_IN' && session) {
-                console.log("SIGNED_IN event fired. Checking profile once...");
-
-                const { data: profile } = await supabase
-                    .from('profiles')
-                    .select('role')
-                    .eq('user_id', session.user.id)
-                    .single();
-
-                if (!profile || profile.role === 'user') {
-                    window.location.href = '/welcome/index.html';
-                } else {
-                    window.location.href = '/student/index.html';
-                }
-            }
-        });
     </script>
 </body>
 

@@ -257,3 +257,21 @@ body {
         transform: rotate(360deg);
     }
 }
+
+.loading-text {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.loading-text.visible {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
